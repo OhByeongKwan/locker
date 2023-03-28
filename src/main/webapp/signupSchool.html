@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+</head>
+<body>
+<div class="container d-flex flex-column justify-content-between">
+    <div id="schoolSearch">
+        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="signup-title fs-24" style="margin-top:58px">우리 학교 알아보기</div>
+        <div class="search-box d-flex w-100" style="margin-top:28px">
+            <input class="w-100 border-0" type="text" placeholder="학교 검색하기" style="outline:none" />
+            <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu">
+                <li class="schoolTitle">삼육대</li>
+                <li class="schoolTitle">서울여대</li>
+                <li class="schoolTitle">광운대</li>
+                <li class="schoolTitle">서울대</li>
+                <li class="schoolTitle">연세대</li>
+                <li class="schoolTitle">고려대</li>
+                <li class="schoolTitle">중앙대</li>
+                <li class="schoolTitle">숭실대</li>
+                <li class="schoolTitle">경인교대</li>
+                <li class="schoolTitle">국민대</li>
+                <li class="schoolTitle">세종대</li>
+                <li class="schoolTitle">단국대</li>
+                <li class="schoolTitle">경희대</li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center flex-column" style="gap:10px">
+        <div class="d-flex justify-content-center" style="gap:23px">
+            <div style="color:#686B7C">우리학교 계정이 없다면?</div>
+            <a href="/schoolRequest.html">건의하기</a>
+        </div>
+        <div class="d-flex justify-content-center" style="gap:23px">
+            <div style="color:#686B7C">우리학교 학과가 없다면?</div>
+            <a href="/departmentRequest.html">건의하기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+        //AJAX 학교 불러오기
+        AJAX.call("jsp/getUniList.jsp", {}, function(data) {
+            console.log(data.trim());
+        });
+        //학교 있을 때
+        //학교 없을 때
+
+        $('.search-box button').on('click',()=>{
+            let width = $('.search-box').innerWidth();
+            $('#schoolSearch .dropdown-menu').css('width',width-44+'px');
+        });
+
+        $('#schoolSearch input').on('click',()=>{
+            let width = $('.search-box').innerWidth();
+            $('#schoolSearch .dropdown-menu').css('width',width-44+'px');
+            $('#schoolSearch .dropdown-menu').addClass('show');
+        });
+
+        $(document).mouseup(function (e) {
+            var dropMenu = $('.dropdown-menu');
+            if (dropMenu.has(e.target).length === 0) {
+                dropMenu.removeClass("show");
+            }
+        });
+
+        $('.search-box input').on('keyup',()=>{
+            let nullValue = 0;
+            let inputValue = $('.search-box input')[0].value.toUpperCase();
+            let itemValue = $('.search-box .dropdown-menu li');
+
+            for(let i = 0 ; i<itemValue.length ; i++){
+                if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                    itemValue[i].style.display = 'list-item';
+                    nullValue += 1;
+                }else{
+                    itemValue[i].style.display = 'none';
+                }
+            }
+            console.log(nullValue);
+            if(nullValue == 0){
+                $('.search-box .dropdown-menu').removeClass('show');
+            }else{
+                $('.search-box .dropdown-menu').addClass('show');
+            }
+        });
+
+        $('.search-box .dropdown-menu li').on('click',function(){
+            let schoolName = this.innerText;
+            document.getElementsByTagName('input')[0].value = schoolName;
+            $('.search-box input').attr('value',schoolName);
+            $('.search-box .dropdown-menu').removeClass('show');
+        });
+    }
+
+</script>

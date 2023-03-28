@@ -1,0 +1,23 @@
+body{padding:0;margin:0;min-height:100vh}
+.btn-signup{background-color:transparent;border: 1px solid white;border-radius:30px;color:white;margin-top:565px;padding-top:12px;padding-bottom:12px}
+.btn-signin{background-color:white;border: none;border-radius:30px;padding-top:12px;padding-bottom:12px}
+.container{padding:50px 22px 30px;min-height:100vh}
+
+/*font-size*/
+.fs-14{font-size:14px}
+.fs-16{font-size:16px}
+.fs-18{font-size:18px}
+.fs-20{font-size:20px}
+.fs-22{font-size:22px}
+.fs-24{font-size:24px}
+.fs-26{font-size:26px}
+
+.back-icon{background-image:url("/img/back-icon.svg");background-size:cover;width:13px;height:22px}
+.search-box{border:1px solid #BFC2CE;padding:14px 22px;border-radius:30px}
+.search-box .dropdown-menu li{border-bottom:1px solid #BFC2CE;padding:10px}
+.search-box .dropdown-menu li:last-child{border-bottom:none}
+.dropdown-menu{padding:0!important;max-height:450px;overflow:scroll}
+.dropdown-menu.show{transform:translateY(40px)!important;inset:unset!important;width:calc(100% - 68px)}
+.dropdown-menu li:hover{cursor:pointer;background-color: #c9c9c9}
+#schoolSearch button{border:none;background-color:white;background-image:url(/img/dropdown-arrow.svg);background-size:cover;width:18px;height:9px}
+
