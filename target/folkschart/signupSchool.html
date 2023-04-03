@@ -116,6 +116,11 @@
             document.getElementsByTagName('input')[0].value = schoolName;
             $('.search-box input').attr('value',schoolName);
             $('.search-box .dropdown-menu').removeClass('show');
+            //ajax()=>list 불러옴
+            console.log(schoolName)
+            AJAX.call("jsp/getDepList.jsp", {uniName:"12412412412"}, function(data) {
+                console.log(data.trim());
+            });
         });
     }
 

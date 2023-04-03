@@ -86,7 +86,7 @@
         AJAX.call("jsp/signupDepartment.jsp", {uniName : uniName,departmentName:departmentName, email: email}, function(data) {
             console.log(data.trim());
             //1 -> not exist uni
-            //2 -> 학과 이미 존재
+            //2 -> department exist
             //3 -> already request department
             //4 -> complete requesting department
             //5 -> fail requesting department - err

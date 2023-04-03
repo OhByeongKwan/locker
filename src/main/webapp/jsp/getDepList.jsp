@@ -7,8 +7,7 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 	UniDAO dao = new UniDAO();
-	String id = request.getParameter("id");
-	String newDep = request.getParameter("newDep");
+	String uniName = request.getParameter("uniName");
+	out.print(dao.getDepList(uniName));
 
-	out.print(dao.adminAddDep(id,newDep));
 %>

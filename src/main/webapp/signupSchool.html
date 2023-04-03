@@ -116,6 +116,13 @@
             document.getElementsByTagName('input')[0].value = schoolName;
             $('.search-box input').attr('value',schoolName);
             $('.search-box .dropdown-menu').removeClass('show');
+
+            console.log(schoolName)
+            AJAX.call("jsp/getDepList.jsp", {uniName:schoolName}, function(data) {
+                console.log(data.trim());
+                //list of Departmanet in this Universe
+                // ex) [~~, ~~, ~~, ~~]
+            });
         });
     }
 
