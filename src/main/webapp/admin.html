@@ -5,10 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
     <link rel="stylesheet" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <title></title>
 </head>
 <body>
-<div>
+<div class="container">
 
 <!--        학교신청 내역 , 학과 신청내역 띄워줄테니 여기있는 코드 뽑아내서 페이지 분할 부탁해.-->
         <div>
@@ -35,7 +36,9 @@
     });
 </script>
 <script src="js/velocity.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
@@ -92,6 +95,11 @@
         AJAX.call("jsp/adminAddUni.jsp", {id: id}, function(data) {
             console.log(data.trim())
             //"OK" or "ER"
+            if(data.trim() == 'OK'){
+                Dialog.alert("학교 승인 완료",location.reload);
+            }else{
+                Dialog.alert(data.message,location.reload);
+            }
         });
     }
 
@@ -99,6 +107,11 @@
         console.log(newDep);
         AJAX.call("jsp/adminAddDep.jsp", {id: id, newDep: newDep}, function(data) {
             //"OK" or "ER"
+            if(data.trim() == 'OK'){
+                Dialog.alert("학과 승인 완료",location.reload);
+            }else{
+                Dialog.alert(data.message,location.reload);
+            }
         });
     }
 

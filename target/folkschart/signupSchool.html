@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Cache-Control" content="no-cache">
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
-    <link rel="stylesheet" type="text/css" href="css/core.css" media="only screen">
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <title>모두의 사물함</title>
@@ -15,11 +15,11 @@
     <div id="schoolSearch">
         <div class="back-icon" role="button" onclick="Page.back()"></div>
         <div class="signup-title fs-24" style="margin-top:58px">우리 학교 알아보기</div>
-        <div class="search-box d-flex w-100" style="margin-top:28px">
-            <input class="w-100 border-0" type="text" placeholder="학교 검색하기" style="outline:none" />
+        <div id="university" class="search-box d-flex w-100" style="margin-top:28px">
+            <input id="searchUni" name="searchUni" class="w-100 border-0" type="text" placeholder="학교 검색하기" style="outline:none" />
             <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu univ">
                 <li class="schoolTitle">삼육대</li>
                 <li class="schoolTitle">서울여대</li>
                 <li class="schoolTitle">광운대</li>
@@ -27,12 +27,6 @@
                 <li class="schoolTitle">연세대</li>
                 <li class="schoolTitle">고려대</li>
                 <li class="schoolTitle">중앙대</li>
-                <li class="schoolTitle">숭실대</li>
-                <li class="schoolTitle">경인교대</li>
-                <li class="schoolTitle">국민대</li>
-                <li class="schoolTitle">세종대</li>
-                <li class="schoolTitle">단국대</li>
-                <li class="schoolTitle">경희대</li>
             </ul>
         </div>
     </div>
@@ -67,20 +61,39 @@
         pagectx = params;
         //AJAX 학교 불러오기
         AJAX.call("jsp/getUniList.jsp", {}, function(data) {
-            console.log(data.trim());
+            let unilist = data.trim();
+            unilist = unilist.slice(1,-1);
+            let arr = unilist.split(",");
+            console.log(arr);
+            $('.search-box .dropdown-menu.univ li').remove();
+            if(arr.length !== 0){
+                for(let i = 0 ; i < arr.length ; i++){
+                    $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">${arr[i]}</li>`);
+                }
+            }else{
+                $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">등록된 대학교가 없습니다.</li>`);
+            }
+
+            $('.search-box .dropdown-menu.univ li').on('click',function(){
+                let schoolName = this.innerText;
+                $('#searchUni')[0].value = schoolName;
+                $('.search-box .dropdown-menu.univ').removeClass('show');
+                console.log(schoolName)
+                getDepart(schoolName);
+            });
         });
         //학교 있을 때
         //학교 없을 때
 
-        $('.search-box button').on('click',()=>{
-            let width = $('.search-box').innerWidth();
-            $('#schoolSearch .dropdown-menu').css('width',width-44+'px');
+        $('#university button').on('click',()=>{
+            let width = $('#university').innerWidth();
+            $('#schoolSearch .dropdown-menu.univ').css('width',width-44+'px');
         });
 
-        $('#schoolSearch input').on('click',()=>{
-            let width = $('.search-box').innerWidth();
-            $('#schoolSearch .dropdown-menu').css('width',width-44+'px');
-            $('#schoolSearch .dropdown-menu').addClass('show');
+        $('#university input').on('click',()=>{
+            let width = $('#university').innerWidth();
+            $('#university .dropdown-menu').css('width',width-44+'px');
+            $('#university .dropdown-menu').addClass('show');
         });
 
         $(document).mouseup(function (e) {
@@ -90,10 +103,10 @@
             }
         });
 
-        $('.search-box input').on('keyup',()=>{
+        $('#university input').on('keyup',()=>{
             let nullValue = 0;
-            let inputValue = $('.search-box input')[0].value.toUpperCase();
-            let itemValue = $('.search-box .dropdown-menu li');
+            let inputValue = $('#university input')[0].value.toUpperCase();
+            let itemValue = $('#university .dropdown-menu li');
 
             for(let i = 0 ; i<itemValue.length ; i++){
                 if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
@@ -105,23 +118,120 @@
             }
             console.log(nullValue);
             if(nullValue == 0){
-                $('.search-box .dropdown-menu').removeClass('show');
+                $('#university .dropdown-menu').removeClass('show');
             }else{
-                $('.search-box .dropdown-menu').addClass('show');
+                $('#university .dropdown-menu').addClass('show');
             }
         });
+    }
+    function getDepart(schoolName){
+        $('#department').remove();
+        $('#signupForm').remove();
+        $('#schoolSearch').append(`<div id="department" class="search-box d-flex w-100" style="margin-top:28px">
+            <input id="searchDepart" name="searchDepart" class="w-100 border-0" type="text" placeholder="학과 검색하기" style="outline:none" />
+            <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu depart">
+                <li class="departTitle">학과1</li>
+                <li class="departTitle">학과2</li>
+                <li class="departTitle">학과3</li>
+            </ul>
+        </div>`);
 
-        $('.search-box .dropdown-menu li').on('click',function(){
-            let schoolName = this.innerText;
-            document.getElementsByTagName('input')[0].value = schoolName;
-            $('.search-box input').attr('value',schoolName);
-            $('.search-box .dropdown-menu').removeClass('show');
-            //ajax()=>list 불러옴
-            console.log(schoolName)
-            AJAX.call("jsp/getDepList.jsp", {uniName:"12412412412"}, function(data) {
-                console.log(data.trim());
-            });
+        AJAX.call("jsp/getDepList.jsp", {uniName:schoolName}, function(data) {
+            console.log(data);
+            console.log(schoolName);
+            //list of Departmanet in this Universe
+            // ex) [~~, ~~, ~~, ~~]
+        });
+
+        $('#department button').on('click',()=>{
+            let width = $('#department').innerWidth();
+            $('#schoolSearch .dropdown-menu.univ').css('width',width-44+'px');
+        });
+
+        $('#department input').on('click',()=>{
+            let width = $('.search-box').innerWidth();
+            $('#department .dropdown-menu').css('width',width-44+'px');
+            $('#department .dropdown-menu').addClass('show');
+        });
+
+        $('.search-box .dropdown-menu.depart li').on('click',function() {
+            let departName = this.innerText;
+            $('#searchDepart')[0].value = departName;
+            $('.search-box .dropdown-menu.depart').removeClass('show');
+            console.log(departName);
+
+            getSignUp();
+        });
+
+        $('#department input').on('keyup',()=>{
+            let nullValue = 0;
+            let inputValue = $('#department input')[0].value.toUpperCase();
+            let itemValue = $('#department .dropdown-menu li');
+
+            for(let i = 0 ; i<itemValue.length ; i++){
+                if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                    itemValue[i].style.display = 'list-item';
+                    nullValue += 1;
+                }else{
+                    itemValue[i].style.display = 'none';
+                }
+            }
+            console.log(nullValue);
+            if(nullValue == 0){
+                $('#department .dropdown-menu').removeClass('show');
+            }else{
+                $('#department .dropdown-menu').addClass('show');
+            }
         });
     }
 
+    function getSignUp(){
+        $('#signupForm').remove();
+        $('#schoolSearch').append(`<div id="signupForm"><input name="id" class="signup-box w-100" type="text" placeholder="아이디(학번)" style="outline:none" />
+<input name="pw" class="signup-box w-100" type="text" placeholder="비밀번호" style="outline:none" />
+<input name="pw2" class="signup-box w-100" type="text" placeholder="비밀번호 확인" style="outline:none" />
+<div class="signup-box fs-18 text-center" onclick='signup()' style="margin-top:100px">회원가입</div></div>`);
+    }
+
+    function signup(){
+        let uniName = $('input[name=searchUni]').val().trim();
+        let department = $('input[name=searchDepart]').val().trim();
+        let id = $('input[name=id]').val().trim();
+        let pw = $('input[name=pw]').val().trim();
+        let pw2 = $('input[name=pw2]').val().trim();
+
+        if (id == "" || id.length < 3) {
+            Dialog.alert("아이디를 입력해주세요.", function () {
+                $('input[name=id]').focus()
+            });
+            return;
+        }
+        if (pw == "" || pw.length < 3) {
+            Dialog.alert("비밀번호를 입력해주세요.", function () {
+                $('input[name=pw]').focus()
+            });
+            return;
+        }
+        if (pw2 == "" || pw2.length < 3) {
+            Dialog.alert("비밀번호를 입력해주세요.", function () {
+                $('input[name=pw2]').focus()
+            });
+            return;
+        }
+        if (pw != pw2) {
+            Dialog.alert("비밀번호가 일치하지 않습니다.", function () {
+                $('input[name=pw2]').focus()
+            });
+            return;
+        }
+
+        let jsonForm = {uniName : uniName, department : department, id : id, pw : pw, pw2 : pw2};
+        console.log(jsonForm);
+        //회원가입 post 만들기
+        // AJAX.call(url,jsonForm,function(data){
+        //     Dialog.alert('회원가입이 완료되었습니다.',Page.go('/index.html'));
+        // });
+    }
 </script>

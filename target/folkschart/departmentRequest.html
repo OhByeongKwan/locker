@@ -22,15 +22,15 @@
         <div>
             <div>
                 <p class="fs-18">학교</p>
-                <input type="text" />
+                <input type="text" name="uni" />
             </div>
             <div style="margin-top:10px">
                 <p class="fs-18">학과</p>
-                <input type="text" />
+                <input type="text" name="department" />
             </div>
             <div style="margin-top:10px">
                 <p class="fs-18">이메일</p>
-                <input type="email" />
+                <input type="email" name="email" />
             </div>
         </div>
         <div class="fs-18" onclick="submitDepartment()" style="margin-top:193px">신청</div>
@@ -58,39 +58,52 @@
 
     function submitDepartment(){
 
-        var uniName = $($("input")[0]).val().trim();
-        var departmentName = $($("input")[1]).val().trim();
-        var email = $($("input")[2]).val().trim();
+        let uniName = $('input[name=uni]').val().trim();
+        let departmentName = $('input[name=department]').val().trim();
+        let email = $('input[name=email]').val().trim();
+        let dataForm = {uniName : uniName, email: email, departmentName:departmentName};
+        console.log(dataForm);
 
         if (uniName == "" || uniName.length < 3) {
-            Dialog.alert("~~~", function () {
-                $($(".input")[0]).focus()
+            Dialog.alert("정확한 학교를 입력해주세요.", function () {
+                $('input[name=uni]').focus()
             });
             return;
         }
 
         if (departmentName == "" || departmentName.length < 3) {
-            Dialog.alert("~~~", function () {
-                $($(".input")[1]).focus()
+            Dialog.alert("정확한 학과를 입력해주세요.", function () {
+                $('input[name=department]').focus()
             });
             return;
         }
 
         if (!isEmail(email)) {
-            Dialog.alert("~~~", function () {
-                $($(".input")[2]).focus()
+            Dialog.alert("이메일 양식을 제대로 적어주세요.", function () {
+                $('input[name=email]').focus()
             });
             return;
         }
 
-        AJAX.call("jsp/signupDepartment.jsp", {uniName : uniName,departmentName:departmentName, email: email}, function(data) {
+        AJAX.call("jsp/signupDepartment.jsp",dataForm, function(data) {
             console.log(data.trim());
-            //1 -> not exist uni
-            //2 -> department exist
-            //3 -> already request department
-            //4 -> complete requesting department
-            //5 -> fail requesting department - err
-
+            if(data.trim() == 1){
+                //1 -> not exist uni
+                Dialog.alert("대학교가 존재하지 않습니다.",location.reload);
+            }else if(data.trim() == 2){
+                //2 -> department exist
+                Dialog.alert("학과가 이미 존재합니다.",location.reload);
+            }else if(data.trim() == 3){
+                //3 -> already request department
+                Dialog.alert("이미 신청중인 학과입니다.",location.reload);
+            }else if(data.trim() == 4){
+                //4 -> complete requesting department
+                Dialog.alert("학과 신청을 완료하였습니다.",Page.back);
+            }
+            else{
+                //5 -> fail requesting department - err
+                Dialog.alert(data.message,location.reload);
+            }
         });
     }
 

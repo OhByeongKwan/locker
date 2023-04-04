@@ -128,7 +128,7 @@ public class UniDAO {
 
                 //not exist depart
                 // is request department ?
-                sql = "select * from addDepartment where uid = "+ uid + "and department = " + department;
+                sql = "select * from addDepartment where uid = "+ uid + " and department = " + department;
                 rs = st.executeQuery(sql);
                 // request department
                 if (rs.next()){

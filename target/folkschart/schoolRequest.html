@@ -22,11 +22,11 @@
         <div>
             <div>
                 <p class="fs-18">학교</p>
-                <input type="text" />
+                <input type="text" name="uni" />
             </div>
             <div style="margin-top:10px">
                 <p class="fs-18 email">이메일</p>
-                <input type="email" />
+                <input type="email" name="email" />
             </div>
         </div>
         <div class="fs-18" onclick='submitUni()' style="margin-top:300px">신청</div>
@@ -59,29 +59,38 @@
 
     function submitUni(){
 
-        var uniName = $($("input")[0]).val().trim();
-        var email = $($("input")[1]).val().trim();
+        var uniName = $('input[name=uni]').val().trim();
+        var email = $('input[name=email]').val().trim();
 
         if (uniName == "" || uniName.length < 3) {
-            Dialog.alert("~~~", function () {
-                $($(".input")[0]).focus()
+            Dialog.alert("정확한 학교를 입력해주세요.", function () {
+                $('input[name=uni]').focus()
             });
             return;
         }
 
         if (!isEmail(email)) {
-            Dialog.alert("~~~", function () {
-                $($(".input")[1]).focus()
+            Dialog.alert("이메일 양식을 제대로 적어주세요.", function () {
+                $('input[name=email]').focus()
             });
             return;
         }
 
         AJAX.call("jsp/signupSchool.jsp", {uniName : uniName, email: email}, function(data) {
             console.log(data.trim());
-            //OK -> 추가 완료
-            //EX -> 학교 이미 존재
-            //RE -> 이미 신청중인 학교
-            //ER -> 에러
+            if(data.trim() == 'OK'){
+                //OK -> 추가 완료
+                Dialog.alert("학교 신청을 완료하였습니다.",Page.back);
+            }else if(data.trim() == 'EX'){
+                //EX -> 학교 이미 존재
+                Dialog.alert("이미 존재하는 학교입니다.",location.reload);
+            }else if(data.trim() == 'RE'){
+                //RE -> 이미 신청중인 학교
+                Dialog.alert("이미 신청중인 학교입니다.",location.reload);
+            }else{
+                //ER -> 에러
+                Dialog.alert(data.message,location.reload);
+            }
         });
 }
 
