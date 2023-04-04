@@ -242,8 +242,8 @@ public class UniDAO {
 
             JSONParser parser = new JSONParser();
 
-            String sql = "select jsonstr from uni where uniName = " + uniName;
-            System.out.println(SqlUtil.queryList(sql).toString());
+            String sql = "select jsonstr from uni where uniName = '" + uniName +"'";
+            System.out.println(SqlUtil.queryList(sql));
             //SqlUtil.queryList(sql).toString();
             return SqlUtil.queryList(sql).toString();
 

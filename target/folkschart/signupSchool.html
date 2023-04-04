@@ -137,12 +137,33 @@
                 <li class="departTitle">학과3</li>
             </ul>
         </div>`);
-
         AJAX.call("jsp/getDepList.jsp", {uniName:schoolName}, function(data) {
-            console.log(data);
-            console.log(schoolName);
-            //list of Departmanet in this Universe
-            // ex) [~~, ~~, ~~, ~~]
+            console.log(data.trim());
+            let departlist = data.trim();
+            departlist = departlist.slice(1,-1);
+            let arr = departlist.split(",");
+            arr  = arr.filter(function(item) {
+                return item !== null && item !== undefined && item !== '';
+            });
+            $('#schoolSearch .dropdown-menu.depart li').remove();
+            if(arr.length !== 0){
+                console.log(arr.length);
+                for(let i = 0 ; i < arr.length ; i++){
+                    $('#schoolSearch .dropdown-menu.depart').append(`<li class="departTitle">${arr[i]}</li>`)
+                }
+            }else{
+                console.log(arr.length);
+                $('#schoolSearch .dropdown-menu.depart').append(`<div class="departTitle">등록된 학과가 없습니다.</div>`);
+            }
+
+            $('.search-box .dropdown-menu.depart li').on('click',function() {
+                let departName = this.innerText;
+                $('#searchDepart')[0].value = departName;
+                $('.search-box .dropdown-menu.depart').removeClass('show');
+                console.log(departName);
+
+                getSignUp();
+            });
         });
 
         $('#department button').on('click',()=>{
@@ -154,15 +175,6 @@
             let width = $('.search-box').innerWidth();
             $('#department .dropdown-menu').css('width',width-44+'px');
             $('#department .dropdown-menu').addClass('show');
-        });
-
-        $('.search-box .dropdown-menu.depart li').on('click',function() {
-            let departName = this.innerText;
-            $('#searchDepart')[0].value = departName;
-            $('.search-box .dropdown-menu.depart').removeClass('show');
-            console.log(departName);
-
-            getSignUp();
         });
 
         $('#department input').on('keyup',()=>{
