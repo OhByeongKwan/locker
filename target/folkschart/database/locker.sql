@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS locker
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE locker;
 
+-- status 1 = exist , 2 = request
 CREATE TABLE IF NOT EXISTS uni(
     ID int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     uniName VARCHAR(128),
@@ -9,7 +10,15 @@ CREATE TABLE IF NOT EXISTS uni(
     jsonstr VARCHAR(8192),
     INDEX idx1(uniName)
     );
--- status 1 = exist , 2 = request
+
+CREATE TABLE IF NOT EXISTS department(
+    ID int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    uid int(128),
+    uniName VARCHAR(128),
+    depName VARCHAR(128),
+    INDEX idx1(ID),
+    INDEX idx2(uid)
+    );
 
 CREATE TABLE IF NOT EXISTS addDepartment(
     ID int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -20,4 +29,12 @@ CREATE TABLE IF NOT EXISTS addDepartment(
     );
 -- status 1 = exist , 2 = request
 
-
+CREATE TABLE IF NOT EXISTS user (
+    mid VARCHAR(128) PRIMARY KEY,
+    password VARCHAR(32),
+    depCode VARCHAR(32),
+    type CHAR(4) DEFAULT 'U',
+    authcode VARCHAR(32),
+    jsonstr VARCHAR(1024),
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

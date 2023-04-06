@@ -91,17 +91,20 @@
                 //1 -> not exist uni
                 Dialog.alert("대학교가 존재하지 않습니다.",location.reload);
             }else if(data.trim() == 2){
-                //2 -> department exist
-                Dialog.alert("학과가 이미 존재합니다.",location.reload);
+                //2 -> requesting uni
+                Dialog.alert("대학교 추가가 진행중입니다.",location.reload);
             }else if(data.trim() == 3){
-                //3 -> already request department
+                //3 -> department exist
+                Dialog.alert("학과가 이미 존재합니다.",location.reload);
+            } else if(data.trim() == 4){
+                //4 -> already request department
                 Dialog.alert("이미 신청중인 학과입니다.",location.reload);
-            }else if(data.trim() == 4){
-                //4 -> complete requesting department
+            }else if(data.trim() == 5){
+                //5 -> complete requesting department
                 Dialog.alert("학과 신청을 완료하였습니다.",Page.back);
             }
             else{
-                //5 -> fail requesting department - err
+                //6 -> fail requesting department - err
                 Dialog.alert(data.message,location.reload);
             }
         });

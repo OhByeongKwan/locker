@@ -20,13 +20,6 @@
             <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
             </button>
             <ul class="dropdown-menu univ">
-                <li class="schoolTitle">삼육대</li>
-                <li class="schoolTitle">서울여대</li>
-                <li class="schoolTitle">광운대</li>
-                <li class="schoolTitle">서울대</li>
-                <li class="schoolTitle">연세대</li>
-                <li class="schoolTitle">고려대</li>
-                <li class="schoolTitle">중앙대</li>
             </ul>
         </div>
     </div>
@@ -201,7 +194,7 @@
 
     function getSignUp(){
         $('#signupForm').remove();
-        $('#schoolSearch').append(`<div id="signupForm"><input name="id" class="signup-box w-100" type="text" placeholder="아이디(학번)" style="outline:none" />
+        $('#schoolSearch').append(`<div id="signupForm"><input name="id" class="signup-box w-100" type="text" placeholder="아이디(이메일)" style="outline:none" />
 <input name="pw" class="signup-box w-100" type="text" placeholder="비밀번호" style="outline:none" />
 <input name="pw2" class="signup-box w-100" type="text" placeholder="비밀번호 확인" style="outline:none" />
 <div class="signup-box fs-18 text-center" onclick='signup()' style="margin-top:100px">회원가입</div></div>`);
@@ -214,6 +207,12 @@
         let pw = $('input[name=pw]').val().trim();
         let pw2 = $('input[name=pw2]').val().trim();
 
+        if (!isEmail(id)) {
+            Dialog.alert("이메일을 양식에 맞게 입력해주세요.", function () {
+                $('input[name=id]').focus()
+            });
+            return;
+        }
         if (id == "" || id.length < 3) {
             Dialog.alert("아이디를 입력해주세요.", function () {
                 $('input[name=id]').focus()
@@ -241,6 +240,21 @@
 
         let jsonForm = {uniName : uniName, department : department, id : id, pw : pw, pw2 : pw2};
         console.log(jsonForm);
+
+        AJAX.call("jsp/signup.jsp", jsonForm, function (data) {
+            pagectx.onproc = false;
+
+            var code = data.trim();
+            if (code == "EX") {
+                alert("이미 가입된 이메일 주소입니다.");
+            }
+            else if (code == "ER") {
+                alert("회원 처리 과정에서 에러가 발생하였습니다. 다시 시도해주세요.");
+            }
+            else {
+                Page.goHome();
+            }
+        });
         //회원가입 post 만들기
         // AJAX.call(url,jsonForm,function(data){
         //     Dialog.alert('회원가입이 완료되었습니다.',Page.go('/index.html'));

@@ -1,18 +1,79 @@
 package nuc.core;
 
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Set;
+
+import javax.naming.NamingException;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import nuc.util.*;
 
-import javax.naming.NamingException;
-import java.sql.*;
+import nuc.util.ConnectionPool;
+import nuc.util.MD5;
+import nuc.util.SqlUtil;
+import nuc.util.Util;
 
 public class UserDAO {
 
-    public String test() throws NamingException, SQLException, ParseException {
-        return "ac";
+    //signup - check eamil
+    public String get(String mid) throws NamingException, SQLException, ParseException {
+        String sql = "SELECT jsonstr FROM user where mid = '" + mid + "'";
+        return SqlUtil.query(sql);
     }
+
+    public JSONObject insert(String mid, String pass, String imgdir, String uniName, String depName) throws NamingException, SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Statement st = null;
+        try {
+            conn = ConnectionPool.get();
+            st = conn.createStatement();
+
+            String sql = "SELECT id FROM department WHERE uniName = '" + uniName + "'";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            rs.next();
+            String depCode = String.valueOf((rs.getInt("id")));
+
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("mid", mid);
+            jsonobj.put("uniName", uniName);
+            jsonobj.put("depName", depName);
+            jsonobj.put("depCode", depCode);
+
+            pass = "'"+pass+"'";
+
+            String sql2 = "INSERT INTO user(mid, password, depCode, jsonstr) VALUES('" + mid +
+                    "', '" + MD5.get(pass) +
+                     "', '" + depCode +
+                    "', '" + jsonobj.toJSONString() +
+                    "')";
+            System.out.println(sql2);
+            SqlUtil.update(sql2);
+
+            // create a directory to store images
+            (new File(imgdir)).mkdirs();
+            return jsonobj;
+            }
+        finally {
+        if (rs!= null) rs.close();
+        if (st!= null) st.close();
+        if (conn!= null) conn.close();
+    }
+
+    }
+
+
+
     public String loginTest(String mid) throws NamingException, SQLException, ParseException {
         Connection conn = null;
         Statement st = null;
