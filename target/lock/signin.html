@@ -3,17 +3,23 @@
 <head>
     <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache">
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
-    <link rel="stylesheet" type="text/css" href="css/core.css" media="only screen">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <title>모두의 사물함</title>
+    <link rel="stylesheet" href="css/core.css" media="only screen">
+    <title></title>
 </head>
-<body style="background-color:#0E58D6">
-<div class="container d-flex flex-column gap-3" style="padding:22px">
-    <div role="button" class="btn-signup text-center" onclick="Page.go('/signupSchool.html')">회원가입 하기</div>
-    <div role="button" class="btn-signin text-center" onclick="Page.go('/signin.html')">로그인 하기</div>
+<body>
+<div>
+    <div class="login1">
+
+        <input id="--mid" type="text" placeholder="아이디를 입력해주세요">
+        <input id="--pass" type="password" placeholder="비밀번호를 입력해주세요">
+        <div class="button" onclick="login()">로그인</div>
+        <div class="button" onclick="signup()">회원가입</div>
+
+    </div>
 </div>
+
+
 </body>
 </html>
 <script src="js/jquery-3.5.1.min.js"></script>
@@ -26,7 +32,6 @@
 </script>
 <script src="js/velocity.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap.bundle.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
@@ -81,12 +86,6 @@
         console.log(usrobj)
         SSO.login(null, usrobj);
     }
-    function test(){
-        console.log("aaaaaa")
-        AJAX.jsonCall("jsp/test.jsp", {mid: "1"}, function (data) {
-            console.log(data)
-        });
-    }
 
 
     function signup() {
@@ -107,20 +106,5 @@
         }
 
         return {mid: mid, pass: ps};
-    }
-
-    function addSchool(name,email){
-        //ajax name email주기
-        //학교 있을 떄
-        //왠만하면 코드로 줄게 ex ok err 0 1 -1
-        //jsp 쪽에다가 써놓기.
-
-        // if(존재할 때)
-        //     alert("이미 학교기 존재합니다.")
-        // else if 신청 되이씅ㄹ 때
-        //     alert("이미 신청이 되어있습니다.")
-        // else 신청되었습니다
-
-
     }
 </script>

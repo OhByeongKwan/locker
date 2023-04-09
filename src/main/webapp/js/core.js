@@ -1054,7 +1054,7 @@ var SSO = {
         if (isDevice() && Params.get("cfgDevice").platform != "undefined") {
             // native app
             if (Params.get("cfgDevice").platform === "android") { // Android
-                var url = "folkschart://login.kakao";
+                var url = "locker://login.kakao";
                 window.location.replace(url);
             } else if (Params.get("cfgDevice").platform === "ios") { // IOS
                 webkit.messageHandlers.loginKakao.postMessage("");
@@ -1066,7 +1066,7 @@ var SSO = {
             });
         } else {
             // Kakao.Auth.authorize({
-            // 	redirectUri:  "https://www.folkschart.com/jsp/oauthKakao.jsp"
+            // 	redirectUri:  "https://www.locker.com/jsp/oauthKakao.jsp"
             // });
             // desktop browser
             Kakao.Auth.login({
@@ -1181,7 +1181,7 @@ function formatNum(val){
 }
 
 function isDevice() {
-    if (typeof _folksChartInterface != "undefined") {
+    if (typeof _lockerInterface != "undefined") {
         return true;
     } else {
         let dev = Params.get("cfgDevice", true);

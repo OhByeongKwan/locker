@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+</head>
+<body>
+<div class="container d-flex flex-column justify-content-between">
+    <div id="schoolSearch">
+        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="signup-title fs-24" style="margin-top:58px">우리 학교 알아보기</div>
+        <div id="university" class="search-box d-flex w-100" style="margin-top:28px">
+            <input id="searchUni" name="searchUni" class="w-100 border-0" type="text" placeholder="학교 검색하기" style="outline:none" />
+            <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu univ">
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center flex-column" style="gap:10px">
+        <div class="d-flex justify-content-center" style="gap:23px">
+            <div style="color:#686B7C">우리학교 계정이 없다면?</div>
+            <a href="/schoolRequest.html">건의하기</a>
+        </div>
+        <div class="d-flex justify-content-center" style="gap:23px">
+            <div style="color:#686B7C">우리학교 학과가 없다면?</div>
+            <a href="/departmentRequest.html">건의하기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+        //AJAX 학교 불러오기
+        AJAX.call("jsp/getUniList.jsp", {}, function(data) {
+            let unilist = data.trim();
+            unilist = unilist.slice(1,-1);
+            let arr = unilist.split(",");
+            console.log(arr);
+            $('.search-box .dropdown-menu.univ li').remove();
+            if(arr.length !== 0){
+                for(let i = 0 ; i < arr.length ; i++){
+                    $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">${arr[i]}</li>`);
+                }
+            }else{
+                $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">등록된 대학교가 없습니다.</li>`);
+            }
+
+            $('.search-box .dropdown-menu.univ li').on('click',function(){
+                let schoolName = this.innerText;
+                $('#searchUni')[0].value = schoolName;
+                $('.search-box .dropdown-menu.univ').removeClass('show');
+                console.log(schoolName)
+                getDepart(schoolName);
+            });
+        });
+        //학교 있을 때
+        //학교 없을 때
+
+        $('#university button').on('click',()=>{
+            let width = $('#university').innerWidth();
+            $('#schoolSearch .dropdown-menu.univ').css('width',width-44+'px');
+        });
+
+        $('#university input').on('click',()=>{
+            let width = $('#university').innerWidth();
+            $('#university .dropdown-menu').css('width',width-44+'px');
+            $('#university .dropdown-menu').addClass('show');
+        });
+
+        $(document).mouseup(function (e) {
+            var dropMenu = $('.dropdown-menu');
+            if (dropMenu.has(e.target).length === 0) {
+                dropMenu.removeClass("show");
+            }
+        });
+
+        $('#university input').on('keyup',()=>{
+            let nullValue = 0;
+            let inputValue = $('#university input')[0].value.toUpperCase();
+            let itemValue = $('#university .dropdown-menu li');
+
+            for(let i = 0 ; i<itemValue.length ; i++){
+                if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                    itemValue[i].style.display = 'list-item';
+                    nullValue += 1;
+                }else{
+                    itemValue[i].style.display = 'none';
+                }
+            }
+            console.log(nullValue);
+            if(nullValue == 0){
+                $('#university .dropdown-menu').removeClass('show');
+            }else{
+                $('#university .dropdown-menu').addClass('show');
+            }
+        });
+    }
+    function getDepart(schoolName){
+        $('#department').remove();
+        $('#signupForm').remove();
+        $('#schoolSearch').append(`<div id="department" class="search-box d-flex w-100" style="margin-top:28px">
+            <input id="searchDepart" name="searchDepart" class="w-100 border-0" type="text" placeholder="학과 검색하기" style="outline:none" />
+            <button type="button" class="dropdown-toggle-split my-auto" data-bs-toggle="dropdown" aria-expanded="false">
+            </button>
+            <ul class="dropdown-menu depart">
+                <li class="departTitle">학과1</li>
+                <li class="departTitle">학과2</li>
+                <li class="departTitle">학과3</li>
+            </ul>
+        </div>`);
+        AJAX.call("jsp/getDepList.jsp", {uniName:schoolName}, function(data) {
+            console.log(data.trim());
+            let departlist = data.trim();
+            departlist = departlist.slice(1,-1);
+            let arr = departlist.split(",");
+            arr  = arr.filter(function(item) {
+                return item !== null && item !== undefined && item !== '';
+            });
+            $('#schoolSearch .dropdown-menu.depart li').remove();
+            if(arr.length !== 0){
+                console.log(arr.length);
+                for(let i = 0 ; i < arr.length ; i++){
+                    $('#schoolSearch .dropdown-menu.depart').append(`<li class="departTitle">${arr[i]}</li>`)
+                }
+            }else{
+                console.log(arr.length);
+                $('#schoolSearch .dropdown-menu.depart').append(`<div class="departTitle">등록된 학과가 없습니다.</div>`);
+            }
+
+            $('.search-box .dropdown-menu.depart li').on('click',function() {
+                let departName = this.innerText;
+                $('#searchDepart')[0].value = departName;
+                $('.search-box .dropdown-menu.depart').removeClass('show');
+                console.log(departName);
+
+                getSignUp();
+            });
+        });
+
+        $('#department button').on('click',()=>{
+            let width = $('#department').innerWidth();
+            $('#schoolSearch .dropdown-menu.univ').css('width',width-44+'px');
+        });
+
+        $('#department input').on('click',()=>{
+            let width = $('.search-box').innerWidth();
+            $('#department .dropdown-menu').css('width',width-44+'px');
+            $('#department .dropdown-menu').addClass('show');
+        });
+
+        $('#department input').on('keyup',()=>{
+            let nullValue = 0;
+            let inputValue = $('#department input')[0].value.toUpperCase();
+            let itemValue = $('#department .dropdown-menu li');
+
+            for(let i = 0 ; i<itemValue.length ; i++){
+                if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                    itemValue[i].style.display = 'list-item';
+                    nullValue += 1;
+                }else{
+                    itemValue[i].style.display = 'none';
+                }
+            }
+            console.log(nullValue);
+            if(nullValue == 0){
+                $('#department .dropdown-menu').removeClass('show');
+            }else{
+                $('#department .dropdown-menu').addClass('show');
+            }
+        });
+    }
+
+    function getSignUp(){
+        $('#signupForm').remove();
+        $('#schoolSearch').append(`<div id="signupForm"><input name="id" class="signup-box w-100" type="text" placeholder="아이디(이메일)" style="outline:none" />
+<input name="pw" class="signup-box w-100" type="text" placeholder="비밀번호" style="outline:none" />
+<input name="pw2" class="signup-box w-100" type="text" placeholder="비밀번호 확인" style="outline:none" />
+<div class="signup-box fs-18 text-center" onclick='signup()' style="margin-top:100px">회원가입</div></div>`);
+    }
+
+    function signup(){
+        let uniName = $('input[name=searchUni]').val().trim();
+        let department = $('input[name=searchDepart]').val().trim();
+        let id = $('input[name=id]').val().trim();
+        let pw = $('input[name=pw]').val().trim();
+        let pw2 = $('input[name=pw2]').val().trim();
+
+        if (!isEmail(id)) {
+            Dialog.alert("이메일을 양식에 맞게 입력해주세요.", function () {
+                $('input[name=id]').focus()
+            });
+            return;
+        }
+        if (id == "" || id.length < 3) {
+            Dialog.alert("아이디를 입력해주세요.", function () {
+                $('input[name=id]').focus()
+            });
+            return;
+        }
+        if (pw == "" || pw.length < 3) {
+            Dialog.alert("비밀번호를 입력해주세요.", function () {
+                $('input[name=pw]').focus()
+            });
+            return;
+        }
+        if (pw2 == "" || pw2.length < 3) {
+            Dialog.alert("비밀번호를 입력해주세요.", function () {
+                $('input[name=pw2]').focus()
+            });
+            return;
+        }
+        if (pw != pw2) {
+            Dialog.alert("비밀번호가 일치하지 않습니다.", function () {
+                $('input[name=pw2]').focus()
+            });
+            return;
+        }
+
+        let jsonForm = {uniName : uniName, department : department, id : id, pw : pw};
+        console.log(jsonForm);
+
+        AJAX.call("jsp/signup.jsp", jsonForm, function (data) {
+            pagectx.onproc = false;
+
+            var code = data.trim();
+            if (code == "EX") {
+                alert("이미 가입된 이메일 주소입니다.");
+            }
+            else if (code == "ER") {
+                alert("회원 처리 과정에서 에러가 발생하였습니다. 다시 시도해주세요.");
+            }
+            else {
+                Page.goHome();
+            }
+        });
+        //회원가입 post 만들기
+        // AJAX.call(url,jsonForm,function(data){
+        //     Dialog.alert('회원가입이 완료되었습니다.',Page.go('/index.html'));
+        // });
+    }
+</script>

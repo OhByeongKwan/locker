@@ -1,5 +1,5 @@
 var Config = {
-    url: "http://localhost:8086",
+    url: "http://localhost:8087",
     platform: null,
 
     getUserImgUrl: function(mid, file) {
@@ -53,19 +53,68 @@ let AJAX = {
 //Dialog object
 
 var Dialog = {
-    init: function () {
-        $("body").append(this._generate());
+    // init: function () {
+    //     $("body").append(this._generate());
+    //
+    //     $(window).resize(function() {
+    //         Dialog.resize();
+    //     });
+    // },
 
-        $(window).resize(function() {
-            Dialog.resize();
+    okCallback: null,
+    cancelCallback: null,
+    data: {},
+    modal: null,
+
+    init: function() {
+        $("body .container").append(`<div id="dialog" class="modal show" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="dialogCancel" type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button id="dialogOk" type="button" class="btn btn-sm btn-primary">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>`);
+
+        Dialog.modal = new bootstrap.Modal(document.getElementById('dialog'),{});
+
+        $('#dialogOk').on('click', function() {
+            Dialog.hide();
+            if (Utils.isValid(Dialog.okCallback)) {
+                Dialog.okCallback(Dialog.data);
+                Dialog.okCallback = null;
+            }
+            if (Utils.isValid(Dialog.cancelCallback)) {
+                Dialog.cancelCallback = null;
+            }
         });
+
+        $('#dialogCancel').on('click', function() {
+            Dialog.hide();
+            if (Utils.isValid(Dialog.okCallback)) {
+                Dialog.okCallback = null;
+            }
+            if (Utils.isValid(Dialog.cancelCallback)) {
+                Dialog.cancelCallback(Dialog.data);
+                Dialog.cancelCallback = null;
+            }
+        });
+
     },
 
     _generate: function() {
         var str = "<div id='--dialog' class='dialog'><div class='wrapper'>";
         str += "<div id='--dialog-del' class='del-btn' onclick='Dialog.reset()'></div>";
         str += "<div id='--dialog-cnt' class='contents'></div>";
-        str += "</div></div>";
+        str += "</div>";
         return str;
     },
 
@@ -100,7 +149,7 @@ var Dialog = {
 
     set: function(showDel) {
         this.show();
-        this.disableScroll();
+        // this.disableScroll();
         this.ignoreHideProgress = true;
 
         $("body").on('keyup', function(e) {
@@ -110,6 +159,24 @@ var Dialog = {
             else if (e.keyCode == 13) {
                 if ($('#--dialog-ok').length) {
                     //Dialog.onConfirm();
+                }
+            }
+        });
+
+    },
+    set2: function(showDel) {
+        this.show();
+        this.ignoreHideProgress = true;
+
+        $("body").on('keyup', function(e) {
+            if (e.keyCode == 27) {
+                Dialog.onCancel();
+                console.log(e)
+            }
+            else if (e.keyCode == 13) {
+                if ($('#--dialog-ok').length) {
+                    //Dialog.onConfirm();
+                    console.log(e)
                 }
             }
         });
@@ -130,16 +197,38 @@ var Dialog = {
 
     cbFunc: null,
     cbFuncCancel: null,
-    alert: function(msg, cbfunc) {
-        this.cbFunc = cbfunc;
-        this.cbFuncCancel = cbfunc;
+    // alert: function(msg, cbfunc) {
+    //     this.cbFunc = cbfunc;
+    //     this.cbFuncCancel = cbfunc;
+    //
+    //     var str = "<div class='desc mbot-25'>" + msg + "</div>";
+    //     str += "<div id='--dialog-ok' class='button' onclick='Dialog.onConfirm()'>확인</div>";
+    //
+    //     $('#--dialog-cnt').html(str);
+    //
+    //     this.set2();
+    // },
 
-        var str = "<div class='desc mbot-25'>" + msg + "</div>";
-        str += "<div id='--dialog-ok' class='button' onclick='Dialog.onConfirm()'>확인</div>";
+    alert: function(msg, okCallback, data) {
+        Dialog.okCallback = okCallback;
+        Dialog.cancelCallback = okCallback;
+        Dialog.data = data;
 
-        $('#--dialog-cnt').html(str);
+        $('#dialog .modal-body').html(`<div>${msg}</div>`);
+        Dialog.title('');
+        $('#dialogCancel').hide();
+        Dialog.show();
+        return Dialog;
+    },
 
-        this.set();
+    title: function(title){
+        $('#dialog .modal-title').html(title);
+    },
+    show: function() {
+        Dialog.modal.show();
+    },
+    hide: function() {
+        Dialog.modal.hide();
     },
 
     confirm: function(msg, cbfunc, cbload, options) {
@@ -1161,3 +1250,134 @@ function stripSpcChar(str, params) {
     if (params.delSpace) str = str.replace(/ /g, "");
     return str;
 }
+
+let Evt = {
+    init: function () {
+        this._init();
+        this._setHeaderEvt();
+
+        $("body").click(function (event) {
+            // for this._setHeaderEvt();
+            if (!event.target.matches(".page-hdr .icon-box .icon")) {
+                $(".page-hdr .icon-box .icon").each(function () {
+                    $(this).children(".dropdown-content").addClass("hide");
+                });
+            }
+            // for user.html page reporter user
+            if (!event.target.matches(".report .ico-dots")) {
+                $(".report .ico-dots").each(function () {
+                    $(this).siblings(".dropdown-content").addClass("hide");
+                });
+            }
+        });
+    },
+
+    _init: function () {
+        $(".inner-box").click(function (evt) {
+            evt.stopPropagation();
+        });
+        $(".ico-dots").click(function (evt) {
+            evt.stopPropagation();
+        });
+        $(".poll").click(function (evt) {
+            evt.stopPropagation();
+        });
+    },
+
+    _setHeaderEvt: function () {
+        $(".page-hdr .icon-box .icon").click(function (event) {
+            let content = $(this).children(".dropdown-content");
+            if (content.hasClass("hide")) {
+                content.removeClass("hide");
+            } else {
+                content.addClass("hide");
+            }
+        });
+
+        $(".page-hdr .icon-box .icon").click(function (evt) {
+            evt.stopPropagation();
+        });
+
+        $("#--srch-btn").click(function (evt) {
+            evt.stopPropagation();
+        });
+    },
+}
+
+var SessionStore = {
+    set: function (name, val) {
+        name = "nuc:" + name;
+        sessionStorage.setItem(name, JSON.stringify(val));
+    },
+
+    get: function (name) {
+        name = "nuc:" + name;
+        var str = sessionStorage.getItem(name);
+        return (str == null || str == "null" || str == "undefined") ? null : JSON.parse(str);
+    },
+
+    remove: function (name) {
+        name = "nuc:" + name;
+        sessionStorage.removeItem(name);
+    },
+
+    clear: function() {
+        sessionStorage.clear();
+    },
+
+    log: function () {
+        var str = '';
+        for(var key in window.sessionStorage) {
+            if(window.sessionStorage.hasOwnProperty(key)) {
+                var locstr = window.sessionStorage[key];
+                var size = (locstr.length*16)/(8*1024);
+                if (size >= 1) {
+                    console.log(key + ": " + size.toFixed(1) + " KB");
+                }
+                str += locstr;
+            }
+        }
+        if (isValid(str)) {
+            var size = (str.length*16)/(8*1024);
+            /* if (size > 2000) */ console.log("---- Session storate TOTAL: " + size.toFixed(1) + " KB");
+        }
+    },
+};
+
+let Utils = {
+    isValid: function(something) {
+        return (something != null && something != "" && typeof something != "undefined");
+    },
+    isNull: function(something) {
+        return !Utils.isValid(something);
+    },
+    dateFormat: function(dateOrString, formatString) {
+        if(typeof dateOrString === 'string') {
+            if(dateOrString.includes('T')) {
+                return Utils.dateFormat(new Date(x), 'yyyy-MM-dd hh:mm:ss');
+            }
+            formatString = dateOrString;
+            dateOrString = new Date();
+        }
+        if(dateOrString instanceof Date && typeof formatString == 'undefined') {
+            formatString = 'yyyy-MM-dd hh:mm:ss';
+        }
+        if(Utils.isNull(dateOrString)) {
+            return Utils.dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss');
+        }
+        let z = {
+            M: dateOrString.getMonth() + 1,
+            d: dateOrString.getDate(),
+            h: dateOrString.getHours(),
+            m: dateOrString.getMinutes(),
+            s: dateOrString.getSeconds(),
+        };
+        formatString = formatString.replace(/(M+|d+|h+|m+|s+)/g, function (v) {
+            return ((v.length > 1 ? '0' : '') + eval('z.' + v.slice(-1))).slice(-2);
+        });
+
+        return formatString.replace(/(y+)/g, function (v) {
+            return dateOrString.getFullYear().toString().slice(-v.length);
+        });
+    }
+};

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+    <style>
+        #schoolRequest input{border:1px solid #BFC2CE;padding:14px 22px;border-radius:8px;width:100%}
+        #schoolRequest button{border:none;background-color:#0E58D6;padding:14px 22px;border-radius:8px;width:100%;color:white;margin-bottom:0}
+    </style>
+</head>
+<body>
+<div class="container d-flex flex-column">
+    <div class="back-icon" role="button" onclick="Page.back()"></div>
+    <div class="signup-title fs-24" style="margin-top:58px">학과 신청하기</div>
+    <div id="schoolRequest" style="margin-top:28px">
+        <div>
+            <div>
+                <p class="fs-18">학교</p>
+                <input type="text" name="uni" />
+            </div>
+            <div style="margin-top:10px">
+                <p class="fs-18">학과</p>
+                <input type="text" name="department" />
+            </div>
+            <div style="margin-top:10px">
+                <p class="fs-18">이메일</p>
+                <input type="email" name="email" />
+            </div>
+        </div>
+        <div class="fs-18" onclick="submitDepartment()" style="margin-top:193px">신청</div>
+    </div>
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+    }
+
+    function submitDepartment(){
+
+        let uniName = $('input[name=uni]').val().trim();
+        let departmentName = $('input[name=department]').val().trim();
+        let email = $('input[name=email]').val().trim();
+        let dataForm = {uniName : uniName, email: email, departmentName:departmentName};
+        console.log(dataForm);
+
+        if (uniName == "" || uniName.length < 3) {
+            Dialog.alert("정확한 학교를 입력해주세요.", function () {
+                $('input[name=uni]').focus()
+            });
+            return;
+        }
+
+        if (departmentName == "" || departmentName.length < 3) {
+            Dialog.alert("정확한 학과를 입력해주세요.", function () {
+                $('input[name=department]').focus()
+            });
+            return;
+        }
+
+        if (!isEmail(email)) {
+            Dialog.alert("이메일 양식을 제대로 적어주세요.", function () {
+                $('input[name=email]').focus()
+            });
+            return;
+        }
+
+        AJAX.call("jsp/signupDepartment.jsp",dataForm, function(data) {
+            console.log(data.trim());
+            if(data.trim() == 1){
+                //1 -> not exist uni
+                Dialog.alert("대학교가 존재하지 않습니다.",location.reload);
+            }else if(data.trim() == 2){
+                //2 -> requesting uni
+                Dialog.alert("대학교 추가가 진행중입니다.",location.reload);
+            }else if(data.trim() == 3){
+                //3 -> department exist
+                Dialog.alert("학과가 이미 존재합니다.",location.reload);
+            } else if(data.trim() == 4){
+                //4 -> already request department
+                Dialog.alert("이미 신청중인 학과입니다.",location.reload);
+            }else if(data.trim() == 5){
+                //5 -> complete requesting department
+                Dialog.alert("학과 신청을 완료하였습니다.",Page.back);
+            }
+            else{
+                //6 -> fail requesting department - err
+                Dialog.alert(data.message,location.reload);
+            }
+        });
+    }
+
+</script>

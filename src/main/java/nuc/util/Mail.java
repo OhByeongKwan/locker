@@ -43,7 +43,7 @@ public class Mail {
     public void send(String recipient, String code) {
 
         // 1. 발신자의 메일 계정과 비밀번호 설정
-        final String user = "folkschart@gmail.com";
+        final String user = "locker@gmail.com";
         final String password = "bhnabohfkpsbljcm";
 
         // 2. Property에 SMTP 서버 정보 설정

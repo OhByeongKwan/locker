@@ -2,8 +2,8 @@
 <%@ page import="org.json.simple.*" %>
 <%@ page import="org.json.simple.parser.*" %>
 <%@ page import="java.io.*" %>
-<%@ page import="core.*" %>
-<%@ page import="util.*" %>
+<%@ page import="nuc.core.*" %>
+<%@ page import="nuc.util.*" %>
 <% 
 	request.setCharacterEncoding("UTF-8");
 	UserDAO dao = new UserDAO();
@@ -15,19 +15,15 @@
 		mid = request.getParameter("mid");
 		pass = request.getParameter("pass");
 
-		int a = dao.loginTest(mid, pass);
-		out.print("NA");
-		out.print("'"+a+"'");}
+		String res = dao.login(mid, pass);
+		if (res.equals("NA") || res.equals("PS")) {
+			out.print(res);
+			return;
+		}
 
-//		String res = dao.login(mid, pass);
-//		if (res.equals("NA") || res.equals("PS")) {
-//			out.print(res);
-//			return;
-//		}
-//
-//		usrobj = (JSONObject)(new JSONParser()).parse(res);
-//		code = "OK";
-//
+		usrobj = (JSONObject)(new JSONParser()).parse(res);
+		code = "OK";
+
 //	} else if(request.getParameter("platform").equals("kakao")) {
 //		String result = (new ExternApi().getKakaoUserInfo(request.getParameter("acctoken"), request.getParameter("reftoken")));
 //		String urltoken = request.getParameter("urltoken");
@@ -46,7 +42,7 @@
 //					return;
 //				}
 //
-//				usrobj = (new ExternApi()).updateUserInformationByKakao(jsonobj);
+////				usrobj = (new ExternApi()).updateUserInformationByKakao(jsonobj);
 //
 //				if(urltoken != null) {
 //					//(new ParkDAO()).updateToken(mid, urltoken); // 링크타고 들어오는 추천이벤트 할때 넣을것
@@ -54,17 +50,17 @@
 //			} else {
 //				usrobj = (JSONObject)(new JSONParser()).parse(_usrobj);
 //			}
-//		} else {
-//			code = "NA";
-//		}
+		} else {
+			code = "NA";
+		}
 //	}
-//
-//	if(code.startsWith("OK")) {
-//		SessionManager.put(session, "usrobj", usrobj);
-//		if (usrobj.get("admin") != null && usrobj.get("admin").toString().equals("T")) {
-//			code = "AD";
-//		}
-//	}
-//	out.print(code);
+
+	if(code.startsWith("OK")) {
+		SessionManager.put(session, "usrobj", usrobj);
+		if (usrobj.get("admin") != null && usrobj.get("admin").toString().equals("T")) {
+			code = "AD";
+		}
+	}
+	out.print(code);
 
 %>
