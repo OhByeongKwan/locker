@@ -13,7 +13,7 @@
 
         <input id="--mid" type="text" placeholder="아이디를 입력해주세요">
         <input id="--pass" type="password" placeholder="비밀번호를 입력해주세요">
-        <div class="button" onclick="test()">로그인</div>
+        <div class="button" onclick="login()">로그인</div>
         <div class="button" onclick="signup()">회원가입</div>
 
     </div>
@@ -85,12 +85,6 @@
         var usrobj = getInputObj();
         console.log(usrobj)
         SSO.login(null, usrobj);
-    }
-    function test(){
-        console.log("aaaaaa")
-        AJAX.jsonCall("jsp/test.jsp", {mid: "1"}, function (data) {
-            console.log(data)
-        });
     }
 
 

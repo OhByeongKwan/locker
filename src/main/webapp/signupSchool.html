@@ -238,7 +238,7 @@
             return;
         }
 
-        let jsonForm = {uniName : uniName, department : department, id : id, pw : pw, pw2 : pw2};
+        let jsonForm = {uniName : uniName, department : department, id : id, pw : pw};
         console.log(jsonForm);
 
         AJAX.call("jsp/signup.jsp", jsonForm, function (data) {

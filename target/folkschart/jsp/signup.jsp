@@ -6,7 +6,7 @@
 	request.setCharacterEncoding("UTF-8");
 	
 	String mid = request.getParameter("id");
-	String pass = request.getParameter("pass");
+	String pass = request.getParameter("pw");
 	String uniName = request.getParameter("uniName");
 	String depName = request.getParameter("department");
 	

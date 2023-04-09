@@ -50,8 +50,6 @@ public class UserDAO {
             jsonobj.put("depName", depName);
             jsonobj.put("depCode", depCode);
 
-            pass = "'"+pass+"'";
-
             String sql2 = "INSERT INTO user(mid, password, depCode, jsonstr) VALUES('" + mid +
                     "', '" + MD5.get(pass) +
                      "', '" + depCode +
