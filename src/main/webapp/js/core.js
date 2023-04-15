@@ -232,24 +232,13 @@ var Dialog = {
     },
 
     confirm: function(msg, cbfunc, cbload, options) {
-        this.cbFunc = cbfunc;
-        this.cbFuncCancel = cbload;
+        this.okCallback = cbfunc;
+        this.cancelCallback = cbload;
         if (!isValid(options)) options = {};
 
-        var str = "<div class='desc mbot-25'>" + msg + "</div>";
-        str += "<div class='dis-f'>"
-        str += "<div class='section w50'>";
-        str += "<div id='--dialog-cancel' class='button white' onclick='Dialog.onCancel()'>";
-        str += (options.yesno ? "아니오" : "취소") + "</div>";
-        str += "</div>";
-        str += "<div class='section w50'>";
-        str += "<div id='--dialog-ok' class='button' onclick='Dialog.onConfirm()'>";
-        str += (options.yesno ? "네" : "확인")  + "</div>";
-        str += "</div>";
-        str += "</div>";
-
-        $('#--dialog-cnt').html(str);
-
+        let str = `<div>${msg}</div>`;
+        $('#dialog .modal-title').html("");
+        $('#dialog .modal-body').html(str);
         this.set();
     },
 

@@ -11,6 +11,7 @@
 </head>
 <body style="background-color:#0E58D6">
 <div class="container d-flex flex-column gap-3" style="padding:22px">
+    <div role="button" id="test">테스트</div>
     <div role="button" class="btn-signup text-center" onclick="Page.go('/signupSchool.html')">회원가입 하기</div>
     <div role="button" class="btn-signin text-center" onclick="Page.go('/signin.html')">로그인 하기</div>
 </div>
@@ -22,6 +23,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         Page.init(location.pathname, init, {nolog: true});
+        Dialog.init();
     });
 </script>
 <script src="js/velocity.min.js"></script>
@@ -123,4 +125,15 @@
 
 
     }
+
+    //Dialog.confirm 예시
+    // $('#test').on('click',function (){
+    //    Dialog.confirm('test',()=>{
+    //        //확인버튼 눌렀을 때
+    //        console.log('OK');
+    //    },()=>{
+    //        //취소버튼 눌렀을 때
+    //        console.log('cancel');
+    //    });
+    // });
 </script>
