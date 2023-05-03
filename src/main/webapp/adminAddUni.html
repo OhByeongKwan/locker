@@ -17,9 +17,6 @@
             <div>학교신청내역</div>
             <div class="reqUni"></div>
 
-            <div>학과신청내역</div>
-            <div class="reqDep"></div>
-
         </div>
 
 </div>
@@ -71,23 +68,6 @@
             }
             $(".reqUni").html(str);
         });
-
-        //request department list
-        AJAX.call("jsp/adminGetDepList.jsp", {}, function(data) {
-            var data = JSON.parse(data.trim()).dep;
-            console.log(data)
-            var str = "";
-            for(var i=0; i<data.length; i++){
-                str += "<div>";
-                    str += `<div>${data[i].uniName}</div>`;
-                    str += `<div>${data[i].department}</div>`;
-                    str += `<div onclick=\'addDep(${data[i].id}, "${data[i].department}")\'>확인</div>`;
-                str += "</div>";
-            }
-            $(".reqDep").html(str);
-
-
-        });
     }
 
     function addUni(id){
@@ -97,18 +77,6 @@
             //"OK" or "ER"
             if(data.trim() == 'OK'){
                 Dialog.alert("학교 승인 완료",location.reload);
-            }else{
-                Dialog.alert(data.message,location.reload);
-            }
-        });
-    }
-
-    function addDep(id,newDep){
-        console.log(newDep);
-        AJAX.call("jsp/adminAddDep.jsp", {id: id, newDep: newDep}, function(data) {
-            //"OK" or "ER"
-            if(data.trim() == 'OK'){
-                Dialog.alert("학과 승인 완료",location.reload);
             }else{
                 Dialog.alert(data.message,location.reload);
             }

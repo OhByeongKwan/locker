@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title></title>
+</head>
+<body>
+<div class="container">
+
+<!--        학교신청 내역 , 학과 신청내역 띄워줄테니 여기있는 코드 뽑아내서 페이지 분할 부탁해.-->
+        <div>
+
+            <div>회원가입신청내역</div>
+            <div class="reqUser"></div>
+
+        </div>
+
+</div>
+
+
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+
+        pagectx = params;
+
+        //관리자 아이디 생성 후 페이지 진입 시 확인
+        // if(params.usrobj.mid != ~~){
+        //     Page.goHome();
+        // }
+
+        setPage();
+
+        Page.setHandler();
+
+    }
+
+
+    function setPage() {
+        //더미데이터
+        let obj = {'uni' : '삼육', 'dep' : '컴공', 'name' : '오병관', 'underGradeNum' : '2017100939', 'grade' : '4학년', 'phone' : '010-4170-9184'};
+
+        //requset User
+        // AJAX.call("jsp/adminGetUniList.jsp", {}, function(data) {
+        //     var data = JSON.parse(obj.trim()).univ;
+        //     console.log(data)
+            $('.reqUser').append(`<div>학교<br>${obj.uni}</div>
+<div>학과<br>${obj.dep}</div>
+<div>이름<br>${obj.name}</div>
+<div>학번<br>${obj.underGradeNum}</div>
+<div>학년<br>${obj.grade}</div>
+<div>전화번호<br>${obj.phone}</div>
+<div onclick=\'addUni()\'>확인</div>
+`);
+        // });
+    }
+
+    //json으로 값 받아오는 게 편할 듯 메소드에 넘길 때
+    function addUni(uni,dep,name,underGradeNum,grade,phone){
+        let data = {'uni' : '삼육', 'dep' : '컴공', 'name' : '오병관', 'underGradeNum' : '2017100939', 'grade' : '4학년', 'phone' : '010-4170-9184'}
+        console.log(id);
+        AJAX.call("jsp/adminAddUser.jsp", data, function(data) {
+            console.log(data.trim())
+            //"OK" or "ER"
+            if(data.trim() == 'OK'){
+                Dialog.alert("회원가입 승인 완료",location.reload);
+            }else{
+                Dialog.alert(data.message,location.reload);
+            }
+        });
+    }
+
+</script>

@@ -14,26 +14,27 @@
 <div class="container">
     <main class="flex-column justify-content-between">
         <div>
+            <div class="back-icon" role="button" onclick="Page.back()"></div>
             <div class="signup-title fs-24" style="margin-top:58px">기본정보 입력하기</div>
             <div class="d-flex flex-column gap-2" style="margin-top:64px">
                 <label class="fs-18" for="name">이름</label>
-                <input class="fs-14" id="name" type="text" placeholder="이름 입력" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
+                <input class="fs-14" id="name" name="name" type="text" placeholder="이름 입력" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
             </div>
             <div class="d-flex flex-column gap-2" style="margin-top:28px">
                 <label class="fs-18" for="phone">전화번호</label>
                 <div class="d-flex justify-content-between fs-14" id="phone">
-                    <input style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numStart" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numMiddle" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numEnd" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
                 </div>
             </div>
             <div class="d-flex" style="margin-top:64px">
                 <label class="fs-18 col-2 my-auto" for="department">학번</label>
-                <input id="department" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <input id="department" name="department" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
             </div>
             <div class="d-flex justify-content-between" style="margin-top:56px">
                 <label class="fs-18 col-2 my-auto" for="grade">학년</label>
-                <select class="col-3 fs-14" id="grade" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
+                <select class="col-3 fs-14" id="grade" name="grade" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
                     <option>1학년</option>
                     <option>2학년</option>
                     <option>3학년</option>
@@ -41,37 +42,42 @@
                 </select>
             </div>
             <div class="d-flex justify-content-between" style="margin-top:54px">
-                <label class="fs-18 col-2 my-auto" for="sex">성별</label>
-                <div id="sex">
+                <label class="fs-18 col-2 my-auto" for="gender">성별</label>
+                <div id="gender">
                     <span>
-                        남성  <input type="radio" class="fs-14" name="male">
+                        남성  <input type="radio" class="fs-14" name="gender" value="male">
                     </span>
                     <span style="margin-left:50px">
-                        여성  <input type="radio" class="fs-14" name="female">
+                        여성  <input type="radio" class="fs-14" name="gender" value="female">
                     </span>
                 </div>
             </div>
             <div class="d-flex justify-content-between" style="margin-top:57px">
                 <label class="fs-18 col-2" for="address">주소</label>
                 <div id="address" class="d-flex flex-column gap-2">
-                    <select id="시">
+                    <select id="시" name="시">
                         <option name="incheon">인천광역시</option>
                         <option name="daegu">대구광역시</option>
-                        <option name="seoul">서울광역시</option>
+                        <option name="seoul">서울특별시</option>
                     </select>
-                    <select id="구">
+                    <select id="구" name="구">
                         <option name="incheon">서구</option>
                         <option name="daegu">남구</option>
                         <option name="seoul">노원구</option>
                     </select>
                 </div>
             </div>
+            <div class="d-flex flex-column gap-3" style="margin-top:59px">
+                <label class="fs-18 mt-2" for="pw">비밀번호</label>
+                <input id="pw" name="pw" class="w-100 fs-14" type="password" placeholder="비밀번호 입력" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <input id="pw2" name="pw2" class="w-100 fs-14" type="password" placeholder="비밀번호 확인" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+            </div>
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:10px;border-bottom:1px solid #CBCDD8">
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3" style="margin-top:68px">
                     <input style="width:20px" type="checkbox">
                     <span class="fs-20">전체동의</span>
                 </div>
-                <i class="fs-26 ri-arrow-down-s-fill" style="color: #2857CE"></i>
+                <i class="fs-26 ri-arrow-down-s-fill d-flex align-self-end" style="color: #2857CE"></i>
             </div>
             <div class="d-flex justify-content-between align-items-center" style="margin-top:20px">
                 <div class="d-flex gap-3">
@@ -115,4 +121,22 @@
     function init(params) {
         pagectx = params;
     }
+    $('.submit-btn').on('click',()=>{
+        let name = $('input[name=name]').val().trim();
+        let phone = $('input[name=numStart]').val().trim() + '-' + $('input[name=numMiddle]').val().trim() + '-' + $('input[name=numEnd]').val().trim();
+        let department = $('input[name=department]').val().trim();
+        let grade = $('select[name=grade]').val().trim();
+        let gender;
+        if($('input[name=gender]')[0].checked){
+            gender = $('input[name=gender]')[0].value;
+        }else{
+            gender = $('input[name=gender]')[1].value;
+        }
+        let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
+        let pw = $('input[name=pw]').val().trim();
+        let obj = {'name' : name, 'phone' : phone, 'department' : department, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw}
+        console.log(obj);
+
+       Page.go('/sdSignupFinish.html')
+    });
 </script>

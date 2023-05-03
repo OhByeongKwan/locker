@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+</head>
+<body>
+<div class="container">
+    <main>
+        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="text-center">
+            <img class="mx-auto" src="/img/signup.svg" style="margin-top:200px">
+            <div class="fs-20" style="margin-top:40px">모두의 사물함 가입을 축하드립니다</div>
+            <div role="button" style="margin:14px 77px 0;padding:7px;background-color:#0E58D6;border-radius:30px;color:white">지금 시작하기</div>
+        </div>
+        </main>
+
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+    }
+</script>

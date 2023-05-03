@@ -3,17 +3,43 @@
 <head>
     <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Cache-Control" content="no-cache">
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
-    <link rel="stylesheet" type="text/css" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <title>모두의 사물함</title>
+    <title></title>
+    <style>
+        .login-title{padding-top:10%;font-weight:bold;font-size:40px;color:#0E58D6}
+        form label{font-size:18px;color:white}
+        form input{padding:5px;background-color:transparent;color: #D5DBFF;border:none;border-bottom:1px solid #D5DBFF}
+        form input::placeholder{color: #D5DBFF}
+        .button{padding:13px 13px}
+    </style>
 </head>
-<body style="background-color:#0E58D6">
-<div class="container d-flex flex-column gap-3" style="padding:22px">
-    <div role="button" id="test">테스트</div>
-    <div role="button" class="btn-signup text-center" onclick="Page.go('/signupSchool.html')">회원가입 하기</div>
-    <div role="button" class="btn-signin text-center" onclick="Page.go('/signin.html')">로그인 하기</div>
+<body>
+<div class="container">
+    <main>
+        <div class="login-title">
+            <span>Login</span>
+        </div>
+        <div class="d-flex flex-column" style="margin-top:160px">
+            <form style="padding:46px 22px 17px;background-color:#0E58D6;border-radius:27px">
+                <div class="login1">
+                    <div class="d-flex flex-column gap-1">
+                        <label for="--mid">이메일</label>
+                        <input id="--mid" type="text" placeholder="아이디를 입력해주세요">
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <label for="--pass">비밀번호</label>
+                        <input id="--pass" type="password" placeholder="비밀번호를 입력해주세요">
+                    </div>
+                    <div class="button w-100 bg-white text-center" style="border-radius:30px;margin-top:37px" onclick="login()">로그인</div>
+                </div>
+            </form>
+            <div style="padding:0 22px">
+                <div class="button w-100 bg-white text-center" style="border-radius:30px;margin-top:11px;border:1px solid #0E58D6" onclick="signup()">회원가입</div>
+            </div>
+        </div>
+    </main>
 </div>
 </body>
 </html>
@@ -23,12 +49,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         Page.init(location.pathname, init, {nolog: true});
-        Dialog.init();
     });
 </script>
 <script src="js/velocity.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap.bundle.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
@@ -83,16 +108,10 @@
         console.log(usrobj)
         SSO.login(null, usrobj);
     }
-    function test(){
-        console.log("aaaaaa")
-        AJAX.jsonCall("jsp/test.jsp", {mid: "1"}, function (data) {
-            console.log(data)
-        });
-    }
 
 
     function signup() {
-        Page.go("signup.html");
+        Page.go("sdSignupSchool.html");
     }
 
     function getInputObj() {
@@ -110,30 +129,4 @@
 
         return {mid: mid, pass: ps};
     }
-
-    function addSchool(name,email){
-        //ajax name email주기
-        //학교 있을 떄
-        //왠만하면 코드로 줄게 ex ok err 0 1 -1
-        //jsp 쪽에다가 써놓기.
-
-        // if(존재할 때)
-        //     alert("이미 학교기 존재합니다.")
-        // else if 신청 되이씅ㄹ 때
-        //     alert("이미 신청이 되어있습니다.")
-        // else 신청되었습니다
-
-
-    }
-
-    //Dialog.confirm 예시
-    // $('#test').on('click',function (){
-    //    Dialog.confirm('test',()=>{
-    //        //확인버튼 눌렀을 때
-    //        console.log('OK');
-    //    },()=>{
-    //        //취소버튼 눌렀을 때
-    //        console.log('cancel');
-    //    });
-    // });
 </script>
