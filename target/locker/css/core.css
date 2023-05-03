@@ -1,9 +1,11 @@
 body{padding:0;margin:0;min-height:100vh}
+body main{height:100%;padding:50px 22px 30px}
 .btn-signup{background-color:transparent;border: 1px solid white;border-radius:30px;color:white;margin-top:565px;padding-top:12px;padding-bottom:12px}
 .btn-signin{background-color:white;border: none;border-radius:30px;padding-top:12px;padding-bottom:12px}
-.container{padding:50px 22px 30px;min-height:100vh}
+.container{height:100%}
 
 /*font-size*/
+.fs-12{font-size:12px}
 .fs-14{font-size:14px}
 .fs-16{font-size:16px}
 .fs-18{font-size:18px}
@@ -14,6 +16,8 @@ body{padding:0;margin:0;min-height:100vh}
 
 .back-icon{background-image:url("/img/back-icon.svg");background-size:cover;width:13px;height:22px}
 .search-box{border:1px solid #BFC2CE;padding:14px 22px;border-radius:30px}
+.signup-box.signup{border:none;padding:12px;border-radius:8px;margin-top:28px;background-color:#0E58D6;color:white}
+.submit-btn{border:none;padding:12px;border-radius:8px;margin-top:28px;background-color:#0E58D6;color:white}
 .signup-box{border:1px solid #BFC2CE;padding:14px 22px;border-radius:30px;margin-top:28px}
 .search-box .dropdown-menu li{border-bottom:1px solid #BFC2CE;padding:10px}
 .search-box .dropdown-menu li:last-child{border-bottom:none}

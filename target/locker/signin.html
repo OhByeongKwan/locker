@@ -5,21 +5,42 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
     <link rel="stylesheet" href="css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <title></title>
+    <style>
+        .login-title{padding-top:10%;font-weight:bold;font-size:40px;color:#0E58D6}
+        form label{font-size:18px;color:white}
+        form input{padding:5px;background-color:transparent;color: #D5DBFF;border:none;border-bottom:1px solid #D5DBFF}
+        form input::placeholder{color: #D5DBFF}
+        .button{padding:13px 13px}
+    </style>
 </head>
 <body>
-<div>
-    <div class="login1">
-
-        <input id="--mid" type="text" placeholder="아이디를 입력해주세요">
-        <input id="--pass" type="password" placeholder="비밀번호를 입력해주세요">
-        <div class="button" onclick="login()">로그인</div>
-        <div class="button" onclick="signup()">회원가입</div>
-
-    </div>
+<div class="container">
+    <main>
+        <div class="login-title">
+            <span>Login</span>
+        </div>
+        <div class="d-flex flex-column" style="margin-top:160px">
+            <form style="padding:46px 22px 17px;background-color:#0E58D6;border-radius:27px">
+                <div class="login1">
+                    <div class="d-flex flex-column gap-1">
+                        <label for="--mid">이메일</label>
+                        <input id="--mid" type="text" placeholder="아이디를 입력해주세요">
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <label for="--pass">비밀번호</label>
+                        <input id="--pass" type="password" placeholder="비밀번호를 입력해주세요">
+                    </div>
+                    <div class="button w-100 bg-white text-center" style="border-radius:30px;margin-top:37px" onclick="login()">로그인</div>
+                </div>
+            </form>
+            <div style="padding:0 22px">
+                <div class="button w-100 bg-white text-center" style="border-radius:30px;margin-top:11px;border:1px solid #0E58D6" onclick="signup()">회원가입</div>
+            </div>
+        </div>
+    </main>
 </div>
-
-
 </body>
 </html>
 <script src="js/jquery-3.5.1.min.js"></script>
@@ -32,6 +53,7 @@
 </script>
 <script src="js/velocity.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
@@ -89,7 +111,7 @@
 
 
     function signup() {
-        Page.go("signup.html");
+        Page.go("signupSchool.html");
     }
 
     function getInputObj() {
