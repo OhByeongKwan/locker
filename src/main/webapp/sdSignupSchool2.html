@@ -121,6 +121,7 @@
     function init(params) {
         pagectx = params;
     }
+
     $('.submit-btn').on('click',()=>{
         let name = $('input[name=name]').val().trim();
         let phone = $('input[name=numStart]').val().trim() + '-' + $('input[name=numMiddle]').val().trim() + '-' + $('input[name=numEnd]').val().trim();
@@ -132,11 +133,32 @@
         }else{
             gender = $('input[name=gender]')[1].value;
         }
-        let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
+        //let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
+        let addr = 100000;
         let pw = $('input[name=pw]').val().trim();
-        let obj = {'name' : name, 'phone' : phone, 'department' : department, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw}
+        let obj = {'name' : name, 'phone' : phone, 'department' : department, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw, type: 'A'}
         console.log(obj);
 
-       Page.go('/sdSignupFinish.html')
+
+        /*
+        *   0. url로 접근핳수도 있으니 session값에서 이전 페이지에서 받아오는 uniName,email등 값 없을 시 이전 페이지 이동
+        *   1.addr -> addr.js통해서 값 가져오기
+        *   2.signupSchool -> signupSchool2넘어갈 때 sessionStroage통해서 uni, depName, email값 넘기기,
+        *   3.obj실제 값과 다른 값들 학번이 Departmanet라고 되어있는거같은데 변수명 수정 signup.jsp보고 바꿔줘
+        *   4.onclick()으로 함수로 만들기 jquery로 해놓은 위에 코드 함수로 만들어서 관리해줘
+        * */
+
+        AJAX.call("jsp/signup.jsp", obj, function(data) {
+            console.log(data.trim());
+            if(data.trim() == 'OK'){
+                //OK -> 추가 완료
+                Page.go('/sdSignupFinish.html')
+            }else{
+                //ER -> 에러 (reload하면 적은 값들 사라지니까 이거는 빼자 - 메세지만 출력)
+                Dialog.alert(data.message,location.reload);
+            }
+        });
+
+
     });
 </script>

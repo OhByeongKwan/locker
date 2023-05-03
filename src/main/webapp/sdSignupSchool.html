@@ -252,11 +252,22 @@
         }
         let jsonForm = {uniName : uniName, department : department, userType : userType, email : email};
         console.log(jsonForm);
+        //해당 데이터 sessionStorage로 넘기기
 
-        Page.go('/sdSignupSchool2.html')
-        // AJAX.call(url,jsonForm,function(data){
-        //     Dialog.alert('회원가입이 완료되었습니다.',Page.go('/index.html'));
-        // });
+        AJAX.call("jsp/signupCheck.jsp", {id:email}, function(data) {
+            console.log(data.trim());
+            if(data.trim() == 'OK'){
+                //OK -> 가입안된 id -> 페이지 전환
+                Page.go('/sdSignupSchool2.html')
+            }else if(data.trim() == 'EX'){
+                //문구 수정
+                Dialog.alert("가입된 아이디 ~~ ");
+            }else{
+                //ER -> 에러
+                Dialog.alert(data.message,location.reload);
+            }
+        });
+
     }
     function showAccess(){
         $('#accessNum').addClass('show');

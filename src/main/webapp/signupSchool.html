@@ -241,24 +241,20 @@
         let jsonForm = {uniName : uniName, department : department, id : id, pw : pw};
         console.log(jsonForm);
 
-        AJAX.call("jsp/signup.jsp", jsonForm, function (data) {
-            pagectx.onproc = false;
-
-            var code = data.trim();
-            if (code == "EX") {
-                alert("이미 가입된 이메일 주소입니다.");
-            }
-            else if (code == "ER") {
-                alert("회원 처리 과정에서 에러가 발생하였습니다. 다시 시도해주세요.");
-            }
-            else {
-                Page.goHome();
+        let email = "1@naver.com";
+        AJAX.call("jsp/signupCheck.jsp", {email}, function(data) {
+            console.log(data.trim());
+            if(data.trim() == 'OK'){
+                //OK -> 가입안된 id -> 페이지 전환
+                Page.go('/signupSchool2.html')
+            }else if(data.trim() == 'EX'){
+                //문구 수정
+                Dialog.alert("가입된 아이디 ~~ ");
+            }else{
+                //ER -> 에러
+                Dialog.alert(data.message,location.reload);
             }
         });
-        Page.go('/signupSchool2.html')
-        //회원가입 post 만들기
-        // AJAX.call(url,jsonForm,function(data){
-        //     Dialog.alert('회원가입이 완료되었습니다.',Page.go('/index.html'));
-        // });
+
     }
 </script>

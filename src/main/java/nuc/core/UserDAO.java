@@ -29,7 +29,7 @@ public class UserDAO {
         return SqlUtil.query(sql);
     }
 
-    public JSONObject insert(String mid, String pass, String imgdir, String uniName, String depName) throws NamingException, SQLException {
+    public JSONObject insert(String mid, String pass,String type,String uniName,String depName,String phoneNum,String studentId,String grade,String gender,String addr,  String imgdir) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -46,13 +46,21 @@ public class UserDAO {
 
             JSONObject jsonobj = new JSONObject();
             jsonobj.put("mid", mid);
+            jsonobj.put("type", type);
             jsonobj.put("uniName", uniName);
             jsonobj.put("depName", depName);
             jsonobj.put("depCode", depCode);
+            jsonobj.put("phoneNum", phoneNum);
+            jsonobj.put("studentId", studentId);
+            jsonobj.put("grade", grade);
+            jsonobj.put("gender", gender);
+            jsonobj.put("addr", addr);
+            jsonobj.put("permission", 0);
 
-            String sql2 = "INSERT INTO user(mid, password, depCode, jsonstr) VALUES('" + mid +
+            String sql2 = "INSERT INTO user(mid, password, depCode,type,  jsonstr) VALUES('" + mid +
                     "', '" + MD5.get(pass) +
                      "', '" + depCode +
+                    "', '" + type +
                     "', '" + jsonobj.toJSONString() +
                     "')";
             System.out.println(sql2);
@@ -69,33 +77,6 @@ public class UserDAO {
     }
 
     }
-
-
-
-    public String loginTest(String mid) throws NamingException, SQLException, ParseException {
-        Connection conn = null;
-        Statement st = null;
-        ResultSet rs = null;
-        try {
-            conn = ConnectionPool.get();
-            st = conn.createStatement();
-
-            JSONParser parser = new JSONParser();
-
-            String sql = "select mid from test where mid = '" + mid + "'";
-            System.out.println(sql);
-            rs = st.executeQuery(sql);
-
-            if (!rs.next()) return "aa";
-            else return "bb";
-
-        } finally {
-            if (rs!= null) rs.close();
-            if (st!= null) st.close();
-            if (conn!= null) conn.close();
-        }
-    }
-
 
     // Invoked from login.jsp
     public String login(String mid, String pass) throws NamingException, SQLException, ParseException {
@@ -119,6 +100,61 @@ public class UserDAO {
             // check if authentication check is required
             JSONObject jsonobj = (JSONObject) parser.parse(rs.getString("jsonstr"));
             return jsonobj.toJSONString();
+
+        } finally {
+            if (rs!= null) rs.close();
+            if (st!= null) st.close();
+            if (conn!= null) conn.close();
+        }
+    }
+
+    public String getUserList(String type) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.get();
+            st = conn.createStatement();
+
+            JSONParser parser = new JSONParser();
+
+            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = " + 0;
+
+            if(!type.equals("All"))
+                sql += " and JSON_EXTRACT(jsonstr,'$.type') = '" + type + "'";
+
+            System.out.println(sql);
+            System.out.println(SqlUtil.queryList(sql).toString());
+            //SqlUtil.queryList(sql).toString();
+            return SqlUtil.queryList(sql).toString();
+
+        } finally {
+            if (rs!= null) rs.close();
+            if (st!= null) st.close();
+            if (conn!= null) conn.close();
+        }
+    }
+
+    public String approveUser(String mid) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            conn = ConnectionPool.get();
+            st = conn.createStatement();
+
+            JSONParser parser = new JSONParser();
+
+            String sql = "UPDATE user SET jsonstr = JSON_SET(jsonstr, '$.permission', 1) where mid = '" + mid + "'";
+
+            System.out.println(sql);
+
+            stmt = conn.prepareStatement(sql);
+            int count = stmt.executeUpdate();
+            return (count == 1) ? "OK" : "ER";
+
 
         } finally {
             if (rs!= null) rs.close();

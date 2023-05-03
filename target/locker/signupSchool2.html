@@ -115,4 +115,14 @@
     function init(params) {
         pagectx = params;
     }
+
+    function ClicksignupBtn(){
+        //obj adsignup쪽에서 끌어오기. -> type = 'U'
+
+        AJAX.call("jsp/signup.jsp", obj, function(data) {
+            console.log(data.trim());
+
+        });
+    }
+
 </script>
