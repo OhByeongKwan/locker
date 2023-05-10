@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="container">
-    <main class="flex-column justify-content-between">
+    <main class="flex-column justify-content-between" style="padding-top:10%">
         <div id="schoolSearch">
                 <div class="back-icon" role="button" onclick="Page.back()"></div>
                 <div class="signup-title fs-24" style="margin-top:58px">우리 학교 알아보기</div>
@@ -216,10 +216,10 @@
                 <label class="fs-18 col-3 my-auto" for="userType">회원 타입</label>
                 <div id="userType">
                     <span>
-                        일반회원  <input type="radio" class="fs-14" name="userType">
+                        일반회원  <input type="radio" class="fs-14" name="userType" value="U">
                     </span>
                     <span style="margin-left:50px">
-                        관리자회원  <input type="radio" class="fs-14" name="userType">
+                        관리자회원  <input type="radio" class="fs-14" name="userType" value="A">
                     </span>
             </div>
     </div>
@@ -253,6 +253,7 @@
         let jsonForm = {uniName : uniName, department : department, userType : userType, email : email};
         console.log(jsonForm);
         //해당 데이터 sessionStorage로 넘기기
+        SessionStore.set('signupForm',jsonForm);
 
         AJAX.call("jsp/signupCheck.jsp", {id:email}, function(data) {
             console.log(data.trim());

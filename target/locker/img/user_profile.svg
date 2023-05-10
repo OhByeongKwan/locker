@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="86" height="86" viewBox="0 0 86 86">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="-0.337" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0e58d6"/>
+      <stop offset="1" stop-color="#072c6b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="그룹_1563" data-name="그룹 1563" transform="translate(-5602 -4017)">
+    <circle id="타원_265" data-name="타원 265" cx="43" cy="43" r="43" transform="translate(5602 4017)" fill="url(#linear-gradient)"/>
+    <g id="Icon_feather-user" data-name="Icon feather-user" transform="translate(5614.454 4027.885)">
+      <path id="패스_3272" data-name="패스 3272" d="M55.092,40.91V34.773A12.273,12.273,0,0,0,42.819,22.5H18.273A12.273,12.273,0,0,0,6,34.773V40.91" transform="translate(0 18.819)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+      <path id="패스_3273" data-name="패스 3273" d="M36.546,16.773A12.273,12.273,0,1,1,24.273,4.5,12.273,12.273,0,0,1,36.546,16.773Z" transform="translate(6.273 0)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

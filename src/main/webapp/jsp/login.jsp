@@ -23,6 +23,9 @@
 
 		usrobj = (JSONObject)(new JSONParser()).parse(res);
 		code = "OK";
+		if(mid.equals("admin")){
+			code = "AD";
+		}
 
 //	} else if(request.getParameter("platform").equals("kakao")) {
 //		String result = (new ExternApi().getKakaoUserInfo(request.getParameter("acctoken"), request.getParameter("reftoken")));

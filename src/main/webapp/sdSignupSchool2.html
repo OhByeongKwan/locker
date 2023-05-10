@@ -29,8 +29,8 @@
                 </div>
             </div>
             <div class="d-flex" style="margin-top:64px">
-                <label class="fs-18 col-2 my-auto" for="department">학번</label>
-                <input id="department" name="department" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <label class="fs-18 col-2 my-auto" for="departmentNum">학번</label>
+                <input id="departmentNum" name="departmentNum" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
             </div>
             <div class="d-flex justify-content-between" style="margin-top:56px">
                 <label class="fs-18 col-2 my-auto" for="grade">학년</label>
@@ -120,12 +120,25 @@
     var pagectx = {};
     function init(params) {
         pagectx = params;
+        let signupForm = SessionStore.get('signupForm');
+        console.log(signupForm);
+        if(signupForm == null){
+            Dialog.alert('잘못된 접근입니다.',()=>{
+                Page.go('/');
+            });
+        }
     }
 
+    function setpage(){
+
+    }
     $('.submit-btn').on('click',()=>{
+        let signupForm = SessionStore.get('signupForm');
+        console.log(signupForm);
+
         let name = $('input[name=name]').val().trim();
         let phone = $('input[name=numStart]').val().trim() + '-' + $('input[name=numMiddle]').val().trim() + '-' + $('input[name=numEnd]').val().trim();
-        let department = $('input[name=department]').val().trim();
+        let studentId = $('input[name=departmentNum]').val().trim();
         let grade = $('select[name=grade]').val().trim();
         let gender;
         if($('input[name=gender]')[0].checked){
@@ -136,7 +149,11 @@
         //let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
         let addr = 100000;
         let pw = $('input[name=pw]').val().trim();
-        let obj = {'name' : name, 'phone' : phone, 'department' : department, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw, type: 'A'}
+        let id = signupForm.email;
+        let department = signupForm.department;
+        let uni = signupForm.uniName;
+        let type = signupForm.userType;
+        let obj = {'name' : name, 'phoneNum' : phone, 'studentId' : studentId, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw, 'type': type, 'uniName' : uni, 'id' : id, 'department' : department}
         console.log(obj);
 
 
@@ -158,7 +175,5 @@
                 Dialog.alert(data.message,location.reload);
             }
         });
-
-
     });
 </script>

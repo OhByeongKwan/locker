@@ -3,22 +3,36 @@
 <head>
     <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
     <link rel="stylesheet" href="css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <title></title>
 </head>
 <body>
 <div class="container">
-
-<!--        학교신청 내역 , 학과 신청내역 띄워줄테니 여기있는 코드 뽑아내서 페이지 분할 부탁해.-->
-        <div>
-
-            <div>학과신청내역</div>
-            <div class="reqDep"></div>
-
+    <div class="d-flex justify-content-center position-relative" style="padding-top:10%">
+        <div class="back-icon position-absolute" style="left:0" role="button" onclick="Page.back()"></div>
+        <div>학과 추가 건의</div>
+    </div>
+    <div class="position-relative" style="margin-top:34px;border-bottom:2px solid #686B7C;padding-bottom:5px">
+        <input type="text" class="search fs-14 w-100" style="border:none;outline:none;margin-left:40px">
+        <img class="position-absolute" style="left:0;top:0;bottom:0" src="/img/search_icon.svg">
+    </div>
+    <section class="addDepList" style="margin-top:76px">
+        <div class="reqDep d-flex flex-column" style="gap:26px">
+            <div class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                <div class="d-flex flex-column gap-2">
+                    <div>심육대</div>
+                    <div>momo3367@naver.com</div>
+                </div>
+                <div class="d-flex gap-4">
+                    <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
+                    <div role="button" class="approve_cancel"><img src="/img/approve_ok.svg"></div>
+                </div>
+            </div>
         </div>
-
+    </section>
 </div>
 
 
@@ -55,31 +69,37 @@
 
 
     function setPage() {
-        //request department list
+        //requset uni list
         AJAX.call("jsp/adminGetDepList.jsp", {}, function(data) {
-            var data = JSON.parse(data.trim()).dep;
+            data = JSON.parse(data.trim()).dep;
             console.log(data)
-            var str = "";
-            for(var i=0; i<data.length; i++){
-                str += "<div>";
-                    str += `<div>${data[i].uniName}</div>`;
-                    str += `<div>${data[i].department}</div>`;
-                    str += `<div onclick=\'addDep(${data[i].id}, "${data[i].department}")\'>확인</div>`;
-                str += "</div>";
+            $('.reqDep *').remove();
+            for(const item of data){
+                $('.reqDep').append(`<div class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                <div class="d-flex flex-column gap-2">
+                    <div>${item.uniName}</div>
+                    <div>${item.department}</div>
+                </div>
+                <div class="d-flex gap-4">
+                    <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
+                    <div role="button" class="approve_ok" onclick="addUni('${item.id}','${item.department}')"><img src="/img/approve_ok.svg"></div>
+                </div>
+            </div>`);
             }
-            $(".reqDep").html(str);
         });
     }
 
-    function addDep(id,newDep){
-        console.log(newDep);
-        AJAX.call("jsp/adminAddDep.jsp", {id: id, newDep: newDep}, function(data) {
-            //"OK" or "ER"
-            if(data.trim() == 'OK'){
-                Dialog.alert("학과 승인 완료",location.reload);
-            }else{
-                Dialog.alert(data.message,location.reload);
-            }
+    function addUni(id,newDep){
+        console.log(id,newDep);
+        Dialog.confirm('승인하시겠습니까?',()=>{
+            AJAX.call("jsp/adminAddDep.jsp", {id: id, newDep: newDep}, function(data) {
+                //"OK" or "ER"
+                if(data.trim() == 'OK'){
+                    Dialog.alert("학과 승인 완료",location.reload());
+                }else{
+                    Dialog.alert(data.message,location.reload());
+                }
+            });
         });
     }
 

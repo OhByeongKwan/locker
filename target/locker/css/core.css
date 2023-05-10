@@ -1,10 +1,12 @@
 body{padding:0;margin:0;min-height:100vh}
-body main{height:100%;padding:50px 22px 30px}
+/*body main{min-height:100vh;padding:50px 22px 30px}*/
+body .container{min-height:100vh;padding:0 25px}
 .btn-signup{background-color:transparent;border: 1px solid white;border-radius:30px;color:white;margin-top:565px;padding-top:12px;padding-bottom:12px}
 .btn-signin{background-color:white;border: none;border-radius:30px;padding-top:12px;padding-bottom:12px}
 .container{height:100%}
 
 /*font-size*/
+.fs-10{font-size:10px}
 .fs-12{font-size:12px}
 .fs-14{font-size:14px}
 .fs-16{font-size:16px}
@@ -13,6 +15,16 @@ body main{height:100%;padding:50px 22px 30px}
 .fs-22{font-size:22px}
 .fs-24{font-size:24px}
 .fs-26{font-size:26px}
+.fs-28{font-size:28px}
+.fs-30{font-size:30px}
+.fs-32{font-size:32px}
+.fs-34{font-size:34px}
+.fs-36{font-size:36px}
+.fs-38{font-size:38px}
+.fs-40{font-size:40px}
+.fs-42{font-size:42px}
+.fs-44{font-size:44px}
+.fs-46{font-size:46px}
 
 .back-icon{background-image:url("/img/back-icon.svg");background-size:cover;width:13px;height:22px}
 .search-box{border:1px solid #BFC2CE;padding:14px 22px;border-radius:30px}
