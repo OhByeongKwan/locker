@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/" docBase="" crossContext="true" reloadable="true" debug="1">
+
+    <!-- Default set of monitored resources. If one of these changes, the    -->
+    <!-- web application will be reloaded.                                   -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+
+    <Resource name="jdbc/locker" auth="Container"
+          type="javax.sql.DataSource" driverClassName="com.mysql.cj.jdbc.Driver"
+          url="jdbc:mysql://43.200.35.210:8080/locker" username="MoonSH" password="1111"
+    	maxTotal="128" maxIdle="8" maxWaitMillis="-1" />
+    	
+	<CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor" />    	
+</Context>
