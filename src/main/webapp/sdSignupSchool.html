@@ -119,6 +119,8 @@
     }
     function getDepart(schoolName){
         $('#department').remove();
+        $('.req-uni').remove();
+        $('.form-title').remove();
         $('#signupForm').remove();
         $('#schoolSearch').append(`<div id="department" class="search-box d-flex w-100" style="margin-top:28px">
             <input id="searchDepart" name="searchDepart" class="w-100 border-0" type="text" placeholder="학과 검색하기" style="outline:none" />
@@ -130,7 +132,7 @@
                 <li class="departTitle">학과3</li>
             </ul>
         </div>
-        <div class="d-flex justify-content-center" style="gap:23px">
+        <div class="req-uni d-flex justify-content-center" style="gap:23px">
             <div style="color:#686B7C">우리학교 학과가 없다면?</div>
             <a href="/departmentRequest.html">건의하기</a>
         </div>`);
@@ -197,8 +199,9 @@
     }
 
     function getSignUp(){
+        $('.form-title').remove();
         $('#signupForm').remove();
-        $('#schoolSearch').append(`<div class="fs-24" style="margin-top:87px">이메일 간편가입</div>
+        $('#schoolSearch').append(`<div class="form-title fs-24" style="margin-top:87px">이메일 간편가입</div>
 <div>
     <div id="signupForm">
     <div class="d-flex justify-content-between" style="padding-bottom:7px;border-bottom:1px solid #CBCDD8;margin-top:40px">
@@ -216,7 +219,7 @@
                 <label class="fs-18 col-3 my-auto" for="userType">회원 타입</label>
                 <div id="userType">
                     <span>
-                        일반회원  <input type="radio" class="fs-14" name="userType" value="U">
+                        일반회원  <input type="radio" class="fs-14" name="userType" value="U" checked>
                     </span>
                     <span style="margin-left:50px">
                         관리자회원  <input type="radio" class="fs-14" name="userType" value="A">
