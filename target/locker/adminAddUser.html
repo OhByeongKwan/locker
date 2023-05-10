@@ -90,14 +90,14 @@
 
     function addUser(mid){
         mid = "1111";
-        AJAX.call("jsp/adminAddUser.jsp", {mid}, function(data) {
+        AJAX.call("jsp/approveUser.jsp", {mid}, function(data) {
             console.log(data.trim())
             //"OK" or "ER"
-            // if(data.trim() == 'OK'){
-            //     Dialog.alert("회원가입 승인 완료",location.reload);
-            // }else{
-            //     Dialog.alert(data.message,location.reload);
-            // }
+            if(data.trim() == 'OK'){
+                Dialog.alert("회원가입 승인 완료",location.reload);
+            }else{
+                Dialog.alert(data.message,location.reload);
+            }
         });
     }
 

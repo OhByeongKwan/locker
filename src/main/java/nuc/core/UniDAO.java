@@ -202,7 +202,7 @@ public class UniDAO {
 
             JSONParser parser = new JSONParser();
 
-            String sql = "select uniName from uni";
+            String sql = "select uniName from uni where status = '2'";
             System.out.println(SqlUtil.queryList(sql).toString());
             //SqlUtil.queryList(sql).toString();
             return SqlUtil.queryList(sql).toString();
