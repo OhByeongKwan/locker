@@ -8,7 +8,7 @@
 
     <Resource name="jdbc/locker" auth="Container"
           type="javax.sql.DataSource" driverClassName="com.mysql.cj.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/locker" username="MoonSH" password="1111"
+              url="jdbc:mysql://localhost:3306/locker" username="root" password="1111"
     	maxTotal="128" maxIdle="8" maxWaitMillis="-1" />
     	
 	<CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor" />    	
