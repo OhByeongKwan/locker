@@ -120,7 +120,7 @@ var Dialog = {
     },
 
     show: function(timeout) {
-        $("#--dialog").css("display", "block");
+        $("#--dialog#dialog").css("display", "block");
         Dialog.resize();
 
         // set focus on the default button after enabling the dialog
@@ -1029,7 +1029,7 @@ var SSO = {
                 Dialog.alert("비밀번호가 일치하지 않습니다.");
             } else if (code == "AD") {
                 Dialog.confirm("관리자 페이지로 이동하시겠습니까?", function() {
-                    Page.move("admin.html");
+                    Page.move("mainD.html");
                 }, function() {
                     Page.goHome();
                 });

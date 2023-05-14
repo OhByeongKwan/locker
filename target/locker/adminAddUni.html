@@ -3,6 +3,7 @@
 <head>
     <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
     <link rel="stylesheet" href="css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -10,15 +11,28 @@
 </head>
 <body>
 <div class="container">
-
-<!--        학교신청 내역 , 학과 신청내역 띄워줄테니 여기있는 코드 뽑아내서 페이지 분할 부탁해.-->
-        <div>
-
-            <div>학교신청내역</div>
-            <div class="reqUni"></div>
-
+    <div class="d-flex justify-content-center position-relative" style="padding-top:10%">
+        <div class="back-icon position-absolute" style="left:0" role="button" onclick="Page.back()"></div>
+        <div>학교 추가 건의</div>
+    </div>
+    <div class="position-relative" style="margin-top:34px;border-bottom:2px solid #686B7C;padding-bottom:5px">
+        <input type="text" class="search fs-14 w-100" style="border:none;outline:none;margin-left:40px">
+        <img class="position-absolute" style="left:0;top:0;bottom:0" src="/img/search_icon.svg">
+    </div>
+    <section class="addUniList" style="margin-top:76px">
+        <div class="reqUni d-flex flex-column" style="gap:26px">
+            <div class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                <div class="d-flex flex-column gap-2">
+                    <div>심육대</div>
+                    <div>momo3367@naver.com</div>
+                </div>
+                <div class="d-flex gap-4">
+                    <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
+                    <div role="button" class="approve_ok"><img src="/img/approve_ok.svg"></div>
+                </div>
+            </div>
         </div>
-
+    </section>
 </div>
 
 
@@ -57,30 +71,36 @@
     function setPage() {
         //requset uni list
         AJAX.call("jsp/adminGetUniList.jsp", {}, function(data) {
-            var data = JSON.parse(data.trim()).univ;
+            data = JSON.parse(data.trim()).univ;
             console.log(data)
-            var str = "";
-            for(var i=0; i<data.length; i++){
-                str += "<div>";
-                    str += `<div>${data[i].uniName}</div>`;
-                    str += `<div onclick=\'addUni(${data[i].id})\'>확인</div>`;
-                str += "</div>";
+            $('.reqUni *').remove();
+            for(const item of data){
+                $('.reqUni').append(`<div class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                <div class="d-flex flex-column gap-2">
+                    <div>${item.uniName}</div>
+                    <div>이메일 없잖아 시발</div>
+                </div>
+                <div class="d-flex gap-4">
+                    <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
+                    <div role="button" class="approve_ok" onclick="addUni(${item.id})"><img src="/img/approve_ok.svg"></div>
+                </div>
+            </div>`);
             }
-            $(".reqUni").html(str);
         });
     }
 
     function addUni(id){
         console.log(id);
-        AJAX.call("jsp/adminAddUni.jsp", {id: id}, function(data) {
-            console.log(data.trim())
-            //"OK" or "ER"
-            if(data.trim() == 'OK'){
-                Dialog.alert("학교 승인 완료",location.reload);
-            }else{
-                Dialog.alert(data.message,location.reload);
-            }
+        Dialog.confirm('승인하시겠습니까?',()=>{
+            AJAX.call("jsp/adminAddUni.jsp", {id: id}, function(data) {
+                console.log(data.trim())
+                //"OK" or "ER"
+                if(data.trim() == 'OK'){
+                    Dialog.alert("학교 승인 완료",location.reload());
+                }else{
+                    Dialog.alert(data.message,location.reload());
+                }
+            });
         });
     }
-
 </script>

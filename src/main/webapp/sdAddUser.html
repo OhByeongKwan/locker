@@ -12,7 +12,7 @@
 <div class="container">
     <div class="d-flex justify-content-center position-relative" style="padding-top:10%">
         <div class="back-icon position-absolute" style="left:0" role="button" onclick="Page.back()"></div>
-        <div class="fs-20">관리자 회원 승인</div>
+        <div class="fs-20">일반 회원 승인</div>
     </div>
     <div class="position-relative" style="margin-top:34px;border-bottom:2px solid #686B7C;padding-bottom:5px">
         <input type="text" class="search fs-14 w-100" style="border:none;outline:none;margin-left:40px">
@@ -69,9 +69,7 @@
 
 
     function setPage() {
-
-        AJAX.call("jsp/GetUserList.jsp", {type: 'A'}, function(data) {
-            //adminUser - jsonstr 내부 값 permission = 0 , type = 'A'
+        AJAX.call("jsp/GetUserList.jsp", {type: 'U'}, function(data) {
             data = JSON.parse(data.trim());
             console.log(data)
             $('.reqUser *').remove();
@@ -87,7 +85,9 @@
                 </div>
             </div>`);
             }
+            //defaultUser - jsonstr 내부 값 permission = 0 , type = 'U'
         });
+
         // AJAX.call("jsp/GetUserList.jsp", {type: 'All'}, function(data) {
         //     //defaultUser - jsonstr 내부 값 permission = 0
         //     data = JSON.parse(data.trim());
@@ -95,18 +95,6 @@
         // });
     }
 
-<<<<<<< HEAD
-    function addUser(mid){
-        mid = "1111";
-        AJAX.call("jsp/approveUser.jsp", {mid}, function(data) {
-            console.log(data.trim())
-            //"OK" or "ER"
-            if(data.trim() == 'OK'){
-                Dialog.alert("회원가입 승인 완료",location.reload);
-            }else{
-                Dialog.alert(data.message,location.reload);
-            }
-=======
     function addUser(mid,e){
         e.stopPropagation();
         // mid = "1111";
@@ -120,12 +108,11 @@
                     Dialog.alert(data.message,location.reload());
                 }
             });
->>>>>>> origin/obk
         });
     }
 
     function modal(mid){
-        AJAX.call("jsp/GetUserList.jsp", {type: 'A'}, function(data) {
+        AJAX.call("jsp/GetUserList.jsp", {type: 'U'}, function(data) {
             $('.user-detail').remove();
             data = JSON.parse(data.trim());
             data.map((item)=>{

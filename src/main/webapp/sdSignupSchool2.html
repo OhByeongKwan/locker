@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="container">
-    <main class="flex-column justify-content-between">
+    <main class="flex-column justify-content-between" style="padding-top:10%">
         <div>
             <div class="back-icon" role="button" onclick="Page.back()"></div>
             <div class="signup-title fs-24" style="margin-top:58px">기본정보 입력하기</div>
@@ -29,8 +29,8 @@
                 </div>
             </div>
             <div class="d-flex" style="margin-top:64px">
-                <label class="fs-18 col-2 my-auto" for="department">학번</label>
-                <input id="department" name="department" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <label class="fs-18 col-2 my-auto" for="departmentNum">학번</label>
+                <input id="departmentNum" name="departmentNum" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
             </div>
             <div class="d-flex justify-content-between" style="margin-top:56px">
                 <label class="fs-18 col-2 my-auto" for="grade">학년</label>
@@ -45,7 +45,7 @@
                 <label class="fs-18 col-2 my-auto" for="gender">성별</label>
                 <div id="gender">
                     <span>
-                        남성  <input type="radio" class="fs-14" name="gender" value="male">
+                        남성  <input type="radio" class="fs-14" name="gender" value="male" checked>
                     </span>
                     <span style="margin-left:50px">
                         여성  <input type="radio" class="fs-14" name="gender" value="female">
@@ -74,27 +74,27 @@
             </div>
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:10px;border-bottom:1px solid #CBCDD8">
                 <div class="d-flex gap-3" style="margin-top:68px">
-                    <input style="width:20px" type="checkbox">
+                    <input name="checkAll" onclick="checkedAll()" style="width:20px" type="checkbox">
                     <span class="fs-20">전체동의</span>
                 </div>
                 <i class="fs-26 ri-arrow-down-s-fill d-flex align-self-end" style="color: #2857CE"></i>
             </div>
             <div class="d-flex justify-content-between align-items-center" style="margin-top:20px">
                 <div class="d-flex gap-3">
-                    <input style="width:16px" type="checkbox">
+                    <input name="check1" style="width:16px" type="checkbox">
                     <span class="fs-12">모두의 사물함 서비스 이용약간 (필수)</span>
                 </div>
                 <div class="fs-26" style="color:#CBCDD8"><i class="ri-arrow-right-s-line"></i></div>
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-3">
-                    <input style="width:16px" type="checkbox">
+                    <input name="check2" style="width:16px" type="checkbox">
                     <span class="fs-12">개인정보 수집 및 이용약간 (필수) </span>
                 </div>
                 <div class="fs-26" style="color:#CBCDD8"><i class="ri-arrow-right-s-line"></i></div>
             </div>
         </div>
-        <div role="button" class="fs-18 text-center submit-btn" style="margin-top:78px">완료</div>
+        <div role="button" class="fs-18 text-center submit-btn" onclick="signup()" style="margin-top:78px">완료</div>
         <div class="d-flex justify-content-center" style="gap:23px;margin-top:13px">
             <div style="color:#686B7C">이미 계정이 존재하신가요?</div>
             <a class="fs-14" href="/index.html">로그인</a>
@@ -120,45 +120,115 @@
     var pagectx = {};
     function init(params) {
         pagectx = params;
+        let signupForm = SessionStore.get('signupForm');
+        console.log(signupForm);
+        if(signupForm == null){
+            Dialog.alert('잘못된 접근입니다.',()=>{
+                Page.go('/');
+            });
+        }
     }
 
-    $('.submit-btn').on('click',()=>{
-        let name = $('input[name=name]').val().trim();
-        let phone = $('input[name=numStart]').val().trim() + '-' + $('input[name=numMiddle]').val().trim() + '-' + $('input[name=numEnd]').val().trim();
-        let department = $('input[name=department]').val().trim();
-        let grade = $('select[name=grade]').val().trim();
-        let gender;
-        if($('input[name=gender]')[0].checked){
-            gender = $('input[name=gender]')[0].value;
-        }else{
-            gender = $('input[name=gender]')[1].value;
-        }
-        //let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
-        let addr = 100000;
-        let pw = $('input[name=pw]').val().trim();
-        let obj = {'name' : name, 'phone' : phone, 'department' : department, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw, type: 'A'}
-        console.log(obj);
+    function signup(){
+            let signupForm = SessionStore.get('signupForm');
+            console.log(signupForm);
 
-
-        /*
-        *   0. url로 접근핳수도 있으니 session값에서 이전 페이지에서 받아오는 uniName,email등 값 없을 시 이전 페이지 이동
-        *   1.addr -> addr.js통해서 값 가져오기
-        *   2.signupSchool -> signupSchool2넘어갈 때 sessionStroage통해서 uni, depName, email값 넘기기,
-        *   3.obj실제 값과 다른 값들 학번이 Departmanet라고 되어있는거같은데 변수명 수정 signup.jsp보고 바꿔줘
-        *   4.onclick()으로 함수로 만들기 jquery로 해놓은 위에 코드 함수로 만들어서 관리해줘
-        * */
-
-        AJAX.call("jsp/signup.jsp", obj, function(data) {
-            console.log(data.trim());
-            if(data.trim() == 'OK'){
-                //OK -> 추가 완료
-                Page.go('/sdSignupFinish.html')
+            let name = $('input[name=name]').val().trim();
+            let phone = $('input[name=numStart]').val().trim() + '-' + $('input[name=numMiddle]').val().trim() + '-' + $('input[name=numEnd]').val().trim();
+            let studentId = $('input[name=departmentNum]').val().trim();
+            let grade = $('select[name=grade]').val().trim();
+            let gender;
+            if($('input[name=gender]')[0].checked){
+                gender = $('input[name=gender]')[0].value;
             }else{
-                //ER -> 에러 (reload하면 적은 값들 사라지니까 이거는 빼자 - 메세지만 출력)
-                Dialog.alert(data.message,location.reload);
+                gender = $('input[name=gender]')[1].value;
             }
-        });
+            //let addr = $('select[name=시]').val().trim() +' '+ $('select[name=구]').val().trim();
+            let addr = 100000;
+            let pw = $('input[name=pw]').val().trim();
+            let pw2 = $('input[name=pw2]').val().trim();
+            let id = signupForm.email;
+            let department = signupForm.department;
+            let uni = signupForm.uniName;
+            let type = signupForm.userType;
+            let check1 = $('input[name=check1]')[0].checked;
+            let check2 = $('input[name=check2]')[0].checked;
+            console.log(check1);
+            console.log(check2);
+            if(name == ""){
+                Dialog.alert('이름을 입력하세요.',()=>{
+                    $('input[name=name]').focus();
+                });
+                return;
+            }
+        if($('input[name=numStart]').val().trim() == "" || $('input[name=numMiddle]').val().trim() == "" || $('input[name=numEnd]').val().trim() == ""){
+            Dialog.alert('전화번호를 입력하세요.',()=>{
+                $('input[name=numStart]').focus();
+            });
+            return;
+        }
+        if(studentId == ""){
+            Dialog.alert('학번을 입력하세요.',()=>{
+                $('input[name=departmentNum]').focus();
+            });
+            return;
+        }
+        if(pw == ""){
+            Dialog.alert('비밀번호를 입력하세요.',()=>{
+                $('input[name=pw]').focus();
+            });
+            return;
+        }
+        if(pw2 == ""){
+            Dialog.alert('비밀번호를 입력하세요.',()=>{
+                $('input[name=pw2]').focus();
+            });
+            return;
+        }
+        if(pw != pw2){
+            Dialog.alert('비밀번호가 일치하지 않습니다.',()=>{
+                $('input[name=pw]').focus();
+            });
+            return;
+        }
+        if(check1 == false || check2 == false){
+            Dialog.alert('약관동의를 모두 체크해주세요.',()=>{
+                $('input[name=check1]').focus();
+            });
+            return;
+        }
+            let obj = {'name' : name, 'phoneNum' : phone, 'studentId' : studentId, 'grade' : grade, 'gender' : gender,'addr' : addr, 'pw' : pw, 'type': type, 'uniName' : uni, 'id' : id, 'department' : department}
+            console.log(obj);
 
 
-    });
+            /*
+            *   0. url로 접근핳수도 있으니 session값에서 이전 페이지에서 받아오는 uniName,email등 값 없을 시 이전 페이지 이동
+            *   1.addr -> addr.js통해서 값 가져오기
+            *   2.signupSchool -> signupSchool2넘어갈 때 sessionStroage통해서 uni, depName, email값 넘기기,
+            *   3.obj실제 값과 다른 값들 학번이 Departmanet라고 되어있는거같은데 변수명 수정 signup.jsp보고 바꿔줘
+            *   4.onclick()으로 함수로 만들기 jquery로 해놓은 위에 코드 함수로 만들어서 관리해줘
+            * */
+
+            AJAX.call("jsp/signup.jsp", obj, function(data) {
+                console.log(data.trim());
+                if(data.trim() == 'OK'){
+                    //OK -> 추가 완료
+                    Page.go('/sdSignupFinish.html')
+                }else{
+                    //ER -> 에러 (reload하면 적은 값들 사라지니까 이거는 빼자 - 메세지만 출력)
+                    Dialog.alert(data.message,location.reload);
+                }
+            });
+    }
+
+    function checkedAll(){
+        if($('input[name=checkAll]')[0].checked == true){
+            $('input[name=check1]')[0].checked = true;
+            $('input[name=check2]')[0].checked = true;
+        }else{
+            $('input[name=check1]')[0].checked = false;
+            $('input[name=check2]')[0].checked = false;
+        }
+    }
+
 </script>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+</head>
+<body>
+<div class="container">
+    <main class="input-form flex-column justify-content-between" style="padding-top:10%">
+        <div>
+            <label for="lockerDate">신청 기간</label>
+            <div id="lockerDate" class="d-flex">
+                <input name="startDate" type="date"> ~ <input name="endDate" type="date">
+            </div>
+        </div>
+        <div>
+            <label for="lockerNum">사물함 번호</label>
+            <div id="lockerNum" class="d-flex">
+                <input class="w-50" name="startNum" type="number"> ~ <input class="w-50" name="endNum" type="number">
+            </div>
+        </div>
+        <div>
+            <label for="notUseLockerNum">안쓰는 사물함 번호</label>
+            <div id="notUseLockerNum" class="d-flex">
+                <input class="w-50" name="startNum" type="number"> ~ <input class="w-50" name="endNum" type="number">
+            </div>
+        </div>
+        <div>
+            <label for="lockerWay">배정 방식</label>
+            <div class="d-flex">
+                <input id="lockerWay" name="lockerWay" type="radio" value="auto"> 자동배정
+            </div>
+        </div>
+        <div>
+            <label>도움 필요 학생 채크 여부</label>
+            <div class="d-flex">
+                <input type="checkbox">
+            </div>
+        </div>
+        <div>
+            <label for="oneLockerMaxNum">사물함 당 최대 인원수</label>
+            <div class="d-flex">
+                <input id="oneLockerMaxNum" name="oneLockerMaxNum" type="number">
+            </div>
+        </div>
+        <div>
+            <label for="pw">보안방식</label>
+            <div id="pw" class="d-flex">
+                <span>
+                        비밀번호  <input type="radio" class="fs-14" name="way" value="password">
+                </span>
+                <span style="margin-left:50px">
+                        키  <input type="radio" class="fs-14" name="way" value="key">
+                </span>
+            </div>
+        </div>
+        <div role="button" class="fs-18 text-center submit-btn" onclick="reqLocker()" style="margin-top:78px">완료</div>
+    </main>
+
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+    }
+
+    function reqLocker(){
+        let startDate = $('input[name=startDate]').val().trim();
+        let endDate = $('input[name=endDate]').val().trim();
+        let startNum = $('#lockerNum input[name=startNum]').val().trim();
+        let endNum = $('#lockerNum input[name=endNum]').val().trim();
+        let notStartNum = $('#notUseLockerNum input[name=startNum]').val().trim();
+        let notEndNum = $('#notUseLockerNum input[name=endNum]').val().trim();
+        let lockerWay;
+        if($('input[name=lockerWay]')[0].checked){
+            lockerWay = $('input[name=lockerWay]')[0].value;
+        }else {
+            lockerWay = null;
+        }
+        let helper = $('input[type=checkbox]')[0].checked;
+        let oneLockerMaxNum = $('input[name=oneLockerMaxNum]').val().trim();
+        let way;
+        if($('input[name=way]')[0].checked){
+            way = $('input[name=way]')[0].value;
+        }else if($('input[name=way]')[1].checked){
+            way = $('input[name=way]')[1].value;
+        }else{
+            way = null;
+        }
+        let obj = {'startDate':startDate,'endDate':endDate,'startNum':startNum,'endNum':endNum,'notStartNum':notStartNum,'notEndNum':notEndNum,'lockerWay':lockerWay,'helper':helper,'oneLockerMaxNum':oneLockerMaxNum,'way':way};
+
+        console.log(obj);
+    }
+</script>

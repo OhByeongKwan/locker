@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+    </style>
+    <title>모두의 사물함</title>
+</head>
+<body>
+<div class="container" style="min-height:100vh;background-color:#0E58D6">
+    <div class="d-flex" style="gap:30px;padding-top:20%">
+        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님</div>
+        <div class="d-flex" style="color:white">
+            <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
+            <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
+        </div>
+    </div>
+    <section class="menus" style="margin-top:66px">
+        <div class="d-flex flex-column" style="gap:27px">
+            <div role="button" onclick="Page.go('/adminAddUni.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <img src="/img/add_uni.svg">
+                <div class="fs-18" style="color:#0E58D6">학교 추가 건의</div>
+            </div>
+            <div role="button" onclick="Page.go('/adminAddDep.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <img src="/img/add_dep.svg">
+                <div class="fs-18" style="color:#0E58D6">과 추가 건의</div>
+            </div>
+            <div role="button" onclick="Page.go('/manageUser.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <img src="/img/manage_user.svg">
+                <div class="fs-18" style="color:#0E58D6">회원 관리</div>
+            </div>
+            <div role="button" onclick="Page.go('#')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <img src="/img/manage_doc.svg">
+                <div class="fs-18" style="color:#0E58D6">문서 관리</div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+        Dialog.init();
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+    }
+</script>
