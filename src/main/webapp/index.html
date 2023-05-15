@@ -10,14 +10,17 @@
     <style>
         .login-title{padding-top:10%;font-weight:bold;font-size:40px;color:#0E58D6}
         form label{font-size:18px;color:white}
-        form input{padding:5px;background-color:transparent;color: #D5DBFF;border:none;border-bottom:1px solid #D5DBFF}
+        form input{padding:5px;background-color:transparent;color: #D5DBFF;border:none;border-bottom:1px solid #D5DBFF;outline:none}
         form input::placeholder{color: #D5DBFF}
         .button{padding:13px 13px}
+        .main-form{opacity:0;transition:opacity 1s}
+        .main-logo{opacity:1;transition:opacity 1s}
     </style>
 </head>
 <body>
 <div class="container">
-    <main>
+    <div class="d-flex main-logo justify-content-center align-items-center position-absolute" style="height:100vh;left:50%;right:50%;z-index:-1"><img src="/img/login_logo.svg"></div>
+    <main class="main-form">
         <div class="login-title">
             <span>Login</span>
         </div>
@@ -57,6 +60,10 @@
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
+        setTimeout(()=>{
+            $('.main-logo').css('opacity',0);
+            $('.main-form').css('opacity',1);
+        },1500);
         if(params.usrobj && params.usrobj.mid != null){
             // Page.goHome();
         }

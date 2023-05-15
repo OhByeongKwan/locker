@@ -115,6 +115,7 @@
         AJAX.call("jsp/GetUserList.jsp", {type: 'A'}, function(data) {
             $('.user-detail').remove();
             data = JSON.parse(data.trim());
+            console.log(data);
             data.map((item)=>{
                if(item.mid == mid){
                    console.log(item);

@@ -50,6 +50,8 @@
 <script src="js/velocity.min.js"></script>
 <script type="text/javascript">
     var pagectx = {};
+    let code;
+    let timeout;
     function init(params) {
         pagectx = params;
         //AJAX 학교 불러오기
@@ -210,9 +212,9 @@
     </div>
     <div id="accessNum" class="justify-content-between" style="padding:14px;border:1px solid #FF7676;border-radius:8px;margin-top:12px">
         <input type="number" class="border-0" style="width:60%" placeholder="인증번호 입력">
-        <div class="d-flex">
-            <div class="mmss" style="font-size:14px"><span class="mm">2</span><span> : </span><span class="ss">59</span></div>
-            <div role="button" style="color: #686B7C">인증하기</div>
+        <div class="d-flex gap-2">
+            <div class="mmss align-self-center" style="font-size:14px"><span class="mm">3</span><span> : </span><span class="ss">0</span></div>
+            <div class="access-btn" role="button" style="color: #686B7C" onclick="accessTnf()">인증하기</div>
         </div>
     </div>
     <div class="d-flex justify-content-between" style="margin-top:40px">
@@ -253,6 +255,12 @@
             });
             return;
         }
+        if($('#signupForm')[0].value != 'success-email'){
+            Dialog.alert('이메일 인증을 완료해주세요.',()=>{
+                $('input[name=email]').focus();
+            });
+            return;
+        }
         let jsonForm = {uniName : uniName, department : department, userType : userType, email : email};
         console.log(jsonForm);
         //해당 데이터 sessionStorage로 넘기기
@@ -274,21 +282,66 @@
 
     }
     function showAccess(){
+        let email = $('input[name=email]').val().trim();
+        if (!isEmail(email)) {
+            Dialog.alert("이메일을 양식에 맞게 입력해주세요.", function () {
+                $('input[name=email]').focus()
+            });
+            return;
+        }
         $('#accessNum').addClass('show');
-            let time = 0;
-            let mm = $('#accessNum .mm')[0].textContent;
-            let ss = $('#accessNum .ss')[0].textContent;
-            for(mm ; mm >= 0 ; mm--){
-                for(ss ; ss >= 0 ; ss--){
-                    // setTimeout(function(){
-                        console.log(`${mm}분 ${ss}초`)
-                        $('#accessNum .mm')[0].textContent = mm;
-                        $('#accessNum .ss')[0].textContent = ss;
-                        time++;
-                    // },1000);
-                }
+        $('#accessBtn').text('재인증하기');
+        $('#accessBtn').disabled = true;
+        $('#accessBtn')[0].onclick = false;
+
+            let characters = '0123456789';
+            code = '';
+
+            for (var i = 0; i < 4; i++) {
+                var randomIndex = Math.floor(Math.random() * characters.length);
+                code += characters.charAt(randomIndex);
+            }
+            console.log(code);
+
+        let mm = 3;
+        let ss = 0;
+        $('#accessNum .mmss').css('color','black');
+
+        timeout = setInterval(()=>{
+            if (mm <= 0 && ss <= 0){
+                $('#accessNum .mmss').css('color','red');
+                clearInterval(timeout);
+                $('#accessBtn').disabled = false;
+                $('#accessBtn')[0].onclick = showAccess;
+                code = null;
+            }
+
+            console.log(`${mm}분 ${ss}초`);
+            $('#accessNum .mm')[0].innerText = mm;
+            $('#accessNum .ss')[0].innerText = ss;
+
+            ss--;
+
+            if (ss < 0) {
+                mm--;
                 ss = 59;
             }
-            $('#accessNum .mmss').css('color','red');
+        },1000);
+    }
+
+    function accessTnf(){
+        console.log(code);
+        if(code == $('#accessNum input[type=number]')[0].value){
+            Dialog.alert('인증에 성공하였습니다.',()=>{
+                $('#accessNum').removeClass('show');
+                $('#accessBtn')[0].onclick = null;
+                clearInterval(timeout);
+                $('#accessBtn').text('인증완료');
+                $('#accessBtn').css('color','#A3A3A3');
+                $('#signupForm')[0].value = 'success-email';
+            });
+        }else{
+            Dialog.alert('인증번호가 올바르지 않습니다.');
+        }
     }
 </script>

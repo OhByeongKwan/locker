@@ -9,58 +9,99 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <title>모두의 사물함</title>
+    <style>
+        li::marker{font-size:20px}
+        #lockerDate input{background-color:#F4F5FC;border-radius:8px;padding:15px;max-width:45%;width:100%;border:none;font-size:14px}
+        .start-pw.show{display:flex}
+        .start-pw{display:none}
+    </style>
 </head>
 <body>
 <div class="container">
     <main class="input-form flex-column justify-content-between" style="padding-top:10%">
-        <div>
-            <label for="lockerDate">신청 기간</label>
-            <div id="lockerDate" class="d-flex">
-                <input name="startDate" type="date"> ~ <input name="endDate" type="date">
-            </div>
-        </div>
-        <div>
-            <label for="lockerNum">사물함 번호</label>
-            <div id="lockerNum" class="d-flex">
-                <input class="w-50" name="startNum" type="number"> ~ <input class="w-50" name="endNum" type="number">
-            </div>
-        </div>
-        <div>
-            <label for="notUseLockerNum">안쓰는 사물함 번호</label>
-            <div id="notUseLockerNum" class="d-flex">
-                <input class="w-50" name="startNum" type="number"> ~ <input class="w-50" name="endNum" type="number">
-            </div>
-        </div>
-        <div>
-            <label for="lockerWay">배정 방식</label>
-            <div class="d-flex">
-                <input id="lockerWay" name="lockerWay" type="radio" value="auto"> 자동배정
-            </div>
-        </div>
-        <div>
-            <label>도움 필요 학생 채크 여부</label>
-            <div class="d-flex">
-                <input type="checkbox">
-            </div>
-        </div>
-        <div>
-            <label for="oneLockerMaxNum">사물함 당 최대 인원수</label>
-            <div class="d-flex">
-                <input id="oneLockerMaxNum" name="oneLockerMaxNum" type="number">
-            </div>
-        </div>
-        <div>
-            <label for="pw">보안방식</label>
-            <div id="pw" class="d-flex">
-                <span>
-                        비밀번호  <input type="radio" class="fs-14" name="way" value="password">
-                </span>
-                <span style="margin-left:50px">
-                        키  <input type="radio" class="fs-14" name="way" value="key">
-                </span>
-            </div>
-        </div>
-        <div role="button" class="fs-18 text-center submit-btn" onclick="reqLocker()" style="margin-top:78px">완료</div>
+        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="signup-title fs-24" style="margin-top:58px">사물함 신청 서비스 제작</div>
+        <ol style="padding-left:25px">
+            <li>
+                <div class="fs-20" style="margin-top:100px">
+                    <label for="lockerDate">신청 날짜</label>
+                    <div id="lockerDate" class="d-flex mt-3 justify-content-between align-items-center">
+                        <input name="startDate" type="date"> ~ <input name="endDate" type="date">
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:66px">
+                    <label for="lockerNum">사물함 번호</label>
+                    <div id="lockerNum" class="d-flex flex-column">
+                        <div class="d-flex mt-3 gap-2 fs-12 align-items-center">
+                            <input class="start-num text-center" oninput="lockerSum()" style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="startNum" type="number">
+                            ~
+                            <input class="end-num text-center" oninput="lockerSum()" style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="endNum" type="number">
+                            <img role="button" onclick="plus()" src="/img/plus.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="fs-20 d-flex align-items-center justify-content-end" style="margin-top:57px">
+                    <label for="lockerSumNum">총 사물함 개수</label>
+                    <div id="lockerSumNum" class="fs-12 text-center" style="padding:14px 0;border:1px solid #BFC2CE;border-radius:8px;color:#686B7C;margin-left:18px;max-width:89px;width:100%">0</div><span style="margin-left:5px">(개)</span>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:55px">
+                    <label for="lockerWay">배정 방식</label>
+                    <div id="lockerWay" class="d-flex fs-14" style="margin-top:34px">
+                        <input name="lockerWay" type="radio" value="auto" checked> 자동배정
+                        <input name="lockerWay" type="radio" value="manual" style="margin-left:42px"> 수기배정
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:73px">
+                    <div class="d-flex" style="gap:10px">
+                        <label for="help">도움 필요 학생 채크 여부</label>
+                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>
+                    </div>
+                    <div id="help" class="d-flex fs-14" style="margin-top:34px">
+                        <input name="helpStatus" type="radio" value="yes" checked> 예
+                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px"> 아니오
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:73px">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="oneLockerMaxNum">사물함 당 최대 인원수</label>
+                        <div>
+                            <input id="oneLockerMaxNum" name="oneLockerMaxNum" class="text-center" type="number" style="padding:14px 0;max-width:90px;color:#686B7C;border:1px solid #BFC2CE;border-radius:8px;font-size:13px;margin-right:5px">(명)
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:84px">
+                    <label for="pw">잠금설정</label>
+                    <div id="pw" class="d-flex fs-14" style="margin-top:32px">
+                        <span>
+                            자물쇠 이용  <input type="radio" name="way" value="key" onclick="showStartPw()" checked>
+                        </span>
+                        <span style="margin-left:50px">
+                        도어락 이용  <input type="radio" name="way" onclick="showStartPw()" value="password">
+                        </span>
+                    </div>
+                </div>
+                <div class="start-pw flex-column" style="margin-top:67px">
+                    <div class="fs-18 d-flex justify-content-end align-items-center">
+                        <label for="startPw">초기 비밀번호</label>
+                        <input id="startPw" type="number" class="fs-14 text-center" name="startPw" placeholder="비밀번호 입력칸" style="padding:12px 0;max-width:154px;width:100%;border-radius:8px;border:1.5px solid #FF7676;outline:none;color:#686B7C;margin-left:20px">
+                    </div>
+                    <div class="text-center" style="font-size:10px;color:#686B7C;margin-top:45px">
+                        해당 번호는 설정시, 각 부여받은 사물함과 함께 학생분들에게 공개됩니다.<br><br>신중하게 설정 부탁드립니다.
+                    </div>
+                </div>
+            </li>
+        </ol>
+        <div role="button" class="fs-18 text-center submit-btn" onclick="reqLocker()" style="margin:78px 0 31px">완료</div>
     </main>
 
 </div>
@@ -85,30 +126,83 @@
     }
 
     function reqLocker(){
+        let startPw = null;
+        let lockerObj = {};
+        let startEndObj = [];
+        for(const item of $('#lockerNum>div')){
+            lockerObj.startNum = item.children[0].value;
+            lockerObj.endNum = item.children[1].value;
+            startEndObj.push(lockerObj);
+            lockerObj ={};
+        }
+        let lockerSumNum = $('#lockerSumNum')[0].textContent;
         let startDate = $('input[name=startDate]').val().trim();
         let endDate = $('input[name=endDate]').val().trim();
-        let startNum = $('#lockerNum input[name=startNum]').val().trim();
-        let endNum = $('#lockerNum input[name=endNum]').val().trim();
-        let notStartNum = $('#notUseLockerNum input[name=startNum]').val().trim();
-        let notEndNum = $('#notUseLockerNum input[name=endNum]').val().trim();
         let lockerWay;
         if($('input[name=lockerWay]')[0].checked){
             lockerWay = $('input[name=lockerWay]')[0].value;
         }else {
-            lockerWay = null;
+            lockerWay = $('input[name=lockerWay]')[1].value;
         }
-        let helper = $('input[type=checkbox]')[0].checked;
+        let helpStatus;
+        if($('input[name=helpStatus]')[0].checked){
+            helpStatus = $('input[name=helpStatus]')[0].value;
+        }else {
+            helpStatus = $('input[name=helpStatus]')[1].value;
+        }
         let oneLockerMaxNum = $('input[name=oneLockerMaxNum]').val().trim();
         let way;
         if($('input[name=way]')[0].checked){
             way = $('input[name=way]')[0].value;
+            startPw = null;
         }else if($('input[name=way]')[1].checked){
             way = $('input[name=way]')[1].value;
+            startPw = $('input[name=startPw]')[0].value;
         }else{
             way = null;
         }
-        let obj = {'startDate':startDate,'endDate':endDate,'startNum':startNum,'endNum':endNum,'notStartNum':notStartNum,'notEndNum':notEndNum,'lockerWay':lockerWay,'helper':helper,'oneLockerMaxNum':oneLockerMaxNum,'way':way};
-
+        let obj = {'startDate':startDate,'endDate':endDate,'startEndObj' : startEndObj,'lockerSumNum' : lockerSumNum,'lockerWay':lockerWay,'oneLockerMaxNum':oneLockerMaxNum,'way':way,'helpStatus' : helpStatus,'startPw' : startPw};
         console.log(obj);
+    }
+
+    function plus(){
+        $('#lockerNum>div img').remove();
+        $('#lockerNum').append(`<div class="d-flex mt-3 gap-2 fs-12 align-items-center">
+                    <input class="start-num text-center" oninput="lockerSum()" style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="startNum" type="number">
+                    ~
+                    <input class="end-num text-center" oninput="lockerSum()" style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="endNum" type="number">
+                    <img role="button" onclick="plus()" src="/img/plus.svg">
+                    <img role="button" onclick="minus()" src="/img/minus.svg">
+                </div>`);
+    }
+    function minus(){
+        $('#lockerNum>div:last-child').remove();
+
+        if($('#lockerNum>div').length == 1){
+            $('#lockerNum>div:last-child').append(`<img role="button" onclick="plus()" src="/img/plus.svg">`);
+        }else{
+            $('#lockerNum>div:last-child').append(`<img role="button" onclick="plus()" src="/img/plus.svg">
+                    <img role="button" onclick="minus()" src="/img/minus.svg">`);
+        }
+        lockerSum();
+    }
+    function lockerSum(){
+        let lockerNum = $('#lockerNum>div');
+        let sum = 0;
+        for(const item of lockerNum){
+            let startNum = item.children[0].value;
+            let endNum = item.children[1].value;
+            sum += endNum - startNum + 1;
+            console.log(sum);
+        }
+        $('#lockerSumNum').text(sum);
+    }
+
+    function showStartPw(){
+        if($('#pw input[value=password]')[0].checked == true){
+            $('.start-pw').addClass('show');
+        }else{
+            $('.start-pw').removeClass('show');
+        }
     }
 </script>
