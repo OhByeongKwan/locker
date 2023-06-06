@@ -54,6 +54,7 @@
     let timeout;
     function init(params) {
         pagectx = params;
+
         //AJAX 학교 불러오기
         AJAX.call("jsp/getUniList.jsp", {}, function(data) {
             let unilist = data.trim();
@@ -273,7 +274,7 @@
                 Page.go('/sdSignupSchool2.html')
             }else if(data.trim() == 'EX'){
                 //문구 수정
-                Dialog.alert("가입된 아이디 ~~ ");
+                Dialog.alert("이미 가입 처리된 아이디 입니다.");
             }else{
                 //ER -> 에러
                 Dialog.alert(data.message,location.reload);

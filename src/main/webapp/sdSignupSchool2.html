@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4-src.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
     <title>모두의 사물함</title>
 </head>
 <body>
@@ -23,9 +25,9 @@
             <div class="d-flex flex-column gap-2" style="margin-top:28px">
                 <label class="fs-18" for="phone">전화번호</label>
                 <div class="d-flex justify-content-between fs-14" id="phone">
-                    <input name="numStart" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input name="numMiddle" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input name="numEnd" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numStart" class="0" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numMiddle" class="1" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input name="numEnd" class="2" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
                 </div>
             </div>
             <div class="d-flex" style="margin-top:64px">
@@ -55,15 +57,16 @@
             <div class="d-flex justify-content-between" style="margin-top:57px">
                 <label class="fs-18 col-2" for="address">주소</label>
                 <div id="address" class="d-flex flex-column gap-2">
-                    <select id="시" name="시">
-                        <option name="incheon">인천광역시</option>
-                        <option name="daegu">대구광역시</option>
-                        <option name="seoul">서울특별시</option>
+                    <select id="metro" name="metro" onchange="renderCity()">
+<!--                        <option name="incheon">인천광역시</option>-->
+<!--                        <option name="daegu">대구광역시</option>-->
+<!--                        <option name="seoul">서울특별시</option>-->
                     </select>
-                    <select id="구" name="구">
-                        <option name="incheon">서구</option>
-                        <option name="daegu">남구</option>
-                        <option name="seoul">노원구</option>
+                    <select id="city" name="city">
+                        <div>도시를 선택해주세요.</div>
+<!--                        <option name="incheon">서구</option>-->
+<!--                        <option name="daegu">남구</option>-->
+<!--                        <option name="seoul">노원구</option>-->
                     </select>
                 </div>
             </div>
@@ -110,22 +113,50 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script src="js/core.js"></script>
+<script src="js/addr.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         Page.init(location.pathname, init, {nolog: true});
     });
 </script>
 <script src="js/velocity.min.js"></script>
+
+<script src="js/proj4js-combined.min.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
         pagectx = params;
         let signupForm = SessionStore.get('signupForm');
-        console.log(signupForm);
-        if(signupForm == null){
-            Dialog.alert('잘못된 접근입니다.',()=>{
-                Page.go('/');
-            });
+        let addrMetro = AddrKo.getMetroList();
+        renderMetro(addrMetro);
+        // if(signupForm == null){
+        //     Dialog.alert('잘못된 접근입니다.',()=>{
+        //         Page.go('/');
+        //     });
+        // }
+        renderCity();
+    }
+
+    function renderMetro(metros){
+        for(const metro of metros){
+            $('#metro').append(`<option name=${metro[0]}>${metro[1]}</option>`);
+        }
+    }
+
+    function renderCity(){
+        let metro = $('#metro')[0].value;
+        let select;
+        let metroLists = $('#metro>option');
+        for(const metroOne of metroLists){
+            if(metro == metroOne.value){
+                select = $(metroOne).attr('name');
+            }
+        }
+        let addrCitys = AddrKo.getCityList(select);
+        $('#city *').remove();
+
+        for(const city of addrCitys){
+            $('#city').append(`<option name=${city[0]}>${city[1]}</option>`);
         }
     }
 
@@ -230,5 +261,25 @@
             $('input[name=check2]')[0].checked = false;
         }
     }
+
+    $('#phone > input').keypress(function (e) {
+        var i = e.target.classList[0];
+        if($($('#phone > input')[0]).val().length >= 2){
+            $('input[name=numMiddle]').focus();
+        }
+    })
+
+    function nextPhone(phone){
+        if(phone.name == 'numStart'){
+            if(phone.value.length >= 3){
+                $('input[name=numMiddle]').focus();
+            }
+        }else if(phone.name == 'numMiddle'){
+            if(phone.value.length >= 4){
+                $('input[name=numEnd]').focus();
+            }
+        }
+    }
+
 
 </script>
