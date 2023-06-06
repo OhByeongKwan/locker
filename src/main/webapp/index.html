@@ -89,6 +89,18 @@
         })
     }
 
+    $('input').keypress(function (e) {
+        if(e.keyCode == 13){
+            let input = e.target;
+            let inputs = $('input');
+            let index = inputs.index(input);
+            if(inputs.length - index == 1){
+                login();
+            }else{
+                inputs[index+1].focus();
+            }
+        }
+    });
 
     function setPage() {
         $("#--mid").focus();

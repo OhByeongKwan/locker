@@ -26,8 +26,8 @@
                     <ul class="dropdown-menu univ">
                     </ul>
                 </div>
-                <div class="d-flex justify-content-center" style="gap:23px">
-                    <div style="color:#686B7C">우리학교 계정이 없다면?</div>
+                <div class="d-flex justify-content-center mt-2" style="gap:23px">
+                    <div  style="color:#686B7C">우리학교 계정이 없다면?</div>
                     <a href="/schoolRequest.html">건의하기</a>
                 </div>
         </div>
@@ -67,7 +67,7 @@
                     $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">${arr[i]}</li>`);
                 }
             }else{
-                $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle">등록된 대학교가 없습니다.</li>`);
+                $('.search-box .dropdown-menu.univ').append(`<li class="schoolTitle" style="padding:10px">등록된 대학교가 없습니다.</li>`);
             }
 
             $('.search-box .dropdown-menu.univ li').on('click',function(){
@@ -135,7 +135,7 @@
                 <li class="departTitle">학과3</li>
             </ul>
         </div>
-        <div class="req-uni d-flex justify-content-center" style="gap:23px">
+        <div class="req-uni d-flex justify-content-center mt-2" style="gap:23px">
             <div style="color:#686B7C">우리학교 학과가 없다면?</div>
             <a href="/departmentRequest.html">건의하기</a>
         </div>`);
@@ -155,7 +155,7 @@
                 }
             }else{
                 console.log(arr.length);
-                $('#schoolSearch .dropdown-menu.depart').append(`<div class="departTitle">등록된 학과가 없습니다.</div>`);
+                $('#schoolSearch .dropdown-menu.depart').append(`<div class="departTitle" style="padding:10px">등록된 학과가 없습니다.</div>`);
             }
 
             $('.search-box .dropdown-menu.depart li').on('click',function() {
@@ -266,21 +266,7 @@
         console.log(jsonForm);
         //해당 데이터 sessionStorage로 넘기기
         SessionStore.set('signupForm',jsonForm);
-
-        AJAX.call("jsp/signupCheck.jsp", {id:email}, function(data) {
-            console.log(data.trim());
-            if(data.trim() == 'OK'){
-                //OK -> 가입안된 id -> 페이지 전환
-                Page.go('/sdSignupSchool2.html')
-            }else if(data.trim() == 'EX'){
-                //문구 수정
-                Dialog.alert("이미 가입 처리된 아이디 입니다.");
-            }else{
-                //ER -> 에러
-                Dialog.alert(data.message,location.reload);
-            }
-        });
-
+        Page.go('/sdSignupSchool2.html')
     }
     function showAccess(){
         let email = $('input[name=email]').val().trim();
@@ -290,44 +276,58 @@
             });
             return;
         }
-        $('#accessNum').addClass('show');
-        $('#accessBtn').text('재인증하기');
-        $('#accessBtn').disabled = true;
-        $('#accessBtn')[0].onclick = false;
+        AJAX.call("jsp/signupCheck.jsp", {id:email}, function(data) {
+            console.log(data.trim());
+            if(data.trim() == 'OK'){
+                //OK -> 가입안된 id
 
-            let characters = '0123456789';
-            code = '';
+                $('#accessNum').addClass('show');
+                $('#accessBtn').text('재인증하기');
+                $('#accessBtn').disabled = true;
+                $('#accessBtn')[0].onclick = false;
 
-            for (var i = 0; i < 4; i++) {
-                var randomIndex = Math.floor(Math.random() * characters.length);
-                code += characters.charAt(randomIndex);
+                let characters = '0123456789';
+                code = '';
+
+                for (var i = 0; i < 4; i++) {
+                    var randomIndex = Math.floor(Math.random() * characters.length);
+                    code += characters.charAt(randomIndex);
+                }
+                console.log(code);
+
+                let mm = 3;
+                let ss = 0;
+                $('#accessNum .mmss').css('color','black');
+
+                timeout = setInterval(()=>{
+                    if (mm <= 0 && ss <= 0){
+                        $('#accessNum .mmss').css('color','red');
+                        clearInterval(timeout);
+                        $('#accessBtn').disabled = false;
+                        $('#accessBtn')[0].onclick = showAccess;
+                        code = null;
+                    }
+
+                    console.log(`${mm}분 ${ss}초`);
+                    $('#accessNum .mm')[0].innerText = mm;
+                    $('#accessNum .ss')[0].innerText = ss;
+
+                    ss--;
+
+                    if (ss < 0) {
+                        mm--;
+                        ss = 59;
+                    }
+                },1000);
+            }else if(data.trim() == 'EX'){
+                //문구 수정
+                Dialog.alert("이미 가입 처리된 아이디 입니다.");
+                return;
+            }else{
+                //ER -> 에러
+                Dialog.alert(data.message,location.reload);
             }
-            console.log(code);
-
-        let mm = 3;
-        let ss = 0;
-        $('#accessNum .mmss').css('color','black');
-
-        timeout = setInterval(()=>{
-            if (mm <= 0 && ss <= 0){
-                $('#accessNum .mmss').css('color','red');
-                clearInterval(timeout);
-                $('#accessBtn').disabled = false;
-                $('#accessBtn')[0].onclick = showAccess;
-                code = null;
-            }
-
-            console.log(`${mm}분 ${ss}초`);
-            $('#accessNum .mm')[0].innerText = mm;
-            $('#accessNum .ss')[0].innerText = ss;
-
-            ss--;
-
-            if (ss < 0) {
-                mm--;
-                ss = 59;
-            }
-        },1000);
+        });
     }
 
     function accessTnf(){

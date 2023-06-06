@@ -1,4 +1,4 @@
-let AddrKo = {
+var AddrKo = {
     getCityName: function(code) {
         for (var i=0; i<this.cities.length; i++) {
             if (this.cities[i].code == code) return this.cities[i].name;

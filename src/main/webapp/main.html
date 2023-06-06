@@ -13,12 +13,25 @@
         form input{padding:5px;background-color:transparent;color: #D5DBFF;border:none;border-bottom:1px solid #D5DBFF}
         form input::placeholder{color: #D5DBFF}
         .button{padding:13px 13px}
+        .container.show{display:block}
+        .container{display:none}
     </style>
 </head>
 <body>
-<div class="container">
-    <main>
-    </main>
+<div class="permission0 container" style="padding-top:10%">
+<!--    <div class="back-icon" role="button" onclick="Page.back()"></div>-->
+    <div class="d-flex flex-column justify-content-center align-items-center" style="gap:25px;margin-top:20%">
+        <img src="/img/main0.svg">
+        <div class="user-info fs-20 fw-bold text-center"></div>
+        <div class="fw-bold fs-24">가입 승인 <span style="color:blue">대기 중</span> 입니다.</div>
+    </div>
+    <div class="button w-100 bg-white text-center" style="border-radius:30px;margin-top:11px;border:1px solid #0E58D6;color:#0E58D6;margin-top:50px">가입 취소하기</div>
+    <div class="button w-100 text-center mt-2" onclick="SSO.logout()" style="border-radius:30px;margin-top:37px;color:white;background-color:#0E58D6">로그아웃</div>
+</div>
+
+<div class="permission1 container" style="padding-top:10%">
+<!--    <div class="back-icon" role="button" onclick="Page.back()"></div>-->
+    <h1>메인페이지</h1>
 </div>
 </body>
 </html>
@@ -36,10 +49,19 @@
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
-
         pagectx = params;
-
+        renderPage(pagectx.usrobj);
     }
 
-
+    function renderPage(user){
+        console.log(user);
+        if(user.permission == 1){
+            $('.permission1').addClass('show');
+            $('.permission0').removeClass('show');
+        }else{
+            $('.permission0 .user-info').append(`<p>${user.uniName}</p><p>${user.depName}</p>`);
+            $('.permission1').removeClass('show');
+            $('.permission0').addClass('show');
+        }
+    }
 </script>

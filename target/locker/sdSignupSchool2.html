@@ -8,8 +8,6 @@
     <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4-src.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
     <title>모두의 사물함</title>
 </head>
 <body>
@@ -20,19 +18,19 @@
             <div class="signup-title fs-24" style="margin-top:58px">기본정보 입력하기</div>
             <div class="d-flex flex-column gap-2" style="margin-top:64px">
                 <label class="fs-18" for="name">이름</label>
-                <input class="fs-14" id="name" name="name" type="text" placeholder="이름 입력" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
+                <input onkeypress="nextFocus(event)" class="fs-14" id="name" name="name" type="text" placeholder="이름 입력" style="padding:15px;border-radius:8px;border:1px solid #BFC2CE">
             </div>
             <div class="d-flex flex-column gap-2" style="margin-top:28px">
                 <label class="fs-18" for="phone">전화번호</label>
                 <div class="d-flex justify-content-between fs-14" id="phone">
-                    <input name="numStart" class="0" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input name="numMiddle" class="1" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
-                    <input name="numEnd" class="2" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input maxlength="3" name="numStart" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input maxlength="4" name="numMiddle" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
+                    <input maxlength="4" name="numEnd" onkeypress="nextFocus(event)" class="2" style="width:30%;padding:10px 14px;height:max-content;border-radius:8px;border:1px solid #BFC2CE" type="number">
                 </div>
             </div>
             <div class="d-flex" style="margin-top:64px">
                 <label class="fs-18 col-2 my-auto" for="departmentNum">학번</label>
-                <input id="departmentNum" name="departmentNum" class="w-100 fs-14" type="text" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <input id="departmentNum" name="departmentNum" class="w-100 fs-14" type="number" placeholder="학번 입력하기" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
             </div>
             <div class="d-flex justify-content-between" style="margin-top:56px">
                 <label class="fs-18 col-2 my-auto" for="grade">학년</label>
@@ -72,7 +70,7 @@
             </div>
             <div class="d-flex flex-column gap-3" style="margin-top:59px">
                 <label class="fs-18 mt-2" for="pw">비밀번호</label>
-                <input id="pw" name="pw" class="w-100 fs-14" type="password" placeholder="비밀번호 입력" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
+                <input id="pw" onkeypress="nextFocus(event)" name="pw" class="w-100 fs-14" type="password" placeholder="비밀번호 입력" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
                 <input id="pw2" name="pw2" class="w-100 fs-14" type="password" placeholder="비밀번호 확인" style="padding:15px;border-radius:8px;border:none;background-color:#F4F5FC">
             </div>
             <div class="d-flex justify-content-between align-items-center" style="padding-bottom:10px;border-bottom:1px solid #CBCDD8">
@@ -113,15 +111,13 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
 <script src="js/core.js"></script>
-<script src="js/addr.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         Page.init(location.pathname, init, {nolog: true});
     });
 </script>
 <script src="js/velocity.min.js"></script>
-
-<script src="js/proj4js-combined.min.js"></script>
+<script src="js/addr.js"></script>
 <script type="text/javascript">
     var pagectx = {};
     function init(params) {
@@ -129,15 +125,16 @@
         let signupForm = SessionStore.get('signupForm');
         let addrMetro = AddrKo.getMetroList();
         renderMetro(addrMetro);
+        renderCity();
         // if(signupForm == null){
         //     Dialog.alert('잘못된 접근입니다.',()=>{
         //         Page.go('/');
         //     });
         // }
-        renderCity();
     }
 
     function renderMetro(metros){
+        console.log(metros);
         for(const metro of metros){
             $('#metro').append(`<option name=${metro[0]}>${metro[1]}</option>`);
         }
@@ -157,6 +154,19 @@
 
         for(const city of addrCitys){
             $('#city').append(`<option name=${city[0]}>${city[1]}</option>`);
+        }
+    }
+
+    function nextFocus(e){
+        if(e.keyCode == 13){
+            let input = e.target;
+            let inputs = $('input');
+            let index = inputs.index(input);
+            if(inputs.length - index == 1){
+                login();
+            }else{
+                inputs[index+1].focus();
+            }
         }
     }
 
@@ -262,24 +272,16 @@
         }
     }
 
-    $('#phone > input').keypress(function (e) {
-        var i = e.target.classList[0];
-        if($($('#phone > input')[0]).val().length >= 2){
-            $('input[name=numMiddle]').focus();
+    $('#phone>input').keypress(function(e){
+        let item = e.target;
+        console.log(item.maxLength);
+        console.log(item.value.length+1);
+        if(item.maxLength < item.value.length+1){
+            let inputs = $('#phone>input');
+            let index = inputs.index(item);
+            console.log(inputs[index+1]);
+            e.preventDefault();
+            inputs[index+1].focus();
         }
-    })
-
-    function nextPhone(phone){
-        if(phone.name == 'numStart'){
-            if(phone.value.length >= 3){
-                $('input[name=numMiddle]').focus();
-            }
-        }else if(phone.name == 'numMiddle'){
-            if(phone.value.length >= 4){
-                $('input[name=numEnd]').focus();
-            }
-        }
-    }
-
-
+    });
 </script>
