@@ -15,16 +15,6 @@
 	String grade = request.getParameter("grade");
 	String gender = request.getParameter("gender");
 	String addr = request.getParameter("addr");
-//	String mid = "1111";
-//	String pass = "1111";
-//	String type = "1111";
-//	String uniName = "삼육대학교";
-//	String depName = "컴퓨터공학";
-//	String phoneNum = "1111";
-//	String studentId = "1111";
-//	String grade = "1111";
-//	String gender = "1111";
-//	String addr = "1111";
 
 	
 	UserDAO dao = new UserDAO();
