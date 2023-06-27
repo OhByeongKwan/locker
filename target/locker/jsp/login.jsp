@@ -15,6 +15,8 @@
 		mid = request.getParameter("mid");
 		pass = request.getParameter("pass");
 
+
+
 		String res = dao.login(mid, pass);
 		if (res.equals("NA") || res.equals("PS")) {
 			out.print(res);
@@ -62,6 +64,8 @@
 		SessionManager.put(session, "usrobj", usrobj);
 		if (usrobj.get("admin") != null && usrobj.get("admin").toString().equals("T")) {
 			code = "AD";
+		}else if(usrobj.get("type") != null && usrobj.get("type").toString().equals("A")) {
+			code = "AD2";
 		}
 	}
 	out.print(code);
