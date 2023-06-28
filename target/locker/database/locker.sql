@@ -38,3 +38,19 @@ CREATE TABLE IF NOT EXISTS user (
     jsonstr VARCHAR(1024),
     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS lockerForm (
+    id int NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+    depCode int(128),
+    jsonstr VARCHAR(1024),
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+Create tavle if not exists lock<id> (
+    numCode VARCHAR(4),
+    num VARCHAR(32),
+    status VARCHAR(128) DEFAULT 'N',
+    mid VARCHAR(128),
+    password VARCHAR(32),
+
+)
