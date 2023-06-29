@@ -161,8 +161,14 @@
         }else{
             way = null;
         }
-        let obj = {'startDate':startDate,'endDate':endDate,'startEndObj' : startEndObj,'lockerSumNum' : lockerSumNum,'lockerWay':lockerWay,'oneLockerMaxNum':oneLockerMaxNum,'way':way,'helpStatus' : helpStatus,'startPw' : startPw};
-        console.log(obj);
+        let depCode = pagectx.usrobj.depCode;
+        let jsonstr = {startDate:startDate,endDate:endDate,startEndObj : startEndObj,lockerSumNum : lockerSumNum,lockerWay:lockerWay,oneLockerMaxNum:oneLockerMaxNum,way:way,helpStatus : helpStatus,startPw : startPw, depCode : depCode};
+        jsonstr = JSON.stringify(jsonstr);
+
+        AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},function(data){
+            console.log(data);
+           Dialog.alert('신청완료',Page.back);
+        });
     }
 
     function plus(){

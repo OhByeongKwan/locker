@@ -16,6 +16,7 @@ import java.sql.*;
 public class LockerDAO {
 
     public String insert(String jsonstr) throws NamingException, SQLException {
+        System.out.println(jsonstr);
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

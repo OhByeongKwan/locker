@@ -46,11 +46,10 @@ CREATE TABLE IF NOT EXISTS lockerForm (
     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-Create tavle if not exists lock<id> (
-    numCode VARCHAR(4),
-    num VARCHAR(32),
-    status VARCHAR(128) DEFAULT 'N',
-    mid VARCHAR(128),
-    password VARCHAR(32),
-
-)
+-- CREATE TABLE if not exists lock<id> (
+--     numCode VARCHAR(4),
+--     num VARCHAR(32),
+--     status VARCHAR(128) DEFAULT 'N',
+--     mid VARCHAR(128),
+--     password VARCHAR(32),
+-- )

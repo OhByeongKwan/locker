@@ -10,7 +10,7 @@
 	//출력값 x
 	request.setCharacterEncoding("UTF-8");
 	LockerDAO dao = new LockerDAO();
-	String jsonstr = request.getParameter("jsontr");
+	String jsonstr = request.getParameter("jsonstr");
 
 	out.print(dao.insert(jsonstr));
 
