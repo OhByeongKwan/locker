@@ -50,7 +50,7 @@ public class LockerDAO {
             sql += "num VARCHAR(32),";
             sql += "status VARCHAR(128) DEFAULT 'N',";
             sql += "mid VARCHAR(128),";
-            sql += "password VARCHAR(32),";
+            sql += "password VARCHAR(32)";
             sql += ")";
             System.out.println(sql);
             SqlUtil.update(sql);
@@ -68,14 +68,14 @@ public class LockerDAO {
 
     public String getForm(String depCode) throws NamingException, SQLException, ParseException {
         //에러 안나면 주석 제거
-//        Connection conn = null;
+        Connection conn = null;
         try {
-//            conn = ConnectionPool.get();
+            conn = ConnectionPool.get();
             String sql = "select jsonstr from lockerForm where depCode = '" + depCode +"'";
             return SqlUtil.query(sql);
 
         } finally {
-//            if (conn!= null) conn.close();
+            if (conn!= null) conn.close();
         }
     }
 

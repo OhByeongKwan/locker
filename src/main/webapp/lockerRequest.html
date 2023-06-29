@@ -165,9 +165,8 @@
         let jsonstr = {startDate:startDate,endDate:endDate,startEndObj : startEndObj,lockerSumNum : lockerSumNum,lockerWay:lockerWay,oneLockerMaxNum:oneLockerMaxNum,way:way,helpStatus : helpStatus,startPw : startPw, depCode : depCode};
         jsonstr = JSON.stringify(jsonstr);
 
-        AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},function(data){
-            console.log(data);
-           Dialog.alert('신청완료',Page.back);
+        AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},()=>{
+            Dialog.alert('신청완료',Page.back);
         });
     }
 
