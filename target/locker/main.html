@@ -29,9 +29,22 @@
     <div class="button w-100 text-center mt-2" onclick="SSO.logout()" style="border-radius:30px;margin-top:37px;color:white;background-color:#0E58D6">로그아웃</div>
 </div>
 
-<div class="permission1 container" style="padding-top:10%">
-<!--    <div class="back-icon" role="button" onclick="Page.back()"></div>-->
-    <h1>메인페이지</h1>
+<div class="permission1 container" style="min-height:100vh;background-color:#0E58D6">
+    <div class="d-flex" style="gap:30px;padding-top:20%">
+        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 회원님</div>
+        <div class="d-flex" style="color:white">
+            <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
+            <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
+        </div>
+    </div>
+    <section class="menus" style="margin-top:66px">
+        <div class="d-flex flex-column" style="gap:27px">
+            <div role="button" onclick="Page.go('/userLockerRequest.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <img src="/img/add_uni.svg">
+                <div class="fs-18" style="color:#0E58D6">사물함 신청</div>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>

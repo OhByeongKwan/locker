@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name=viewport content="width=device-width, initial-scale=1, user-scalable=0, viewport-fit=cover">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+<!--    <link rel="shortcut icon" href="images/main-logo.png">-->
+    <link rel="stylesheet" type="text/css" href="/css/core.css" media="only screen">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>모두의 사물함</title>
+    <style>
+        li::marker{font-size:20px}
+        #lockerDate input{background-color:#F4F5FC;border-radius:8px;padding:15px;max-width:45%;width:100%;border:none;font-size:14px}
+        .start-pw.show{display:flex}
+        .start-pw{display:none}
+    </style>
+</head>
+<body>
+<div class="container">
+    <main class="input-form flex-column justify-content-between" style="padding-top:10%">
+        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="signup-title fs-24" style="margin-top:58px">사물함 신청</div>
+        <ol style="padding-left:25px">
+            <li>
+                <div class="fs-20" style="margin-top:100px">
+                    <label for="lockerDate">신청 날짜</label>
+                    <div id="lockerDate" class="d-flex mt-3 justify-content-between align-items-center">
+                        <input name="startDate" type="date" readonly> ~ <input name="endDate" type="date" readonly>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:66px">
+                    <label for="lockerNum">사물함 번호</label>
+                    <div id="lockerNum" class="d-flex flex-column">
+                        <div class="d-flex mt-3 gap-2 fs-12 align-items-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="fs-20 d-flex align-items-center justify-content-end" style="margin-top:57px">
+                    <label for="lockerSumNum">총 사물함 개수</label>
+                    <div id="lockerSumNum" class="fs-12 text-center" style="padding:14px 0;border:1px solid #BFC2CE;border-radius:8px;color:#686B7C;margin-left:18px;max-width:89px;width:100%">0</div><span style="margin-left:5px">(개)</span>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:55px">
+                    <label for="lockerWay">배정 방식</label>
+                    <div id="lockerWay" class="d-flex fs-14" style="margin-top:34px">
+                        <input name="lockerWay" type="radio" value="auto" readonly> 자동배정
+                        <input name="lockerWay" type="radio" value="manual" style="margin-left:42px" readonly> 수기배정
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:73px">
+                    <div class="d-flex" style="gap:10px">
+                        <label for="help">도움 필요 학생 체크 여부</label>
+                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>
+                    </div>
+                    <div id="help" class="d-flex fs-14" style="margin-top:34px">
+                        <input name="helpStatus" type="radio" value="yes" readonly> 예
+                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px" readonly> 아니오
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:73px">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <label for="oneLockerMaxNum">사물함 당 최대 인원수</label>
+                        <div>
+                            <input id="oneLockerMaxNum" name="oneLockerMaxNum" class="text-center" type="number" style="padding:14px 0;max-width:90px;color:#686B7C;border:1px solid #BFC2CE;border-radius:8px;font-size:13px;margin-right:5px" readonly>(명)
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="fs-20" style="margin-top:84px">
+                    <label for="pw">잠금설정</label>
+                    <div id="pw" class="d-flex fs-14" style="margin-top:32px">
+                        <span>
+                            자물쇠 이용  <input type="radio" name="way" value="key" onclick="showStartPw()" readonly>
+                        </span>
+                        <span style="margin-left:50px">
+                        도어락 이용  <input type="radio" name="way" onclick="showStartPw()" value="password" readonly>
+                        </span>
+                    </div>
+                </div>
+                <div class="start-pw flex-column" style="margin-top:67px">
+                    <div class="fs-18 d-flex justify-content-end align-items-center">
+                        <label for="startPw">초기 비밀번호</label>
+                        <input id="startPw" type="number" class="fs-14 text-center" readonly name="startPw" placeholder="비밀번호 입력칸" style="padding:12px 0;max-width:154px;width:100%;border-radius:8px;border:1.5px solid #FF7676;outline:none;color:#686B7C;margin-left:20px">
+                    </div>
+                    <div class="text-center" style="font-size:10px;color:#686B7C;margin-top:45px">
+                        해당 번호는 설정시, 각 부여받은 사물함과 함께 학생분들에게 공개됩니다.<br><br>신중하게 설정 부탁드립니다.
+                    </div>
+                </div>
+            </li>
+        </ol>
+        <div role="button" class="fs-18 text-center submit-btn" onclick="userReqLocker()" style="margin:78px 0 31px">신청</div>
+    </main>
+
+</div>
+</body>
+</html>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/core.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        Page.init(location.pathname, init, {nolog: true});
+    });
+</script>
+<script src="js/velocity.min.js"></script>
+<script type="text/javascript">
+    var pagectx = {};
+    function init(params) {
+        pagectx = params;
+        let depCode = pagectx.usrobj.depCode;
+        console.log(depCode);
+        AJAX.call('jsp/getLockerForm.jsp',{depCode : depCode},(data)=>{
+            renderForm(data);
+        });
+    }
+
+    function renderForm(form){
+        form = JSON.parse(form);
+        console.log(form);
+        $('input[name=startDate]')[0].value = form.startDate;
+        $('input[name=endDate]')[0].value = form.endDate;
+        $('#lockerSumNum').text(form.lockerSumNum);
+
+        for(const list of form.startEndObj){
+            $('#lockerNum>div').append(`<input  class="start-num text-center" value="${list.startNum}" oninput="lockerSum()" readonly style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="startNum" type="number">
+                            ~
+                            <input class="end-num text-center" value="${list.endNum}" oninput="lockerSum()" readonly style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="endNum" type="number">`);
+        }
+
+        if(form.lockerWay == 'auto'){
+            $('#lockerWay input[value=auto]')[0].checked = true;
+            $('#lockerWay input[value=manual]')[0].checked = false;
+        }else{
+            $('#lockerWay input[value=auto]')[0].checked = false;
+            $('#lockerWay input[value=manual]')[0].checked = true;
+        }
+        $('#lockerWay input[value=auto]')[0].disabled = true;
+        $('#lockerWay input[value=manual]')[0].disabled = true;
+
+        if(form.helpStatus == 'yes'){
+            $('#help input[value=yes]')[0].checked = true;
+            $('#help input[value=no]')[0].checked = false;
+        }else{
+            $('#help input[value=yes]')[0].checked = false;
+            $('#help input[value=no]')[0].checked = true;
+        }
+        $('#help input[value=yes]')[0].disabled = true;
+        $('#help input[value=no]')[0].disabled = true;
+
+        $('#oneLockerMaxNum')[0].value = form.oneLockerMaxNum;
+
+        if(form.way == 'password'){
+            $('#pw input[value=password]')[0].checked = true;
+            $('#pw input[value=key]')[0].checked = false;
+            $('.start-pw').addClass('show');
+            $('.start-pw #startPw')[0].value = form.startPw;
+        }else{
+            $('#pw input[value=password]')[0].checked = false;
+            $('#pw input[value=key]')[0].checked = true;
+        }
+        $('#pw input[value=password]')[0].disabled = true;
+        $('#pw input[value=key]')[0].disabled = true;
+    }
+
+    function userReqLocker(){
+        console.log('신청');
+    }
+</script>
