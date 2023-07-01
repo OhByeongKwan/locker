@@ -78,6 +78,83 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
+    public String userLockerRequest(String jsonstr) throws NamingException, SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Statement st = null;
+        try {
+            conn = ConnectionPool.get();
+            st = conn.createStatement();
+
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse( jsonstr );
+            JSONObject jsonObj = (JSONObject) obj;
+
+            String depCode = (String) jsonObj.get("depCode");
+            String mid = (String) jsonObj.get("mid");
+            String pass = (String) jsonObj.get("pass");
+            int lockerSumNum  = Integer.parseInt((String) jsonObj.get("SumNum"));
+            int oneLockerMaxNum = Integer.parseInt((String) jsonObj.get("oneLockerMaxNum"));
+
+            System.out.println(lockerSumNum + "lockerSumNUm ,,,,, " + oneLockerMaxNum + ": oneLocker");
+
+            int totalCount = lockerSumNum*oneLockerMaxNum;
+
+            //우선 취소한 것이 있는지 체크. -> 취소된 것이 있다면 mid값만 바꾸어 설정.
+            String sql = "Select mid from lock"+depCode+" where status = 'C'";
+            String changeMid = SqlUtil.query(sql);
+            if(changeMid != null) {
+                System.out.println(changeMid);
+                sql = "update lock"+depCode+" set mid = '"+mid+"' where mid = '" + changeMid + "'";
+                SqlUtil.update(sql);
+                return "OK";
+            }
+
+            sql = "Select COUNT(*) from lock"+depCode;
+
+            System.out.println(sql);
+            int thisCount = SqlUtil.queryInt(sql);
+            System.out.println(thisCount);
+
+            String numCode = "A";
+            if(thisCount > lockerSumNum){
+                int num = totalCount/thisCount;
+                char numCode_ = ((char)(num+65));
+                numCode = Character.toString(numCode_);
+            }
+
+            thisCount++;
+            while(thisCount<0){
+                thisCount -= lockerSumNum;
+            }
+            thisCount += lockerSumNum;
+
+            sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password) VALUES('" + numCode +
+                    "', '" + thisCount +
+                    "', '" + mid +
+                    "', '" + pass +
+                    "')";
+            System.out.println(sql);
+            SqlUtil.update(sql);
+
+            return "OK";
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (rs!= null) rs.close();
+            if (st!= null) st.close();
+            if (conn!= null) conn.close();
+        }
+
+    }
+
+    public String userLockerCancel(String mid, String depCode) throws NamingException, SQLException {
+        String sql = "update lock"+depCode+" set status = 'C' where mid = '" + mid + "'";
+        SqlUtil.update(sql);
+        return "OK";
+
+    }
 
 
 }

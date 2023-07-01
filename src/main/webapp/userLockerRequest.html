@@ -176,5 +176,21 @@
 
     function userReqLocker(){
         console.log('신청');
+
+        let pass = "사물함 비밀번호";
+        if(pass != null){
+            //여기 pass 값 수정할 것 .
+            //사물함 생성 시 만드는 초기값 집어 넣을 것
+            //없을 시 "NONE"
+            pass = "1111";
+        }
+        let jsonstr = {mid : pagectx.usrobj.mid, depCode: "1", SumNum:"400", oneLockerMaxNum:"2", pass:pass};
+        jsonstr = JSON.stringify(jsonstr);
+
+        AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr}, function(data) {
+            console.log(data.trim());
+            //성공 시에만 "OK"
+        });
+
     }
 </script>

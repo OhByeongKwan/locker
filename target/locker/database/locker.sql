@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS lockerForm (
 );
 
 -- CREATE TABLE if not exists lock<id> (
---     numCode VARCHAR(4),
---     num VARCHAR(32),
+--     numCode VARCHAR(4), - A .. b.. c
+--     num VARCHAR(32),     - 1  .. 2 .. 3
 --     status VARCHAR(128) DEFAULT 'N',
 --     mid VARCHAR(128),
 --     password VARCHAR(32),
