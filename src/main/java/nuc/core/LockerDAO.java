@@ -78,6 +78,41 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
+    public String getLockerUser(String depCode, String mid) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Statement st = null;
+        try {
+            conn = ConnectionPool.get();
+            st = conn.createStatement();
+
+            JSONParser parser = new JSONParser();
+
+            String sql = "Select * from lock"+depCode+" where status != 'C' and mid = '"+mid+"'";
+            System.out.println(sql);
+
+            rs = st.executeQuery(sql);
+            if (rs.next()) {
+                JSONObject jo = new JSONObject();
+                jo.put("numCode", rs.getString("numCode"));
+                jo.put("num", rs.getString("num"));
+                jo.put("status", rs.getString("status"));
+                jo.put("password", rs.getString("password"));
+
+                System.out.println(jo.toString());
+                String jsonstr = jo.toJSONString();
+                return jsonstr;
+
+            }else{
+                return "NO";
+            }
+        } finally {
+            if (rs!= null) rs.close();
+            if (st!= null) st.close();
+            if (conn!= null) conn.close();
+        }
+    }
     public String userLockerRequest(String jsonstr) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
