@@ -1,6 +1,6 @@
 var Config = {
     url: "http://localhost:8087",
-    // url: "http://43.200.35.210:8080",
+    // url: "http://15.164.134.14:8080",
     platform: null,
 
     getUserImgUrl: function(mid, file) {
@@ -1028,8 +1028,6 @@ var SSO = {
         if(usrobj == null) return;
         var pstr = "mid=" + usrobj.mid + "&pass=" + usrobj.pass;
         this._login(pstr, function(code) {
-            alert(code);
-            alert("aa")
             if (code == "PS") {
                 Dialog.alert("비밀번호가 일치하지 않습니다.");
             } else if (code == "AD") {
@@ -1039,8 +1037,12 @@ var SSO = {
                     Page.goHome();
                 });
             }
-            else {
-                Page.goHome();
+            else if(code == "AD2"){
+                Dialog.confirm("관리자 페이지로 이동하시겠습니까?", function() {
+                    Page.move("mainM.html");
+                }, function() {
+                    Page.goHome();
+                });
             }
         });
     },

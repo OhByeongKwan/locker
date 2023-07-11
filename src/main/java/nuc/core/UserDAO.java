@@ -108,7 +108,7 @@ public class UserDAO {
         }
     }
 
-    public String getUserList(String type) throws NamingException, SQLException, ParseException {
+    public String getUserList(String type, String permission, String depCode) throws NamingException, SQLException, ParseException {
         Connection conn = null;
         PreparedStatement stmt = null;
         Statement st = null;
@@ -119,8 +119,10 @@ public class UserDAO {
 
             JSONParser parser = new JSONParser();
 
-            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = " + 0;
-
+            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = '" + permission +"'";
+                if(depCode != null){
+                    sql += "and depCode = '" + depCode + "'";
+                }
             if(!type.equals("All"))
                 sql += " and JSON_EXTRACT(jsonstr,'$.type') = '" + type + "'";
 

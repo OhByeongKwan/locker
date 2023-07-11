@@ -8,7 +8,13 @@
 	request.setCharacterEncoding("UTF-8");
 	UserDAO dao = new UserDAO();
 
-	String type = request.getParameter("type");
+	// permission = 1 or 0
+	// depCode = null or depCode
 
-	out.print(dao.getUserList(type));
+	String type = request.getParameter("type");
+	String permission = request.getParameter("permission");
+	String depCode = request.getParameter("depCode");
+
+
+	out.print(dao.getUserList(type, permission, depCode));
 %>

@@ -5,16 +5,14 @@
 <%@ page import="nuc.core.*" %>
 <%@ page import="nuc.util.*" %>
 <%
+
+	//사물함 신청 폼 확인
+	//depCode = 학과코드
 	request.setCharacterEncoding("UTF-8");
-	UserDAO dao = new UserDAO();
-
-	// permission = 1 or 0
-	// depCode = null or depCode
-
-	String type = request.getParameter("type");
-	String permission = request.getParameter("permission");
+	LockerDAO dao = new LockerDAO();
 	String depCode = request.getParameter("depCode");
+	String mid = request.getParameter("mid");
 
-
-	out.print(dao.getUserList(type, permission, depCode));
+	//getLockerUser
+	out.print(dao.getLockerUser(depCode,mid));
 %>

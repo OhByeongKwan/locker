@@ -141,7 +141,7 @@ public class LockerDAO {
             String changeMid = SqlUtil.query(sql);
             if(changeMid != null) {
                 System.out.println(changeMid);
-                sql = "update lock"+depCode+" set mid = '"+mid+"' where mid = '" + changeMid + "'";
+                sql = "update lock"+depCode+" set mid = '"+mid+"', status ='N' where mid = '" + changeMid + "'";
                 SqlUtil.update(sql);
                 return "OK";
             }
