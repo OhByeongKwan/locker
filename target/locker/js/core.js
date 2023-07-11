@@ -579,6 +579,10 @@ let Page = {
         this._go(url, param, false);
     },
 
+    reload: function() {
+        location.reload();
+    },
+
     goFeed: function(fid) {
         ScrollPos.set();
         this.go("feedView.html?fid=" + fid);
@@ -601,7 +605,8 @@ let Page = {
     },
 
     back: function (noanim) {
-        history.back();
+        // history.back();
+        location.href = document.referrer;
     },
 
     _go: function(url, param, jump) {
