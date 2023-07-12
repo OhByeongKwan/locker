@@ -12,6 +12,8 @@ import org.json.simple.parser.ParseException;
 import javax.naming.NamingException;
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class LockerDAO {
 
@@ -113,7 +115,7 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
-    public String userLockerRequest(String jsonstr) throws NamingException, SQLException {
+    public String typeAUserLockerRequest(String jsonstr) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -125,15 +127,13 @@ public class LockerDAO {
             JSONParser parser = new JSONParser();
             Object obj = parser.parse( jsonstr );
             JSONObject jsonObj = (JSONObject) obj;
+            System.out.println(jsonObj);
 
             String depCode = (String) jsonObj.get("depCode");
             String mid = (String) jsonObj.get("mid");
             String pass = (String) jsonObj.get("pass");
             int lockerSumNum  = Integer.parseInt((String) jsonObj.get("SumNum"));
             int oneLockerMaxNum = Integer.parseInt((String) jsonObj.get("oneLockerMaxNum"));
-
-            System.out.println(lockerSumNum + "lockerSumNUm ,,,,, " + oneLockerMaxNum + ": oneLocker");
-
             int totalCount = lockerSumNum*oneLockerMaxNum;
 
             //우선 취소한 것이 있는지 체크. -> 취소된 것이 있다면 mid값만 바꾸어 설정.
@@ -146,27 +146,55 @@ public class LockerDAO {
                 return "OK";
             }
 
+
+            Object sobj = jsonObj.get("startEndObj");
+            ArrayList al1 = new ArrayList();
+            al1 = (ArrayList) sobj;
+            int arrayCnt = ((ArrayList) sobj).size();
+            System.out.println(arrayCnt + " = arracyCnt");
+
+            Vector<Integer> startEndV = new Vector<Integer>();
+
+            for(int i=0; i<arrayCnt; i++){
+                int temp =  Integer.valueOf((String) ((JSONObject)al1.get(i)).get("startNum"));
+                startEndV.add(temp);
+                temp =  Integer.valueOf((String) ((JSONObject)al1.get(i)).get("endNum"));
+                startEndV.add(temp);
+            }
+
+            for(int i=0; i<startEndV.size(); i++){
+                System.out.println("i  =" + i + "data = " + startEndV.get(i));
+            }
+
             sql = "Select COUNT(*) from lock"+depCode;
-
-            System.out.println(sql);
             int thisCount = SqlUtil.queryInt(sql);
-            System.out.println(thisCount);
 
-            String numCode = "A";
-            if(thisCount > lockerSumNum){
-                int num = totalCount/thisCount;
-                char numCode_ = ((char)(num+65));
-                numCode = Character.toString(numCode_);
-            }
+            char numCode = 'A';
+            int num = thisCount;
+            if(num == 0){
+                num = 1;
+            }else{
+                System.out.println("thisC="+thisCount);
+                if(thisCount >= lockerSumNum){
 
-            thisCount++;
-            while(thisCount<0){
-                thisCount -= lockerSumNum;
+                        int plusCode = thisCount/lockerSumNum;
+                        numCode = (char) (numCode + plusCode);
+                        num = num-lockerSumNum*plusCode;
+
+                }
+
+                int i=-2;
+                while(num >=0){
+                    i+=2;
+                    num -= (startEndV.get(i+1)-startEndV.get(i)+1);
+                }
+                System.out.println("i="+ i+", num = "+num);
+                num = startEndV.get(i+1)+num+1;
+                System.out.println("i="+ i+", num = "+num);
             }
-            thisCount += lockerSumNum;
 
             sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password) VALUES('" + numCode +
-                    "', '" + thisCount +
+                    "', '" + num +
                     "', '" + mid +
                     "', '" + pass +
                     "')";
@@ -189,6 +217,20 @@ public class LockerDAO {
         SqlUtil.update(sql);
         return "OK";
 
+    }
+
+    public String typeAlockFinish(String depCode) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        //선착순 배정의 경우 단순 status만 옮기면 끝이난다.
+        try {
+            conn = ConnectionPool.get();
+            String sql = "update lockerForm set status = 'A' where depCode = '" + depCode +"'";
+            SqlUtil.query(sql);
+            sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
+            return SqlUtil.query(sql);
+        } finally {
+            if (conn!= null) conn.close();
+        }
     }
 
 

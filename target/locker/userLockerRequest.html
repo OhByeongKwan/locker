@@ -145,7 +145,8 @@
             if(data == 'NO'){
                 renderForm(form);
             }else{
-                Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
+                renderForm(form);
+                // Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
             }
         });
     }
@@ -198,19 +199,16 @@
         }
         $('#pw input[value=password]')[0].disabled = true;
         $('#pw input[value=key]')[0].disabled = true;
+
+        pagectx.form = form.startEndObj;
     }
 
     function userReqLocker(){
         if(pass == null){
             pass = 'NONE';
         }
-        // if(pass != null){
-        //     //여기 pass 값 수정할 것 .
-        //     //사물함 생성 시 만드는 초기값 집어 넣을 것
-        //     //없을 시 "NONE"
-        //     pass = "1111";
-        // }
-        let jsonstr = {mid : pagectx.usrobj.mid, depCode: pagectx.usrobj.depCode, SumNum:SumNum, oneLockerMaxNum:oneLockerMaxNum, pass:pass};
+
+        let jsonstr = {mid : pagectx.usrobj.mid, depCode: pagectx.usrobj.depCode, SumNum:SumNum, oneLockerMaxNum:oneLockerMaxNum, pass:pass, startEndObj: pagectx.form};
         jsonstr = JSON.stringify(jsonstr);
 
         AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr}, function(data) {

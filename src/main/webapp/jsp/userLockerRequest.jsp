@@ -12,5 +12,6 @@
 
 	String jsonstr = request.getParameter("jsonstr");
 
-	out.print(dao.userLockerRequest(jsonstr));
+	//선착순의 경우 typeAUserLockerRequest로 지정
+	out.print(dao.typeAUserLockerRequest(jsonstr));
 %>
