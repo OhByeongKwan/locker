@@ -1025,9 +1025,11 @@ var SSO = {
     },
 
     _login2: function(usrobj) {
+        console.log(usrobj)
         if(usrobj == null) return;
         var pstr = "mid=" + usrobj.mid + "&pass=" + usrobj.pass;
         this._login(pstr, function(code) {
+            console.log(code)
             if (code == "PS") {
                 Dialog.alert("비밀번호가 일치하지 않습니다.");
             } else if (code == "AD") {
@@ -1043,6 +1045,10 @@ var SSO = {
                 }, function() {
                     Page.goHome();
                 });
+            }else if(code == "OK"){
+                    Page.goHome();
+            }else{
+                alert("꺼져")
             }
         });
     },

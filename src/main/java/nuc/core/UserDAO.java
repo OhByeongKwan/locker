@@ -119,9 +119,9 @@ public class UserDAO {
 
             JSONParser parser = new JSONParser();
 
-            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = '" + permission +"'";
+            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = " + permission;
                 if(depCode != null){
-                    sql += "and depCode = '" + depCode + "'";
+                    sql += " and depCode = '" + depCode + "'";
                 }
             if(!type.equals("All"))
                 sql += " and JSON_EXTRACT(jsonstr,'$.type') = '" + type + "'";
