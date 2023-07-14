@@ -10,6 +10,7 @@
 	String type = request.getParameter("type");
 	String uniName = request.getParameter("uniName");
 	String depName = request.getParameter("department");
+	String name = request.getParameter("name");
 	String phoneNum = request.getParameter("phoneNum");
 	String studentId = request.getParameter("studentId");
 	String grade = request.getParameter("grade");
@@ -24,7 +25,7 @@
 		return;
 	}
 	
-	JSONObject jsonobj = dao.insert(mid, pass,type, uniName, depName, phoneNum,studentId,grade,gender,addr, Config.getImageDir(application.getRealPath(File.separator), mid));
+	JSONObject jsonobj = dao.insert(mid, pass,type, uniName, depName,name phoneNum,studentId,grade,gender,addr, Config.getImageDir(application.getRealPath(File.separator), mid));
 	if (jsonobj == null) {
 		out.println("ER");
 		return;
