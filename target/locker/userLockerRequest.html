@@ -131,7 +131,7 @@
             data = data.trim();
             console.log(data);
             if(data == 'null'){
-                Dialog.alert('신청폼XX',Page.back);
+                Dialog.alert('신청 가능한 사물함이 없습니다.',Page.back);
             }else{
                 data = JSON.parse(data);
                 checkLockerUser(data);
@@ -145,8 +145,7 @@
             if(data == 'NO'){
                 renderForm(form);
             }else{
-                renderForm(form);
-                // Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
+                Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
             }
         });
     }

@@ -29,7 +29,7 @@ public class UserDAO {
         return SqlUtil.query(sql);
     }
 
-    public JSONObject insert(String mid, String pass,String type,String uniName,String depName,String phoneNum,String studentId,String grade,String gender,String addr,  String imgdir) throws NamingException, SQLException {
+    public JSONObject insert(String mid, String pass,String type,String uniName,String depName, String name,String phoneNum,String studentId,String grade,String gender,String addr,  String imgdir) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -50,6 +50,7 @@ public class UserDAO {
             jsonobj.put("uniName", uniName);
             jsonobj.put("depName", depName);
             jsonobj.put("depCode", depCode);
+            jsonobj.put("name", name);
             jsonobj.put("phoneNum", phoneNum);
             jsonobj.put("studentId", studentId);
             jsonobj.put("grade", grade);

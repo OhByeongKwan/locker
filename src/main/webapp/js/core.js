@@ -554,6 +554,13 @@ let Page = {
             if (!isValid(param)) param = {};
             param.usrobj = sesobj.usrobj;
 
+            if(param.usrobj != undefined){
+                AJAX.call('jsp/getLockerForm.jsp',{depCode : param.usrobj.depCode},(form)=>{
+                    let data = JSON.parse(form);
+                    pagectx.lockerForm = data;
+                });
+            }
+
             if(!(params.nolog !== true && ret === "NA")){
                 var addrobj = SessionStore.get("global.addrobj");
                 if (addrobj != null) param.addrcode = addrobj.code;
