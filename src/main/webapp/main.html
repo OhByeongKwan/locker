@@ -26,7 +26,6 @@
 <body>
 <div class="container p-0">
     <div class="permission0" style="padding:10% 25px 0">
-        <!--    <div class="back-icon" role="button" onclick="Page.back()"></div>-->
         <div class="d-flex flex-column justify-content-center align-items-center" style="gap:25px;margin-top:20%">
             <img src="/img/main0.svg">
             <div class="user-info fs-20 fw-bold text-center"></div>
@@ -38,7 +37,7 @@
 
     <div class="permission1" style="min-height:100vh;background-color:#0E58D6;padding:0 25px">
         <div class="d-flex" style="gap:30px;padding-top:20%">
-            <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 회원님</div>
+            <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">{user-name}</span> 회원님</div>
             <div class="d-flex" style="color:white">
                 <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
                 <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
@@ -121,6 +120,7 @@
     function renderPage(user){
         console.log(user);
         if(user.permission == 1){
+            $('.user-name').text(pagectx.usrobj.name);
             $('.permission1').addClass('show');
             $('.permission0').removeClass('show');
             if(user.type == 'A'){

@@ -24,7 +24,6 @@
 <body>
 <div class="container p-0">
     <div class="permission0" style="padding:10% 25px 0">
-        <!--    <div class="back-icon" role="button" onclick="Page.back()"></div>-->
         <div class="d-flex flex-column justify-content-center align-items-center" style="gap:25px;margin-top:20%">
             <img src="/img/main0.svg">
             <div class="user-info fs-20 fw-bold text-center"></div>
@@ -84,6 +83,7 @@
     function renderPage(user){
         console.log(user);
         if(user.permission == 1){
+            $('.user-name').text(pagectx.usrobj.name);
             $('.permission1').addClass('show');
             $('.permission0').removeClass('show');
         }else{
