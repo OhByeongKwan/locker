@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <main class="input-form flex-column justify-content-between" style="padding-top:10%">
-        <div class="back-icon" role="button" onclick="Page.back()"></div>
+        <div class="back-icon" role="button" onclick="Page.go('main.html')"></div>
         <div class="signup-title fs-24" style="margin-top:58px">사물함 신청</div>
         <ol style="padding-left:25px">
             <li>
@@ -131,7 +131,7 @@
             data = data.trim();
             console.log(data);
             if(data == 'null'){
-                Dialog.alert('신청폼XX',Page.back);
+                Dialog.alert('신청 가능한 사물함이 없습니다.',Page.back);
             }else{
                 data = JSON.parse(data);
                 checkLockerUser(data);
@@ -145,8 +145,7 @@
             if(data == 'NO'){
                 renderForm(form);
             }else{
-                renderForm(form);
-                // Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
+                Dialog.alert('이미 사물함 신청을 완료하였습니다.',Page.back);
             }
         });
     }

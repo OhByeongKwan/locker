@@ -29,7 +29,7 @@ public class UserDAO {
         return SqlUtil.query(sql);
     }
 
-    public JSONObject insert(String mid, String pass,String type,String uniName,String depName,String phoneNum,String studentId,String grade,String gender,String addr,  String imgdir) throws NamingException, SQLException {
+    public JSONObject insert(String mid, String pass,String type,String uniName,String depName, String name,String phoneNum,String studentId,String grade,String gender,String addr,  String imgdir) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -50,6 +50,7 @@ public class UserDAO {
             jsonobj.put("uniName", uniName);
             jsonobj.put("depName", depName);
             jsonobj.put("depCode", depCode);
+            jsonobj.put("name", name);
             jsonobj.put("phoneNum", phoneNum);
             jsonobj.put("studentId", studentId);
             jsonobj.put("grade", grade);
@@ -119,9 +120,9 @@ public class UserDAO {
 
             JSONParser parser = new JSONParser();
 
-            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = '" + permission +"'";
+            String sql = "select jsonstr from user where JSON_EXTRACT(jsonstr,'$.permission') = " + permission;
                 if(depCode != null){
-                    sql += "and depCode = '" + depCode + "'";
+                    sql += " and depCode = '" + depCode + "'";
                 }
             if(!type.equals("All"))
                 sql += " and JSON_EXTRACT(jsonstr,'$.type') = '" + type + "'";

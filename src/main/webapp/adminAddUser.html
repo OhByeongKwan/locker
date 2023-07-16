@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <div class="d-flex justify-content-center position-relative" style="padding-top:10%">
-        <div class="back-icon position-absolute" style="left:0" role="button" onclick="Page.back()"></div>
+        <div class="back-icon position-absolute" style="left:0" role="button" onclick="Page.go('manageUser.html')"></div>
         <div class="fs-20">관리자 회원 승인</div>
     </div>
     <div class="position-relative" style="margin-top:34px;border-bottom:2px solid #686B7C;padding-bottom:5px">
@@ -59,8 +59,7 @@
 
 
     function setPage() {
-
-        AJAX.call("jsp/GetUserList.jsp", {type: 'A'}, function(data) {
+        AJAX.call("jsp/GetUserList.jsp",{type : 'A',permission : 0}, function(data) {
             //adminUser - jsonstr 내부 값 permission = 0 , type = 'A'
             data = JSON.parse(data.trim());
             console.log(data)
@@ -102,7 +101,7 @@
     }
 
     function modal(mid){
-        AJAX.call("jsp/GetUserList.jsp", {type: 'A'}, function(data) {
+        AJAX.call("jsp/GetUserList.jsp", {type: 'A', permission : 0}, function(data) {
             $('.user-detail').remove();
             data = JSON.parse(data.trim());
             console.log(data);

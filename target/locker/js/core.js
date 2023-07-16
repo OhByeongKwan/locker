@@ -554,6 +554,13 @@ let Page = {
             if (!isValid(param)) param = {};
             param.usrobj = sesobj.usrobj;
 
+            if(param.usrobj != undefined){
+                AJAX.call('jsp/getLockerForm.jsp',{depCode : param.usrobj.depCode},(form)=>{
+                    let data = JSON.parse(form);
+                    pagectx.lockerForm = data;
+                });
+            }
+
             if(!(params.nolog !== true && ret === "NA")){
                 var addrobj = SessionStore.get("global.addrobj");
                 if (addrobj != null) param.addrcode = addrobj.code;
@@ -1025,9 +1032,11 @@ var SSO = {
     },
 
     _login2: function(usrobj) {
+        console.log(usrobj)
         if(usrobj == null) return;
         var pstr = "mid=" + usrobj.mid + "&pass=" + usrobj.pass;
         this._login(pstr, function(code) {
+            console.log(code)
             if (code == "PS") {
                 Dialog.alert("비밀번호가 일치하지 않습니다.");
             } else if (code == "AD") {
@@ -1043,6 +1052,10 @@ var SSO = {
                 }, function() {
                     Page.goHome();
                 });
+            }else if(code == "OK"){
+                    Page.goHome();
+            }else{
+                alert("꺼져")
             }
         });
     },

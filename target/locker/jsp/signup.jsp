@@ -25,7 +25,7 @@
 		return;
 	}
 	
-	JSONObject jsonobj = dao.insert(mid, pass,type, uniName, depName,name phoneNum,studentId,grade,gender,addr, Config.getImageDir(application.getRealPath(File.separator), mid));
+	JSONObject jsonobj = dao.insert(mid, pass,type, uniName, depName,name, phoneNum,studentId,grade,gender,addr, Config.getImageDir(application.getRealPath(File.separator), mid));
 	if (jsonobj == null) {
 		out.println("ER");
 		return;
