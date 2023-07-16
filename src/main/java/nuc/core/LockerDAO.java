@@ -13,6 +13,8 @@ import javax.naming.NamingException;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 public class LockerDAO {
@@ -69,12 +71,61 @@ public class LockerDAO {
     }
 
     public String getForm(String depCode) throws NamingException, SQLException, ParseException {
-        //에러 안나면 주석 제거
         Connection conn = null;
         try {
             conn = ConnectionPool.get();
             String sql = "select jsonstr from lockerForm where depCode = '" + depCode +"'";
             return SqlUtil.query(sql);
+
+        } finally {
+            if (conn!= null) conn.close();
+        }
+    }
+    public String getUserListLockRequest(String depCode) throws NamingException, SQLException, ParseException {
+
+        Connection conn = ConnectionPool.get();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql1 = "select *,JSON_EXTRACT(jsonstr,'$.name') as name from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid";
+            System.out.println(sql1);
+            stmt = conn.prepareStatement(sql1);
+            rs = stmt.executeQuery();
+
+            String str = "[";
+            int cnt = 0;
+            while(rs.next()) {
+                if (cnt++ > 0) str += ",";
+
+                str += "{\"mid\":\"";
+                str += rs.getString("mid");
+                str += "\",";
+                str += "\"name\":";
+                str += rs.getString("name");
+                str += ",";
+                str += "\"num\":\"";
+                str += rs.getString("num");
+                str += "\",";
+                str += "\"numCode\":\"";
+                str += rs.getString("numCode");
+                str += "\"}";
+            }
+            str += "]";
+            return str;
+
+//            String sql1 = "select jsonstr from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid";
+//            String str1 =  SqlUtil.queryList(sql1).toString();
+//            String sql2 = "select num from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid";
+//            String str2 =  SqlUtil.queryList(sql2).toString();
+//            String sql3 = "select numCode from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid";
+//            String str3 =  SqlUtil.queryList(sql3).toString();
+//
+//            List<String> joined = new ArrayList<>();
+//            joined.addAll(Collections.singleton(str1));
+//            joined.addAll(Collections.singleton(str2));
+//            joined.addAll(Collections.singleton(str3));
+//
+//            return joined.toString();
 
         } finally {
             if (conn!= null) conn.close();

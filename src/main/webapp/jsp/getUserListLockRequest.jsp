@@ -5,13 +5,12 @@
 <%@ page import="nuc.core.*" %>
 <%@ page import="nuc.util.*" %>
 <%
-	//유저가 사물함 신청 - userLocekrRequest.html
 
+	//사물함 신청 폼 확인
+	//depCode = 학과코드
 	request.setCharacterEncoding("UTF-8");
 	LockerDAO dao = new LockerDAO();
+	String depCode = request.getParameter("depCode");
 
-	String jsonstr = request.getParameter("jsonstr");
-
-	//선착순의 경우 typeAUserLockerRequest로 지정
-	out.print(dao.typeAUserLockerRequest(jsonstr));
+	out.print(dao.getUserListLockRequest(depCode));
 %>
