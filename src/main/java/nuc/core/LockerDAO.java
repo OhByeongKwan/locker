@@ -276,9 +276,10 @@ public class LockerDAO {
         try {
             conn = ConnectionPool.get();
             String sql = "update lockerForm set status = 'A' where depCode = '" + depCode +"'";
-            SqlUtil.query(sql);
+            SqlUtil.update(sql);
             sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
-            return SqlUtil.query(sql);
+            SqlUtil.update(sql);
+            return "OK";
         } finally {
             if (conn!= null) conn.close();
         }
