@@ -166,7 +166,7 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
-    public String typeAUserLockerRequest(String jsonstr) throws NamingException, SQLException {
+    public String UserLockerRequest(String jsonstr, String type) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -197,6 +197,26 @@ public class LockerDAO {
                 return "OK";
             }
 
+            //count user
+            sql = "Select COUNT(*) from lock"+depCode;
+            int thisCount = SqlUtil.queryInt(sql);
+
+            if(type.equals("A")){
+                if(thisCount>=totalCount){
+                    return "FULL";
+                }
+            }else if(type.equals("B")){{
+                if(thisCount>=totalCount){
+                    sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password) VALUES('" + 'A' +
+                            "', '" + '0' +
+                            "', '" + mid +
+                            "', '" + pass +
+                            "')";
+                    System.out.println(sql);
+                    SqlUtil.update(sql);
+                    return "OK";
+                }
+            }}
 
             Object sobj = jsonObj.get("startEndObj");
             ArrayList al1 = new ArrayList();
@@ -216,9 +236,6 @@ public class LockerDAO {
             for(int i=0; i<startEndV.size(); i++){
                 System.out.println("i  =" + i + "data = " + startEndV.get(i));
             }
-
-            sql = "Select COUNT(*) from lock"+depCode;
-            int thisCount = SqlUtil.queryInt(sql);
 
             char numCode = 'A';
             int num = thisCount;

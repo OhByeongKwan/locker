@@ -11,7 +11,13 @@
 	LockerDAO dao = new LockerDAO();
 
 	String jsonstr = request.getParameter("jsonstr");
+	String type = request.getParameter("type");
+	if(type.trim().equals("random")){
+		//random
+		out.print(dao.UserLockerRequest(jsonstr, "B"));
+	}else{
+		//선착순의 경우 typeAUserLockerRequest로 지정
+		out.print(dao.UserLockerRequest(jsonstr, "A"));
+	}
 
-	//선착순의 경우 typeAUserLockerRequest로 지정
-	out.print(dao.typeAUserLockerRequest(jsonstr));
 %>
