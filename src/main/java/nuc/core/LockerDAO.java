@@ -55,6 +55,7 @@ public class LockerDAO {
             sql += "status VARCHAR(128) DEFAULT 'N',";
             sql += "mid VARCHAR(128),";
             sql += "password VARCHAR(32)";
+            sql += "ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
             sql += ")";
             System.out.println(sql);
             SqlUtil.update(sql);
@@ -73,7 +74,6 @@ public class LockerDAO {
     public String getForm(String depCode) throws NamingException, SQLException, ParseException {
         Connection conn = null;
         try {
-            conn = ConnectionPool.get();
             String sql = "select jsonstr from lockerForm where depCode = '" + depCode +"'";
             return SqlUtil.query(sql);
 
@@ -81,6 +81,22 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
+
+    public String getLockerShare(String depCode, String num) throws NamingException, SQLException, ParseException {
+
+
+            String sql = "select jsonstr from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid where num ="+num;
+            System.out.println(sql);
+            return SqlUtil.queryList(sql);
+    }
+
+    public String changeLockerPassword(String depCode, String num, String password) throws NamingException, SQLException, ParseException {
+        String sql = "update lock"+depCode+" set password ="+password+" where num = " + num;
+        System.out.println(sql);
+        return SqlUtil.queryList(sql);
+    }
+
+
     public String getUserListLockRequest(String depCode) throws NamingException, SQLException, ParseException {
 
         Connection conn = ConnectionPool.get();
@@ -335,15 +351,19 @@ public class LockerDAO {
                     String mid =rs.getString("mid");
                     if(num == 0){
                         sql = "delete from lock" + depCode + " where mid = "+ mid;
+                        SqlUtil.update(sql);
                     }else{
                         sql = "SELECT * FROM lock+" + depCode + " where num = 0 ORDER BY RAND() limit 1";
                         stmt = conn.prepareStatement(sql);
                         rs2 = stmt.executeQuery();
                         rs2.next();
                         String mid2 = rs2.getString("mid");
+                        String ts2 = rs2.getString("ts");
                         sql = "delete from lock" + depCode + " where mid = "+ mid2;
                         SqlUtil.update(sql);
-                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
+//                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
+//                        SqlUtil.update(sql);
+                        sql = "update lock"+depCode+" set mid = '"+mid2+"' and ts ="+ts2+" where mid = '" + mid + "'";
                         SqlUtil.update(sql);
                     }
                     ranCnt--;
