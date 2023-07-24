@@ -26,6 +26,7 @@
 		usrobj = (JSONObject)(new JSONParser()).parse(res);
 		code = "OK";
 		if(mid.equals("admin")){
+			SessionManager.put(session, "usrobj", usrobj);
 			code = "AD";
 		}
 
@@ -56,8 +57,8 @@
 //				usrobj = (JSONObject)(new JSONParser()).parse(_usrobj);
 //			}
 
-		} else {
-			code = "NA";
+	} else {
+		code = "NA";
 		}
 //	}
 
