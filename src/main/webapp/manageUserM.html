@@ -15,7 +15,7 @@
 <body>
 <div class="container" style="min-height:100vh;background-color:#0E58D6">
     <div class="d-flex" style="gap:30px;padding-top:20%">
-        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님</div>
+        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님 :)</div>
         <div class="d-flex" style="color:white">
             <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
             <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
@@ -33,6 +33,10 @@
                 <div class="fs-18" style="color:#0E58D6">학생 명단 보기</div>
             </div>
         </div>
+    </section>
+    <section class="uni-info fs-18 position-absolute text-center" style="color:white;bottom:34px;left:50%;transform:translate(-50%)">
+        <div class="uni-name"></div>
+        <div class="dep-name"></div>
     </section>
 </div>
 </body>
@@ -55,5 +59,7 @@
     function init(params) {
         pagectx = params;
         $('.user-name').text(pagectx.usrobj.name);
+        $('.uni-info .uni-name').text(pagectx.usrobj.uniName);
+        $('.uni-info .dep-name').text(pagectx.usrobj.depName);
     }
 </script>

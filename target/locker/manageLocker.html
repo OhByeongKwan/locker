@@ -15,7 +15,7 @@
 <body>
 <div class="container" style="min-height:100vh;background-color:#0E58D6">
     <div class="d-flex" style="gap:30px;padding-top:20%">
-        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님</div>
+        <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님 :)</div>
         <div class="d-flex" style="color:white">
             <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
             <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
@@ -27,15 +27,19 @@
                 <div class="fs-18" style="color:white">뒤로가기</div>
             </div>
             <div role="button" onclick="Page.go('lockerRequest.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
-                <div class="fs-18" style="color:#0E58D6">신청 관리</div>
+                <div class="fs-18" style="color:#0E58D6">신청 폼 작성</div>
             </div>
-            <div role="button" onclick="Page.go('#')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
-                <div class="fs-18" style="color:#0E58D6">신청 내역</div>
+            <div role="button" onclick="Page.go('lockerRequestUserListM.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+                <div class="fs-18" style="color:#0E58D6">신청 인원 관리</div>
             </div>
             <div role="button" onclick="lockerFinish()" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
                 <div class="fs-18" style="color:#0E58D6">배정하기</div>
             </div>
         </div>
+    </section>
+    <section class="uni-info fs-18 position-absolute text-center" style="color:white;bottom:34px;left:50%;transform:translate(-50%)">
+        <div class="uni-name"></div>
+        <div class="dep-name"></div>
     </section>
 </div>
 </body>
@@ -58,6 +62,8 @@
     function init(params) {
         pagectx = params;
         $('.user-name').text(pagectx.usrobj.name);
+        $('.uni-info .uni-name').text(pagectx.usrobj.uniName);
+        $('.uni-info .dep-name').text(pagectx.usrobj.depName);
     }
 
     function lockerFinish(){
