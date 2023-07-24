@@ -34,7 +34,7 @@
     </div>
     <div class="permission1" style="min-height:100vh;background-color:#0E58D6;padding:0 25px">
         <div class="d-flex" style="padding-top:20%">
-            <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님</div>
+            <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">김동은</span> 관리자님 :)</div>
             <div class="d-flex" style="color:white">
                 <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
                 <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
@@ -55,6 +55,10 @@
                 <!--                <div class="fs-18" style="color:#0E58D6"></div>-->
                 <!--            </div>-->
             </div>
+        </section>
+        <section class="uni-info fs-18 position-absolute text-center" style="color:white;bottom:34px;left:50%;transform:translate(-50%)">
+            <div class="uni-name"></div>
+            <div class="dep-name"></div>
         </section>
     </div>
 </div>
@@ -83,7 +87,9 @@
     function renderPage(user){
         console.log(user);
         if(user.permission == 1){
-            $('.user-name').text(pagectx.usrobj.name);
+            $('.user-name').text(user.name);
+            $('.uni-info .uni-name').text(user.uniName);
+            $('.uni-info .dep-name').text(user.depName);
             $('.permission1').addClass('show');
             $('.permission0').removeClass('show');
         }else{

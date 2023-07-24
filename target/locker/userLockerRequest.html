@@ -46,8 +46,9 @@
                 <div class="fs-20" style="margin-top:55px">
                     <label for="lockerWay">배정 방식</label>
                     <div id="lockerWay" class="d-flex fs-14" style="margin-top:34px">
-                        <input name="lockerWay" type="radio" value="auto" readonly> 자동배정
-                        <input name="lockerWay" type="radio" value="manual" style="margin-left:42px" readonly> 수기배정
+                        <input name="lockerWay" type="radio" value="fifo" readonly> 선착순 배정
+                        <input name="lockerWay" type="radio" value="random" style="margin-left:42px" readonly> 랜덤 배정
+                        <input name="lockerWay" type="radio" value="distance" style="margin-left:42px" readonly> 거리순 배정
                     </div>
                 </div>
             </li>
@@ -163,15 +164,23 @@
                             <input class="end-num text-center" value="${list.endNum}" oninput="lockerSum()" readonly style="max-width:90px;border-radius:8px;border:1px solid #BFC2CE;padding:14px 0" name="endNum" type="number"></div>`);
         }
 
-        if(form.lockerWay == 'auto'){
-            $('#lockerWay input[value=auto]')[0].checked = true;
-            $('#lockerWay input[value=manual]')[0].checked = false;
+        if(form.lockerWay == 'fifo'){
+            $('#lockerWay input[value=fifo]')[0].checked = true;
+            $('#lockerWay input[value=random]')[0].checked = false;
+            $('#lockerWay input[value=distance]')[0].checked = false;
+        }else if(form.lockerWay == 'random'){
+            $('#lockerWay input[value=fifo]')[0].checked = false;
+            $('#lockerWay input[value=random]')[0].checked = true;
+            $('#lockerWay input[value=distance]')[0].checked = false;
         }else{
-            $('#lockerWay input[value=auto]')[0].checked = false;
-            $('#lockerWay input[value=manual]')[0].checked = true;
+            $('#lockerWay input[value=fifo]')[0].checked = false;
+            $('#lockerWay input[value=random]')[0].checked = false;
+            $('#lockerWay input[value=distance]')[0].checked = true;
         }
-        $('#lockerWay input[value=auto]')[0].disabled = true;
-        $('#lockerWay input[value=manual]')[0].disabled = true;
+
+        $('#lockerWay input[value=fifo]')[0].disabled = true;
+        $('#lockerWay input[value=random]')[0].disabled = true;
+        $('#lockerWay input[value=distance]')[0].disabled = true;
 
         if(form.helpStatus == 'yes'){
             $('#help input[value=yes]')[0].checked = true;
@@ -210,7 +219,7 @@
         let jsonstr = {mid : pagectx.usrobj.mid, depCode: pagectx.usrobj.depCode, SumNum:SumNum, oneLockerMaxNum:oneLockerMaxNum, pass:pass, startEndObj: pagectx.form};
         jsonstr = JSON.stringify(jsonstr);
 
-        AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr}, function(data) {
+        AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr,type:pagectx.lockerForm.lockerWay}, function(data) {
             console.log(data);
             Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
         });
