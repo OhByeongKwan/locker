@@ -87,70 +87,64 @@
             </div>`);
             }
         });
-        // AJAX.call("jsp/GetUserList.jsp", {type: 'U',permission : 0}, function(data) {
-        //     data = JSON.parse(data.trim());
-        //     console.log(data)
-        //     $('.reqUser *').remove();
-        //     for(const item of data){
-        //         $('.reqUser').append(`<div role="button" onclick="modal('${item.mid}')" class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
-        //         <div class="d-flex flex-column gap-2">
-        //             <div>${item.uniName}</div>
-        //             <div>${item.mid}</div>
-        //         </div>
-        //         <div class="d-flex gap-4">
-        //             <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
-        //             <div role="button" class="approve_cancel" onclick="addUser('${item.mid}',event)"><img src="/img/approve_ok.svg"></div>
-        //         </div>
-        //     </div>`);
-        //     }
-        //     //defaultUser - jsonstr 내부 값 permission = 0 , type = 'U'
-        // });
-
-        // AJAX.call("jsp/GetUserList.jsp", {type: 'All'}, function(data) {
-        //     //defaultUser - jsonstr 내부 값 permission = 0
-        //     data = JSON.parse(data.trim());
-        //     console.log(data);
-        // });
     }
 
     function modal(mid){
-        AJAX.call("jsp/getLockerUser.jsp", {depCode:pagectx.usrobj.depCode,mid:mid}, function(data) {
+        AJAX.call("jsp/GetUserList.jsp", {type:'All',permission:'1',depCode:pagectx.usrobj.depCode}, function(data) {
             data = JSON.parse(data.trim());
-            console.log(data);
-                   $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
-            <div class="modal-dialog modal-dialog-centered" style="margin:38px">
-                <div class="modal-content" style="padding:25px;border-radius:27px">
-                    <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
-                    <div class="fs-22 fw-bold text-center" style="margin-top:60px">신청날짜 2023.03.14</div>
-                    <div class="d-flex flex-column gap-4" style="margin-top:56px">
-                        <div class="d-flex justify-content-between">
-                            <div style="color:#686B7C">이름</div>
-                            <div class="fs-18">${data.name}</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div style="color:#686B7C">학번</div>
-                            <div class="fs-18">2017100939</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div style="color:#686B7C">학년</div>
-                            <div class="fs-18">4학년</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div style="color:#686B7C">전화번호</div>
-                            <div class="fs-18">010-4170-9184</div>
-                        </div>
-                        <div>
-                            <div style="color:#686B7C">도움필요여부</div>
-                            <div id="help" class="d-flex fs-14 mt-1">
-                                <input name="helpStatus" type="radio" value="yes" readonly disabled> 예
-                                <input name="helpStatus" type="radio" value="no" style="margin-left:42px" checked readonly disabled> 아니오
-                            </div>
-                        </div>
-                    </div>
-                    <button id="dialogOk" type="button" style="margin-top:120px;border-radius:8px;color:white;background-color:transparent;border:1px solid #0E58D6;color:#0E58D6;padding:12px" onclick="hideModal()" class="btn btn-sm btn-primary fs-18">확인</button>
-                </div>
-            </div>
-        </div>`);
+            data.map((data)=>{
+               if(data.mid == mid) {
+                   console.log(data);
+                   let endDate = pagectx.lockerForm.endDate
+                   endDate = endDate.replaceAll('-','.');
+                   console.log(endDate);
+                              $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+                       <div class="modal-dialog modal-dialog-centered" style="margin:38px">
+                           <div class="modal-content" style="padding:25px;border-radius:27px">
+                               <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
+                               <div class="fs-22 fw-bold text-center" style="margin-top:60px">신청날짜 ${endDate}</div>
+                               <div class="d-flex flex-column gap-4" style="margin-top:56px">
+                                   <div class="d-flex justify-content-between">
+                                       <div style="color:#686B7C">이름</div>
+                                       <div class="fs-18">${data.name}</div>
+                                   </div>
+                                   <div class="d-flex justify-content-between">
+                                       <div style="color:#686B7C">학번</div>
+                                       <div class="fs-18">${data.studentId}</div>
+                                   </div>
+                                   <div class="d-flex justify-content-between">
+                                       <div style="color:#686B7C">학년</div>
+                                       <div class="fs-18">${data.grade}</div>
+                                   </div>
+                                   <div class="d-flex justify-content-between">
+                                       <div style="color:#686B7C">전화번호</div>
+                                       <div class="fs-18">${data.phoneNum}</div>
+                                   </div>
+                                   <div>
+                                       <div style="color:#686B7C">도움필요여부</div>
+                                       <div id="help" class="d-flex fs-14 mt-1">
+                                           <div class="col-6">
+                                               <input name="helpStatus" type="radio" value="yes" readonly disabled> 예
+                                           </div>
+                                           <div class="col-6">
+                                               <input name="helpStatus" type="radio" value="no" disabled> 아니오
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                               <button id="dialogOk" type="button" style="margin-top:120px;border-radius:8px;color:white;background-color:transparent;border:1px solid #0E58D6;color:#0E58D6;padding:12px" onclick="hideModal()" class="btn btn-sm btn-primary fs-18">확인</button>
+                           </div>
+                       </div>
+                   </div>`);
+               }
+            });
+            if(pagectx.lockerForm.helpStatus == 'yes'){
+                $('#help input[value=yes]')[0].checked = true;
+                $('#help input[value=no]')[0].checked = false;
+            }else{
+                $('#help input[value=yes]')[0].checked = false;
+                $('#help input[value=no]')[0].checked = true;
+            }
         });
     }
 
