@@ -302,5 +302,62 @@ public class LockerDAO {
         }
     }
 
+    public String typeBlockFinish(String depCode) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        Statement st = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        //선착순 배정의 경우 단순 status만 옮기면 끝이난다.
+        try {
+            conn = ConnectionPool.get();
+
+            String sql = "select count(*) from lock+"+depCode + " where numCode ='A' and num = 0 and status = 'N'";
+            int cnt = Integer.parseInt(SqlUtil.query(sql));
+            if(cnt == 0){
+                return typeAlockFinish(depCode);
+            }else{
+                //1 최대 카운트 수 구하기.
+                //2 신청 카운트 수 구하기
+                //3 랜덤 값 추출 후 탈락 시킬 유저 구하기
+                //4 탈락시킬 유저가 A , 0인경우 그냥 삭제
+                //5 탈락시킬 유저가 N인경우 A 0인 유저와 스위치 후 삭제.
+                sql = "select JSON_EXTRACT(jsonstr,'$.lockerSumNum') * JSON_EXTRACT(jsonstr,'$.oneLockerMaxNum') from lockerForm where depCode = "+depCode;
+                int maxCnt = Integer.parseInt(SqlUtil.query(sql));
+
+                int ranCnt = cnt-maxCnt;
+                while(ranCnt>0){
+                    sql = "SELECT * FROM lock+" + depCode + " ORDER BY RAND() limit 1";
+                    stmt = conn.prepareStatement(sql);
+                    rs = stmt.executeQuery();
+                    rs.next();
+                    int num = ((rs.getInt("num")));
+                    String mid =rs.getString("mid");
+                    if(num == 0){
+                        sql = "delete from lock" + depCode + " where mid = "+ mid;
+                    }else{
+                        sql = "SELECT * FROM lock+" + depCode + " where num = 0 ORDER BY RAND() limit 1";
+                        stmt = conn.prepareStatement(sql);
+                        rs2 = stmt.executeQuery();
+                        rs2.next();
+                        String mid2 = rs2.getString("mid");
+                        sql = "delete from lock" + depCode + " where mid = "+ mid2;
+                        SqlUtil.update(sql);
+                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
+                        SqlUtil.update(sql);
+                    }
+                    ranCnt--;
+                }
+
+            }
+
+            sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
+            SqlUtil.update(sql);
+            return "OK";
+        } finally {
+            if (conn!= null) conn.close();
+        }
+    }
+
 
 }
