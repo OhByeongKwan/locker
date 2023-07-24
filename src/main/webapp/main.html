@@ -37,8 +37,8 @@
 
     <div class="permission1" style="min-height:100vh;background-color:#0E58D6;padding:0 25px">
         <div class="d-flex" style="gap:30px;padding-top:20%">
-            <div class="fs-28" style="color:white">안녕하세요<br><span class="user-name fw-bold">{user-name}</span> 회원님 :)</div>
-            <div class="d-flex" style="color:white">
+            <div class="fs-28" style="color:white">안녕하세요 :)<br><span class="user-name fw-bold">{user-name}</span>님</div>
+            <div class="d-flex mb-2" style="color:white">
                 <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
                 <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
             </div>
@@ -162,25 +162,30 @@
     }
 
     function modal(){
-        $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+        AJAX.call('jsp/getLockerUser.jsp',{depCode:pagectx.usrobj.depCode,mid:pagectx.usrobj.mid},(locker)=>{
+            let lockerForm = pagectx.lockerForm;
+            locker = JSON.parse(locker);
+
+            $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
                     <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
-                    <div class="fs-22 fw-bold" style="margin-top:28px">현재 <span style="color:#0E58D6">12번</span><br>사용 중입니다</div>
+                    <div class="fs-22 fw-bold" style="margin-top:28px">현재 <span style="color:#0E58D6">${locker.num}번</span><br>사용 중입니다</div>
                     <div id="pw" class="d-flex fs-14 justify-content-between" style="margin-top:53px">
                         <span>
-                            자물쇠 이용  <input type="radio" name="way" value="key" readonly>
+                            자물쇠 이용  <input type="radio" name="way" value="key" disabled>
                         </span>
                         <span style="margin-left:50px">
-                        도어락 이용  <input type="radio" name="way" value="password" readonly checked>
+                        도어락 이용  <input type="radio" name="way" value="password" disabled>
                         </span>
                     </div>
                     <div class="d-flex flex-column text-center" style="margin-top:20px;border-radius:16px;background-color:#F4F5FC;padding:15px;gap:20px">
                         <div class="fs-14" style="color:#686B7C">현재 사용 중인 비밀번호</div>
-                        <div class="fs-22 fw-bold">1234</div>
+                        <div class="fs-22 fw-bold">${locker.password}</div>
                         <div class="fs-10" style="color:#686B7C">비밀번호 변경위한<br>자세한 설정은 해당 과에 조교님께 연락해보세요</div>
                     </div>
                     <div class="d-flex justify-content-between" style="margin-top:30px">
+<!--                        데이터 없음-->
                         <div>현재 사물함 쉐어 인원 :</div>
                         <div style="color:#0E58D6">1명</div>
                     </div>
@@ -201,32 +206,14 @@
             </div>
         </div>`);
 
-
-        // AJAX.call("jsp/getLockerUser.jsp", {depCode: 'U', permission : 0}, function(data) {
-        //     $('.user-detail').remove();
-        //     data = JSON.parse(data.trim());
-        //     data.map((item)=>{
-        //         if(item.mid == mid){
-        //             console.log(item);
-        //             $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
-        //     <div class="modal-dialog modal-dialog-centered" style="margin:38px">
-        //         <div class="modal-content" style="padding:25px;border-radius:27px">
-        //             <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
-        //             <img style="max-width:86px" class="mx-auto" src="/img/user_profile.svg">
-        //             <div class="fs-26 fw-bold text-center" style="margin-top:23px">${item.uniName}</div>
-        //             <div class="fs-26 fw-bold text-center">${item.depName}</div>
-        //             <div class="d-flex justify-content-between" style="margin-top:52px"><div style="color:#686B7C">이름</div><div class="fs-18">${item.name}</div></div>
-        //             <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">학번</div><div class="fs-18">${item.studentId}</div></div>
-        //             <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">학년</div><div class="fs-18">${item.grade}</div></div>
-        //             <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">전화번호</div><div class="fs-18">${item.phoneNum}</div></div>
-        //             <button id="dialogCancel" type="button" style="margin-top:52px;border:1px solid #0E58D6;padding:12px;border-radius:8px;color:#0E58D6;background-color:transparent" onclick="#" class="btn btn-sm btn-secondary fs-18" data-bs-dismiss="modal">거절</button>
-        //             <button id="dialogOk" type="button" style="margin-top:10px;border-radius:8px;color:white;background-color:#0E58D6;padding:12px" onclick="addUser('${mid}',event)" class="btn btn-sm btn-primary fs-18">승인</button>
-        //         </div>
-        //     </div>
-        // </div>`);
-        //         }
-        //     });
-        // });
+            if(lockerForm.way == 'password'){
+                $('#pw input[value=password]')[0].checked = true;
+                $('#pw input[value=key]')[0].checked = false;
+            }else{
+                $('#pw input[value=password]')[0].checked = false;
+                $('#pw input[value=key]')[0].checked = true;
+            }
+        });
     }
     function hideModal(){
         $('.user-detail').css('display','none');
