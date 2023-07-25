@@ -330,8 +330,12 @@ public class LockerDAO {
         try {
             conn = ConnectionPool.get();
 
-            String sql = "select count(*) from lock+"+depCode + " where numCode ='A' and num = 0 and status = 'N'";
-            int cnt = Integer.parseInt(SqlUtil.query(sql));
+            String sql = "select count(*) from lock"+depCode + " where numCode ='A' and num = 0 and status = 'N'";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            rs.next();
+            int cnt = rs.getInt("count(*)");
+            System.out.println(sql + ", cnt = " + cnt);
             if(cnt == 0){
                 return typeAlockFinish(depCode);
             }else{
@@ -340,28 +344,34 @@ public class LockerDAO {
                 //3 랜덤 값 추출 후 탈락 시킬 유저 구하기
                 //4 탈락시킬 유저가 A , 0인경우 그냥 삭제
                 //5 탈락시킬 유저가 N인경우 A 0인 유저와 스위치 후 삭제.
-                sql = "select JSON_EXTRACT(jsonstr,'$.lockerSumNum') * JSON_EXTRACT(jsonstr,'$.oneLockerMaxNum') from lockerForm where depCode = "+depCode;
-                int maxCnt = Integer.parseInt(SqlUtil.query(sql));
+                sql = "select JSON_EXTRACT(jsonstr,'$.lockerSumNum') * JSON_EXTRACT(jsonstr,'$.oneLockerMaxNum') as cnt from lockerForm where depCode = "+depCode;
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery();
+                rs.next();
+                int maxCnt = rs.getInt("cnt");
 
                 int ranCnt = cnt-maxCnt;
                 while(ranCnt>0){
-                    sql = "SELECT * FROM lock+" + depCode + " ORDER BY RAND() limit 1";
+                    sql = "SELECT * FROM lock" + depCode + " ORDER BY RAND() limit 1";
+                    System.out.println(sql);
                     stmt = conn.prepareStatement(sql);
                     rs = stmt.executeQuery();
                     rs.next();
                     int num = ((rs.getInt("num")));
                     String mid =rs.getString("mid");
+                    System.out.println(num + ",,," + mid);
                     if(num == 0){
-                        sql = "delete from lock" + depCode + " where mid = "+ mid;
+                        sql = "delete from lock" + depCode + " where mid = '"+ mid+"'";
+                        System.out.println(sql);
                         SqlUtil.update(sql);
                     }else{
-                        sql = "SELECT * FROM lock+" + depCode + " where num = 0 ORDER BY RAND() limit 1";
+                        sql = "SELECT * FROM lock" + depCode + " where num = 0 ORDER BY RAND() limit 1";
                         stmt = conn.prepareStatement(sql);
                         rs2 = stmt.executeQuery();
                         rs2.next();
                         String mid2 = rs2.getString("mid");
                         String ts2 = rs2.getString("ts");
-                        sql = "delete from lock" + depCode + " where mid = "+ mid2;
+                        sql = "delete from lock" + depCode + " where mid = '"+ mid2+"'";
                         SqlUtil.update(sql);
 //                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
 //                        SqlUtil.update(sql);

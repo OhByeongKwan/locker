@@ -67,7 +67,7 @@
     }
 
     function lockerFinish(){
-        AJAX.call('jsp/typeAlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+        AJAX.call('jsp/typeBlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
             Dialog.alert('배정이 완료되었습니다.',Page.reload);
         })
     }
