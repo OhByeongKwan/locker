@@ -54,7 +54,7 @@ public class LockerDAO {
             sql += "num VARCHAR(32),";
             sql += "status VARCHAR(128) DEFAULT 'N',";
             sql += "mid VARCHAR(128),";
-            sql += "password VARCHAR(32)";
+            sql += "password VARCHAR(32),";
             sql += "ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
             sql += ")";
             System.out.println(sql);
@@ -168,6 +168,7 @@ public class LockerDAO {
                 jo.put("num", rs.getString("num"));
                 jo.put("status", rs.getString("status"));
                 jo.put("password", rs.getString("password"));
+                jo.put("ts", rs.getString("ts"));
 
                 System.out.println(jo.toString());
                 String jsonstr = jo.toJSONString();
@@ -195,6 +196,7 @@ public class LockerDAO {
             Object obj = parser.parse( jsonstr );
             JSONObject jsonObj = (JSONObject) obj;
             System.out.println(jsonObj);
+            System.out.println("test!!!!!!!->"+type);
 
             String depCode = (String) jsonObj.get("depCode");
             String mid = (String) jsonObj.get("mid");

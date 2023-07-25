@@ -65,10 +65,10 @@
             console.log(data)
             $('.reqUser *').remove();
             for(const item of data){
-                $('.reqUser').append(`<div role="button" onclick="modal('${item.mid}')" class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                $('.reqUser').append(`<div role="button" onclick="modal('${item.mid}')" class="justify-content-between align-items-center" style="display:flex;padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
                 <div class="d-flex flex-column gap-2">
-                    <div>${item.uniName}</div>
-                    <div>${item.mid}</div>
+                    <div class="user-uni">${item.uniName}</div>
+                    <div class="user-mid">${item.mid}</div>
                 </div>
                 <div class="d-flex gap-4">
                     <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
@@ -130,7 +130,24 @@
     }
 
     function hideModal(){
-        $('.user-detail').css('display','none');
+        $('.user-detail').remove();
     }
+
+    //검색기능
+    $('.search').on('keyup',()=>{
+        let nullValue = 0;
+        let inputValue = $('.search')[0].value.toUpperCase();
+        let itemValue = $('.reqUser .user-mid');
+        let itemValue2 = $('.reqUser .user-uni');
+
+        for(let i = 0 ; i<itemValue.length ; i++){
+            if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1 || itemValue2[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                $(itemValue[i]).parent().parent()[0].style.display = 'flex';
+                nullValue += 1;
+            }else{
+                $(itemValue[i]).parent().parent()[0].style.display = 'none';
+            }
+        }
+    });
 
 </script>

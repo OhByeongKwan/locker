@@ -126,11 +126,11 @@
         let addrMetro = AddrKo.getMetroList();
         renderMetro(addrMetro);
         renderCity();
-        // if(signupForm == null){
-        //     Dialog.alert('잘못된 접근입니다.',()=>{
-        //         Page.go('/');
-        //     });
-        // }
+        if(signupForm == null){
+            Dialog.alert('잘못된 접근입니다.',()=>{
+                Page.go('/');
+            });
+        }
     }
 
     function renderMetro(metros){

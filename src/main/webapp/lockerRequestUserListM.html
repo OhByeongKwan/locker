@@ -71,14 +71,13 @@
         $('#appStatus .dep-name').text(pagectx.usrobj.depName);
         AJAX.call('jsp/getUserListLockRequest.jsp',{depCode:pagectx.usrobj.depCode},(lists)=>{
             lists = JSON.parse(lists);
-            console.log(lists);
             $('#appStatus .req-num').text(`${lists.length}명`);
-            $('#appStatus .all-num').text(`${pagectx.lockerForm.lockerSumNum}명`);
+            $('#appStatus .all-num').text(`${pagectx.lockerForm.lockerSumNum * pagectx.lockerForm.oneLockerMaxNum}명`);
 
             for(const list of lists){
-                $('.reqUser').append(`<div role="button" onclick="modal('${list.mid}')" class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                $('.reqUser').append(`<div role="button" onclick="modal('${list.mid}')" class="justify-content-between align-items-center" style="display:flex;padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
                 <div class="d-flex flex-column gap-2">
-                    <div>${list.name}</div>
+                    <div class="user-name">${list.name}</div>
                     <div>2017100939 / 4학년 재학 중</div>
                 </div>
                 <div class="d-flex gap-4">
@@ -91,18 +90,18 @@
 
     function modal(mid){
         AJAX.call("jsp/GetUserList.jsp", {type:'All',permission:'1',depCode:pagectx.usrobj.depCode}, function(data) {
-            data = JSON.parse(data.trim());
-            data.map((data)=>{
-               if(data.mid == mid) {
-                   console.log(data);
-                   let endDate = pagectx.lockerForm.endDate
-                   endDate = endDate.replaceAll('-','.');
-                   console.log(endDate);
-                              $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+            AJAX.call('jsp/getLockerUser.jsp',{mid:mid, depCode:pagectx.usrobj.depCode},function(lockerForm){
+                data = JSON.parse(data.trim());
+                data.map((data)=>{
+                    if(data.mid == mid) {
+                        lockerForm = JSON.parse(lockerForm.trim());
+                        let date = lockerForm.ts.split(' ');
+                        date = date[0].replaceAll('-','.');
+                        $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
                        <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                            <div class="modal-content" style="padding:25px;border-radius:27px">
                                <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
-                               <div class="fs-22 fw-bold text-center" style="margin-top:60px">신청날짜 ${endDate}</div>
+                               <div class="fs-22 fw-bold text-center" style="margin-top:60px">신청날짜 ${date}</div>
                                <div class="d-flex flex-column gap-4" style="margin-top:56px">
                                    <div class="d-flex justify-content-between">
                                        <div style="color:#686B7C">이름</div>
@@ -136,23 +135,42 @@
                            </div>
                        </div>
                    </div>`);
-               }
+                    }
+                });
+                if(pagectx.lockerForm.helpStatus == 'yes'){
+                    $('#help input[value=yes]')[0].checked = true;
+                    $('#help input[value=no]')[0].checked = false;
+                }else{
+                    $('#help input[value=yes]')[0].checked = false;
+                    $('#help input[value=no]')[0].checked = true;
+                }
             });
-            if(pagectx.lockerForm.helpStatus == 'yes'){
-                $('#help input[value=yes]')[0].checked = true;
-                $('#help input[value=no]')[0].checked = false;
-            }else{
-                $('#help input[value=yes]')[0].checked = false;
-                $('#help input[value=no]')[0].checked = true;
-            }
         });
     }
 
     function hideModal(){
-        $('.user-detail').css('display','none');
+        $('.user-detail').remove();
     }
-    $.get({
 
-    })
+    // 왜넣음??
+    // $.get({
+    //
+    // })
+
+    //검색기능
+    $('.search').on('keyup',()=>{
+        let nullValue = 0;
+        let inputValue = $('.search')[0].value.toUpperCase();
+        let itemValue = $('.reqUser .user-name');
+
+        for(let i = 0 ; i<itemValue.length ; i++){
+            if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                $(itemValue[i]).parent().parent()[0].style.display = 'flex';
+                nullValue += 1;
+            }else{
+                $(itemValue[i]).parent().parent()[0].style.display = 'none';
+            }
+        }
+    });
 
 </script>

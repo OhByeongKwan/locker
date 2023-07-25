@@ -6,6 +6,7 @@
 <!--    <link rel="shortcut icon" href="images/main-logo.png">-->
     <link rel="stylesheet" href="css/core.css" media="only screen">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
     <title></title>
     <style>
         .login-title{padding-top:10%;font-weight:bold;font-size:40px;color:#0E58D6}
@@ -21,6 +22,7 @@
         .cancel-locker.show{display:flex}
         .only-manager{display:none}
         .only-manager.show{display:flex}
+        .locker-status>div:before{content:url("/img/locker_status.svg");margin-right:16px;vertical-align:middle}
     </style>
 </head>
 <body>
@@ -36,21 +38,31 @@
     </div>
 
     <div class="permission1" style="min-height:100vh;background-color:#0E58D6;padding:0 25px">
-        <div class="d-flex" style="gap:30px;padding-top:20%">
-            <div class="fs-28" style="color:white">안녕하세요 :)<br><span class="user-name fw-bold">{user-name}</span>님</div>
-            <div class="d-flex mb-2" style="color:white">
-                <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
-                <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
+        <div class="d-flex justify-content-between" style="padding-top:20%">
+            <div class="d-flex" style="gap:30px">
+                <div class="fs-28" style="color:white">안녕하세요 :)<br><span class="user-name fw-bold">{user-name}</span>님</div>
+                <div class="d-flex mb-2" style="color:white">
+                    <div class="align-self-end fs-10" onclick="SSO.logout()" style="padding-right:5px;border-bottom:1px solid #FFFFFF">로그아웃</div>
+                    <div class="align-self-end" style="line-height:19px;margin-left:2px">></div>
+                </div>
             </div>
+            <div role="button" class="fs-28" style="color:white;height:max-content" onclick="Page.go('/editPassword.html')"><i class="ri-settings-5-fill"></i></div>
         </div>
-        <section class="menus" style="margin-top:66px">
-            <div class="d-flex bg-white" style="height:162px;border-radius:8px">
-                <div class="col-6" role="button" onclick="Page.go('/userLockerRequest.html')">
-                    <div class="w-100" style="border-right:0.8px solid #DEE0EB;height:80%"></div>
+        <section class="locker-status" style="margin-top:40px">
+            <div class="bg-white" style="padding:7px 17px;border-radius:8px">현재 관리자가 <span class="fw-bold" style="color:#FF7676">승인 확인 중</span> 입니다</div>
+        </section>
+        <section class="menus" style="margin-top:22px">
+            <div class="d-flex bg-white" style="border-radius:8px;padding:14px 11px">
+                <div class="col-6" role="button" onclick="movePage()">
+                    <div class="w-100 text-center" style="border-right:0.8px solid #DEE0EB;height:80%">
+                        <img src="/img/locker_req.svg">
+                    </div>
                     <div class="text-center">사물함 신청하기</div>
                 </div>
                 <div class="col-6" onclick="modal()">
-                    <div class="w-100" style="border-right:0.8px solid #DEE0EB;height:80%"></div>
+                    <div class="w-100 text-center" style="height:80%">
+                        <img src="/img/my_locker.svg">
+                    </div>
                     <div class="text-center">내 사물함 보기</div>
                 </div>
             </div>
@@ -166,10 +178,10 @@
             let lockerForm = pagectx.lockerForm;
             locker = JSON.parse(locker);
 
-            $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+            $("body .container").append(`<div class="my-locker-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
-                    <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
+                    <div class="back-icon" style="left:0" role="button" onclick="hideModal('my-locker-modal')"></div>
                     <div class="fs-22 fw-bold" style="margin-top:28px">현재 <span style="color:#0E58D6">${locker.num}번</span><br>사용 중입니다</div>
                     <div id="pw" class="d-flex fs-14 justify-content-between" style="margin-top:53px">
                         <span>
@@ -187,21 +199,12 @@
                     <div class="d-flex justify-content-between" style="margin-top:30px">
 <!--                        데이터 없음-->
                         <div>현재 사물함 쉐어 인원 :</div>
-                        <div style="color:#0E58D6">1명</div>
+                        <div class="list-num" style="color:#0E58D6">1명</div>
                     </div>
-                    <div class="d-flex justify-content-between" style="margin-top:22px">
-                        <div class="d-flex gap-1">
-                            <img src="/img/user_profile.svg" style="max-width:34px">
-                            <div class="d-flex flex-column justify-content-between" style="color:#686B7C">
-                                <div class="fs-14">아트 앤 디자인 학과</div>
-                                <div class="fs-10">2017100939 / 010-1111-1111</div>
-                            </div>
-                        </div>
-                        <div class="fs-14 fw-bold">오병관</div>
-                    </div>
+                    <div class="share-list"></div>
 <!--                    데이터 입력 없음-->
 <!--                    <div class="fs-10 fw-light" style="color:#707070">학과 관련 전화번호 눌러서 확인하기</div>-->
-                    <button id="dialogOk" type="button" style="margin-top:90px;border-radius:8px;color:white;background-color:transparent;padding:12px;border:1px solid #0E58D6;color:#0E58D6" onclick="hideModal()" class="btn btn-sm btn-primary fs-18">확인</button>
+                    <button id="dialogOk" type="button" style="margin-top:90px;border-radius:8px;color:white;background-color:transparent;padding:12px;border:1px solid #0E58D6;color:#0E58D6" onclick="hideModal('my-locker-modal')" class="btn btn-sm btn-primary fs-18">확인</button>
                 </div>
             </div>
         </div>`);
@@ -213,9 +216,58 @@
                 $('#pw input[value=password]')[0].checked = false;
                 $('#pw input[value=key]')[0].checked = true;
             }
+
+            AJAX.call('jsp/getLockerShare.jsp',{depCode:pagectx.usrobj.depCode,num:locker.num},(datas)=>{
+                datas = JSON.parse(datas);
+                console.log(datas);
+                let length = datas.length -1 >= 0 ? datas.length -1 : 0;
+                $('.list-num').text(`${length}명`);
+                for(const data of datas){
+                    if(data.mid == pagectx.usrobj.mid){
+                        continue;
+                    }else{
+                        $('.share-list').append(`<div class="d-flex justify-content-between" style="margin-top:22px">
+                        <div class="d-flex gap-1">
+                            <img src="/img/user_profile.svg" style="max-width:34px">
+                            <div class="d-flex flex-column justify-content-between" style="color:#686B7C">
+                                <div class="fs-14">${data.depName}</div>
+                                <div class="fs-10">${data.studentId} / ${data.phoneNum}</div>
+                            </div>
+                        </div>
+                        <div class="fs-14 fw-bold">${data.name}</div>
+                    </div>`);
+                    }
+                }
+
+                if(length == 0){
+                    $('.share-list').append(`<div class="text-center w-100" style="margin-top:22px;color:#b1b1b1">혼자 사용 중입니다.</div>`);
+                }
+            });
         });
     }
-    function hideModal(){
-        $('.user-detail').css('display','none');
+
+    function modal2(){
+            $("body .container").append(`<div class="locker-req-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+            <div class="modal-dialog modal-dialog-centered" style="margin:38px">
+                <div class="modal-content" style="padding:25px;border-radius:27px">
+                    <div class="back-icon" style="left:0" role="button" onclick="hideModal('locker-req-modal')"></div>
+                    <div class="fs-22 fw-bold text-center" style="margin-top:56px">현재 사물함 <span style="color:#FF7676">신청 기간이<br>마감이 되었습니다.</span></div>
+                    <div class="text-center fs-12" style="color:#686B7C;margin-top:38px">자세한 관련 문의는 각 학과 조교님에게<br>관련 문의 주시면 감사합니다.</div>
+                    <button id="dialogOk" type="button" style="margin-top:10px;border-radius:8px;color:white;background-color:transparent;padding:12px;border:1px solid #0E58D6;color:#0E58D6" onclick="hideModal('locker-req-modal')" class="btn btn-sm btn-primary fs-18">확인</button>
+                </div>
+            </div>
+        </div>`);
+    }
+
+    function hideModal(modal){
+        $(`.${modal}`).remove();
+    }
+
+    function movePage(){
+        if(pagectx.lockerForm == null){
+            modal2();
+        }else{
+            Page.go('/userLockerRequest.html');
+        }
     }
 </script>

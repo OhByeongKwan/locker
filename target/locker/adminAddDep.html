@@ -65,10 +65,10 @@
             console.log(data)
             $('.reqDep *').remove();
             for(const item of data){
-                $('.reqDep').append(`<div class="d-flex justify-content-between align-items-center" style="padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
+                $('.reqDep').append(`<div class="justify-content-between align-items-center" style="display:flex;padding:18px 20px;border:3px solid #C2C4CA;border-radius: 8px">
                 <div class="d-flex flex-column gap-2">
-                    <div>${item.uniName}</div>
-                    <div>${item.department}</div>
+                    <div class="user-uni">${item.uniName}</div>
+                    <div class="user-dep">${item.department}</div>
                 </div>
                 <div class="d-flex gap-4">
                     <div role="button" class="approve_cancel"><img src="/img/approve_cancel.svg"></div>
@@ -93,4 +93,20 @@
         });
     }
 
+    //검색기능
+    $('.search').on('keyup',()=>{
+        let nullValue = 0;
+        let inputValue = $('.search')[0].value.toUpperCase();
+        let itemValue = $('.reqDep .user-uni');
+        let itemValue2 = $('.reqDep .user-dep');
+
+        for(let i = 0 ; i<itemValue.length ; i++){
+            if(itemValue[i].innerHTML.toUpperCase().indexOf(inputValue) > -1 || itemValue2[i].innerHTML.toUpperCase().indexOf(inputValue) > -1){
+                $(itemValue[i]).parent().parent()[0].style.display = 'flex';
+                nullValue += 1;
+            }else{
+                $(itemValue[i]).parent().parent()[0].style.display = 'none';
+            }
+        }
+    });
 </script>

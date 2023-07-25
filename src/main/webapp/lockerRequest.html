@@ -124,6 +124,12 @@
     var pagectx = {};
     function init(params) {
         pagectx = params;
+        AJAX.call('jsp/getLockerForm.jsp',{depCode:pagectx.usrobj.depCode},(data)=>{
+            data = data.trim();
+            if(data != 'null'){
+                Dialog.alert('이미 작성하신 폼이 있습니다.',Page.back);
+            }
+        })
     }
 
     function reqLocker(){
