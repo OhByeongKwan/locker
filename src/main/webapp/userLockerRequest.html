@@ -220,8 +220,12 @@
         jsonstr = JSON.stringify(jsonstr);
 
         AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr,type:pagectx.lockerForm.lockerWay}, function(data) {
-            console.log(data);
-            Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
+            data = data.trim();
+            if(data == 'FULL'){
+                Dialog.alert('사물함 신청 인원이 마감 되었습니다.',Page.back);
+            }else{
+                Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
+            }
         });
 
     }
