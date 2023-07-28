@@ -67,8 +67,14 @@
     }
 
     function lockerFinish(){
-        AJAX.call('jsp/typeBlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
-            Dialog.alert('배정이 완료되었습니다.',Page.reload);
-        })
+        if(pagectx.lockerForm.lockerWay == 'random'){
+            AJAX.call('jsp/typeBlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                Dialog.alert('랜덤 배정이 완료되었습니다.',Page.reload);
+            });
+        }else{
+            AJAX.call('jsp/typeAlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                Dialog.alert('선착순 배정이 완료되었습니다.',Page.reload);
+            });
+        }
     }
 </script>

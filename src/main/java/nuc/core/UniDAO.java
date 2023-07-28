@@ -263,6 +263,7 @@ public class UniDAO {
 
                 data.put("id", rs.getString("id"));
                 data.put("department", rs.getString("department"));
+                data.put("email", rs.getString("email"));
 
                 String sql1 = "SELECT uniName FROM uni WHERE id = '" + rs.getString("uid") + "'";
                 stmt1 = conn.prepareStatement(sql1);
@@ -312,6 +313,7 @@ public class UniDAO {
                 JSONObject data = new JSONObject();
                 data.put("id", rs.getString("id"));
                 data.put("uniName", rs.getString("uniName"));
+                data.put("email", rs.getString("jsonstr"));
                 arr.add(data);
 
                 cnt++;
