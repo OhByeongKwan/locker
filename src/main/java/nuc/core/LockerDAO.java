@@ -127,6 +127,9 @@ public class LockerDAO {
                 str += "\"}";
             }
             str += "]";
+            if(str.length()<5){
+                return "NO";
+            }
             return str;
 
 //            String sql1 = "select jsonstr from user inner join lock"+depCode+" on user.mid = lock"+depCode+".mid";
@@ -160,8 +163,8 @@ public class LockerDAO {
 
             String sql = "Select * from lock"+depCode+" where status != 'C' and mid = '"+mid+"'";
             System.out.println(sql);
-
             rs = st.executeQuery(sql);
+            String jsonstr = "";
             if (rs.next()) {
                 JSONObject jo = new JSONObject();
                 jo.put("numCode", rs.getString("numCode"));
@@ -171,12 +174,12 @@ public class LockerDAO {
                 jo.put("ts", rs.getString("ts"));
 
                 System.out.println(jo.toString());
-                String jsonstr = jo.toJSONString();
-                return jsonstr;
-
-            }else{
-                return "NO";
+                jsonstr = jo.toJSONString();
             }
+            if(jsonstr.length()<5){
+                return "NO";
+            }else
+                return jsonstr;
         } finally {
             if (rs!= null) rs.close();
             if (st!= null) st.close();
