@@ -620,7 +620,7 @@ let Page = {
         if (param != null) SessionStore.set(url, param);
         let platform = Config.platform;
         if (platform === "mobile" || platform === "android") {
-            url = Config.url + "/mobile/" + url;
+            // url = Config.url + "/mobile/" + url;
         }
 
 
