@@ -51,7 +51,43 @@
                         <input name="lockerWay" type="radio" value="distance" style="margin-left:42px" readonly> 거리순 배정
                     </div>
                 </div>
+
+                <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">거리순 배정은 먼 거리의 학생이 사물함 우선권을 갖게됩니다. 허위 사실 기재 시 사물함 신청이 제한됩니다.</div>
+                <div class="m-top-10">통학 방식을 선택해주세요.</div>
+                <div class="fs-20" style="margin-top:15px">
+                    <label for="lockerWay">통학 방식</label>
+                    <div id="goingWay" class="d-flex fs-14" style="margin-top:15px">
+                        <input name="lockerWay" type="radio" value="fifo" readonly> 교내 기숙사 이용
+                        <input name="lockerWay" type="radio" value="random" style="margin-left:42px" readonly> 통학
+                    </div>
+                </div>
+                <div class="content-pane mtop-30">
+                    <div class="form-group m-form__group row">
+                        <label class="col-md-2 offset-md-3 col-form-label">
+                            주&nbsp;&nbsp;소&nbsp;&nbsp;<span class="m--font-orange vertical-middle">*</span>
+                        </label>
+                        <div class="col-md-2">
+                            <input type="text" class="mtop-10 form-control m-input" name="postcode" id="postcode" placeholder="우편번호" readonly />
+                        </div>
+                        <div class="col-md-2 postcode-btn mtop-10">
+                            <button type="button" class="btn btn-info m-btn--air" onclick="execDaumPostcode()">우편번호 찾기</button>
+                        </div>
+                        <div class="col-md-4 offset-md-5 mtop-10">
+                            <input
+                                    type="text"
+                                    class="form-control m-input m--margin-top-10"
+                                    name="address"
+                                    id="address"
+                                    placeholder="도로명 주소"
+                                    readonly
+                            />
+                        </div>
+                        <div class="col-md-4 offset-md-5"></div>
+                    </div>
+                </div>
             </li>
+
+
             <li>
                 <div class="fs-20" style="margin-top:73px">
                     <div class="d-flex" style="gap:10px">
@@ -105,9 +141,11 @@
 </html>
 <script src="js/jquery-3.5.1.min.js"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f6e4fffaf31caeeddf868d2664da0907&libraries=services"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.bundle.js"></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js?autoload=false"></script>
 <script src="js/core.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -123,6 +161,7 @@
     function init(params) {
         pagectx = params;
         checkForm();
+        // getlatlon('인천 연수구 랜드마크로 110')
     }
 
     function checkForm(){
@@ -229,4 +268,56 @@
         });
 
     }
+    /** 우편번호 찾기 */
+    function execDaumPostcode() {
+        daum.postcode.load(function(){
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log(data)
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    $("#postcode").val(data.zonecode);
+                    $("#address").val(data.roadAddress);
+                }
+            }).open();
+        });
+    }
+
+
+    function getlatlon(code){
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        var callback = function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                console.log(result[0].x);
+                console.log(result[0].y);
+            }
+        };
+
+        geocoder.addressSearch(code, callback);
+    }
+
+    function distance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // 지구 반지름 (단위: km)
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c; // 두 지점 간의 거리 (단위: km)
+        return distance;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI/180);
+    }
+
+    // // 예시: 서울과 부산 간의 거리를 계산합니다.
+    // const seoulLat = 37.5665;
+    // const seoulLon = 126.9780;
+    // const busanLat = 35.1796;
+    // const busanLon = 129.0756;
+    // const dist = distance(seoulLat, seoulLon, busanLat, busanLon);
+    // console.log(dist); // 출력: 325.4961911409085
+
 </script>

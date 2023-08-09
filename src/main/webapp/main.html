@@ -176,8 +176,7 @@
     function modal(){
         AJAX.call('jsp/getLockerUser.jsp',{depCode:pagectx.usrobj.depCode,mid:pagectx.usrobj.mid},(locker)=>{
             let lockerForm = pagectx.lockerForm;
-            locker = JSON.parse(locker);
-
+            locker = JSON.parse(locker)
             $("body .container").append(`<div class="my-locker-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
