@@ -95,4 +95,38 @@
         }
     });
 
+    //회원 상세 정보
+    function modal(mid){
+        AJAX.call("jsp/GetUserList.jsp", {type : 'All',permission : 1, depCode : pagectx.usrobj.depCode}, function(data) {
+            $('.user-detail').remove();
+            data = JSON.parse(data.trim());
+            console.log(data);
+            data.map((item)=>{
+                if(item.mid == mid){
+                    console.log(item);
+                    $("body .container").append(`<div class="user-detail modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+            <div class="modal-dialog modal-dialog-centered" style="margin:38px">
+                <div class="modal-content" style="padding:25px;border-radius:27px">
+                    <div class="back-icon" style="left:0" role="button" onclick="hideModal()"></div>
+                    <img style="max-width:86px" class="mx-auto" src="/img/user_profile.svg">
+                    <div class="fs-26 fw-bold text-center" style="margin-top:23px">${item.uniName}</div>
+                    <div class="fs-26 fw-bold text-center">${item.depName}</div>
+                    <div class="d-flex justify-content-between" style="margin-top:52px"><div style="color:#686B7C">이름</div><div class="fs-18">${item.name}</div></div>
+                    <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">학번</div><div class="fs-18">${item.studentId}</div></div>
+                    <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">학년</div><div class="fs-18">${item.grade}</div></div>
+                    <div class="d-flex justify-content-between" style="margin-top:26px"><div style="color:#686B7C">전화번호</div><div class="fs-18">${item.phoneNum}</div></div>
+                    <button id="dialogOk" type="button" style="margin-top:10px;border-radius:8px;color:white;background-color:#0E58D6;padding:12px" onclick="hideModal()" class="btn btn-sm btn-primary fs-18">확인</button>
+                </div>
+            </div>
+        </div>`);
+                }
+            });
+        });
+    }
+
+    //상세 정보 닫기
+    function hideModal(){
+        $('.user-detail').remove();
+    }
+
 </script>

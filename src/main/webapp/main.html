@@ -132,16 +132,20 @@
         mid = pagectx.usrobj.mid;
         depCode = pagectx.usrobj.depCode;
         AJAX.call('jsp/getLockerUser.jsp',{mid:mid, depCode:depCode},(data)=>{
+            pagectx.lockerInfo = JSON.parse(data);
             data = data.trim();
-            console.log(data);
+
             if(data == 'NO'){
+                console.log(1);
                 $('.cancel-locker').removeClass('show');
             }else{
                 data = JSON.parse(data);
                 if(data.type == 'C'){
+                    console.log(2);
                     $('.cancel-locker').removeClass('show');
                     return;
                 }
+                console.log(3);
                 $('.cancel-locker').addClass('show');
             }
         });
@@ -174,10 +178,12 @@
     }
 
     function modal(){
-        AJAX.call('jsp/getLockerUser.jsp',{depCode:pagectx.usrobj.depCode,mid:pagectx.usrobj.mid},(locker)=>{
-            let lockerForm = pagectx.lockerForm;
-            locker = JSON.parse(locker)
-            $("body .container").append(`<div class="my-locker-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
+            if(pagectx.lockerInfo == undefined){
+                Dialog.alert('배정된 사물함이 없습니다');
+            }else{
+                let lockerForm = pagectx.lockerForm;
+                let locker = pagectx.lockerInfo;
+                $("body .container").append(`<div class="my-locker-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
                     <div class="back-icon" style="left:0" role="button" onclick="hideModal('my-locker-modal')"></div>
@@ -208,24 +214,24 @@
             </div>
         </div>`);
 
-            if(lockerForm.way == 'password'){
-                $('#pw input[value=password]')[0].checked = true;
-                $('#pw input[value=key]')[0].checked = false;
-            }else{
-                $('#pw input[value=password]')[0].checked = false;
-                $('#pw input[value=key]')[0].checked = true;
-            }
+                if(lockerForm.way == 'password'){
+                    $('#pw input[value=password]')[0].checked = true;
+                    $('#pw input[value=key]')[0].checked = false;
+                }else{
+                    $('#pw input[value=password]')[0].checked = false;
+                    $('#pw input[value=key]')[0].checked = true;
+                }
 
-            AJAX.call('jsp/getLockerShare.jsp',{depCode:pagectx.usrobj.depCode,num:locker.num},(datas)=>{
-                datas = JSON.parse(datas);
-                console.log(datas);
-                let length = datas.length -1 >= 0 ? datas.length -1 : 0;
-                $('.list-num').text(`${length}명`);
-                for(const data of datas){
-                    if(data.mid == pagectx.usrobj.mid){
-                        continue;
-                    }else{
-                        $('.share-list').append(`<div class="d-flex justify-content-between" style="margin-top:22px">
+                AJAX.call('jsp/getLockerShare.jsp',{depCode:pagectx.usrobj.depCode,num:locker.num},(datas)=>{
+                    datas = JSON.parse(datas);
+                    console.log(datas);
+                    let length = datas.length -1 >= 0 ? datas.length -1 : 0;
+                    $('.list-num').text(`${length}명`);
+                    for(const data of datas){
+                        if(data.mid == pagectx.usrobj.mid){
+                            continue;
+                        }else{
+                            $('.share-list').append(`<div class="d-flex justify-content-between" style="margin-top:22px">
                         <div class="d-flex gap-1">
                             <img src="/img/user_profile.svg" style="max-width:34px">
                             <div class="d-flex flex-column justify-content-between" style="color:#686B7C">
@@ -235,14 +241,14 @@
                         </div>
                         <div class="fs-14 fw-bold">${data.name}</div>
                     </div>`);
+                        }
                     }
-                }
 
-                if(length == 0){
-                    $('.share-list').append(`<div class="text-center w-100" style="margin-top:22px;color:#b1b1b1">혼자 사용 중입니다.</div>`);
-                }
-            });
-        });
+                    if(length == 0){
+                        $('.share-list').append(`<div class="text-center w-100" style="margin-top:22px;color:#b1b1b1">혼자 사용 중입니다.</div>`);
+                    }
+                });
+            }
     }
 
     function modal2(){
