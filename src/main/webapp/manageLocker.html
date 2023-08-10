@@ -29,7 +29,7 @@
             <div role="button" onclick="Page.go('lockerRequest.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
                 <div class="fs-18" style="color:#0E58D6">신청 폼 작성</div>
             </div>
-            <div role="button" onclick="Page.go('lockerRequestUserListM.html')" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
+            <div role="button" onclick="lockerFormCheck()" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
                 <div class="fs-18" style="color:#0E58D6">신청 인원 관리</div>
             </div>
             <div role="button" onclick="lockerFinish()" class="d-flex justify-content-center" style="padding:16px 0;background-color:white;border-radius:8px;gap:10px">
@@ -75,6 +75,14 @@
             AJAX.call('jsp/typeAlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
                 Dialog.alert('선착순 배정이 완료되었습니다.',Page.reload);
             });
+        }
+    }
+
+    function lockerFormCheck(){
+        if(pagectx.lockerForm == null){
+            Dialog.alert('사물함 신청폼을 먼저 작성해주세요');
+        }else{
+            Page.go('lockerRequestUserListM.html')
         }
     }
 </script>
