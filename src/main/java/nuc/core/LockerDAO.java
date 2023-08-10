@@ -74,6 +74,17 @@ public class LockerDAO {
     public String getForm(String depCode) throws NamingException, SQLException, ParseException {
         Connection conn = null;
         try {
+            String sql = "select jsonstr from lockerForm where depCode = '" + depCode +"'";
+            return SqlUtil.query(sql);
+
+        } finally {
+            if (conn!= null) conn.close();
+        }
+    }
+
+    public String getFormStatus(String depCode) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        try {
             String sql = "select status from lockerForm where depCode = '" + depCode +"'";
             return SqlUtil.query(sql);
 
@@ -81,6 +92,7 @@ public class LockerDAO {
             if (conn!= null) conn.close();
         }
     }
+
 
     public String getLockerShare(String depCode, String num) throws NamingException, SQLException, ParseException {
 

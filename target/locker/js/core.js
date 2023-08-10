@@ -555,8 +555,11 @@ let Page = {
             param.usrobj = sesobj.usrobj;
 
             if(param.usrobj != undefined){
+                console.log(param.usrobj.depCode)
                 AJAX.call('jsp/getLockerForm.jsp',{depCode : param.usrobj.depCode},(form)=>{
+                    console.log(form)
                     let data = JSON.parse(form);
+                    console.log(data)
                     pagectx.lockerForm = data;
                 });
             }
