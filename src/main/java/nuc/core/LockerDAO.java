@@ -74,7 +74,7 @@ public class LockerDAO {
     public String getForm(String depCode) throws NamingException, SQLException, ParseException {
         Connection conn = null;
         try {
-            String sql = "select jsonstr from lockerForm where depCode = '" + depCode +"'";
+            String sql = "select status from lockerForm where depCode = '" + depCode +"'";
             return SqlUtil.query(sql);
 
         } finally {
@@ -313,7 +313,7 @@ public class LockerDAO {
         //선착순 배정의 경우 단순 status만 옮기면 끝이난다.
         try {
             conn = ConnectionPool.get();
-            String sql = "update lockerForm set status = 'A' where depCode = '" + depCode +"'";
+            String sql = "update lockerForm set status = 'A' where depCode = '" + depCode + "'";
             SqlUtil.update(sql);
             sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
             SqlUtil.update(sql);
@@ -387,6 +387,8 @@ public class LockerDAO {
             }
 
             sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
+            SqlUtil.update(sql);
+            sql = "update lockerForm set status = 'A' where depCode = '" + depCode + "'";
             SqlUtil.update(sql);
             return "OK";
         } finally {
