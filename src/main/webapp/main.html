@@ -27,6 +27,8 @@
         .menus .possible.show{display:block}
         .menus .impossible{display:none}
         .menus .impossible.show{display:block}
+        .locker-status{display:none}
+        .locker-status.show{display:block}
     </style>
 </head>
 <body>
@@ -53,7 +55,7 @@
             <div role="button" class="fs-28" style="color:white;height:max-content" onclick="Page.go('/editPassword.html')"><i class="ri-settings-5-fill"></i></div>
         </div>
         <section class="locker-status" style="margin-top:40px">
-            <div class="bg-white" style="padding:7px 17px;border-radius:8px">현재 관리자가 <span class="fw-bold" style="color:#FF7676">승인 확인 중</span> 입니다</div>
+            <div class="bg-white" style="padding:7px 17px;border-radius:8px">현재 관리자가 <span class="fw-bold" style="color:#FF7676">사물함 신청 받는 중</span> 입니다</div>
         </section>
         <section class="menus" style="margin-top:22px">
             <div class="d-flex bg-white" style="border-radius:8px;padding:14px 11px">
@@ -113,6 +115,7 @@
     var pagectx = {};
     let mid = '';
     let depCode = '';
+    let lockerFormStatus = '';
     function init(params) {
         pagectx = params;
         Dialog.init();
@@ -138,12 +141,11 @@
         depCode = pagectx.usrobj.depCode;
         AJAX.call('jsp/getLockerUser.jsp',{mid:mid, depCode:depCode},(data)=>{
             data = data.trim();
-            pagectx.lockerInfo = JSON.parse(data);
             if(data == 'NO'){
                 $('.cancel-locker').removeClass('show');
             }else{
-                data = JSON.parse(data);
-                if(data.type == 'C'){
+                pagectx.lockerInfo = JSON.parse(data);
+                if(pagectx.lockerInfo.type == 'C'){
                     $('.cancel-locker').removeClass('show');
                     return;
                 }
@@ -172,14 +174,19 @@
             $('.permission0').addClass('show');
         }
 
-        console.log(pagectx.lockerFormStatus);
-        if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
-            $('.menus .impossible').addClass('show');
-            $('.menus .possible').removeClass('show');
-        }else{
-            $('.menus .impossible').removeClass('show');
-            $('.menus .possible').addClass('show');
-        }
+        AJAX.call('jsp/getLockerFormStatus.jsp',{depCode:pagectx.usrobj.depCode},function(status){
+            lockerFormStatus = status.trim();
+            console.log(lockerFormStatus);
+            if(lockerFormStatus == 'null' || lockerFormStatus == 'A'){
+                $('.menus .impossible').addClass('show');
+                $('.menus .possible').removeClass('show');
+                $('.locker-status').removeClass('show');
+            }else{
+                $('.menus .impossible').removeClass('show');
+                $('.menus .possible').addClass('show');
+                $('.locker-status').addClass('show');
+            }
+        });
     }
 
     function cancelLocker(){
@@ -191,9 +198,12 @@
     function modal(){
             if(pagectx.lockerInfo == undefined){
                 Dialog.alert('배정된 사물함이 없습니다');
+            }else if(lockerFormStatus == 'N'){
+                Dialog.alert('사물함 배정이 완료되지 않았습니다.');
             }else{
                 let lockerForm = pagectx.lockerForm;
                 let locker = pagectx.lockerInfo;
+                let way = pagectx.lockerForm.way == 'key' ? '<span class="fs-16" style="color:#ff4e09">현재 비밀번호가 아닌<br>자물쇠를 사용중입니다.</span>' : `${locker.password}`;
                 $("body .container").append(`<div class="my-locker-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
@@ -209,7 +219,7 @@
                     </div>
                     <div class="d-flex flex-column text-center" style="margin-top:20px;border-radius:16px;background-color:#F4F5FC;padding:15px;gap:20px">
                         <div class="fs-14" style="color:#686B7C">현재 사용 중인 비밀번호</div>
-                        <div class="fs-22 fw-bold">${locker.password}</div>
+                        <div class="fs-22 fw-bold">${way}</div>
                         <div class="fs-10" style="color:#686B7C">비밀번호 변경위한<br>자세한 설정은 해당 과에 조교님께 연락해보세요</div>
                     </div>
                     <div class="d-flex justify-content-between" style="margin-top:30px">
@@ -281,8 +291,8 @@
     }
 
     function movePage(){
-        if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
-            modal2(pagectx.lockerFormStatus);
+        if(lockerFormStatus == 'null' || lockerFormStatus == 'A'){
+            modal2(lockerFormStatus);
         }else{
             Page.go('/userLockerRequest.html');
         }

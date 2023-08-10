@@ -67,7 +67,8 @@
     }
 
     function lockerFinish(){
-            let lockerformStatus = pagectx.lockerFormStatus;
+        AJAX.call('jsp/getLockerFormStatus.jsp',{depCode:pagectx.usrobj.depCode},function(status){
+            let lockerformStatus = status.trim();
             console.log(lockerformStatus);
 
             if(lockerformStatus == 'null'){
@@ -88,6 +89,7 @@
             }else{
                 Dialog.alert('이미 배정이 완료되었습니다.');
             }
+        });
     }
 
     function lockerFormCheck(){
