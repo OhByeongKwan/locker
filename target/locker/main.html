@@ -132,20 +132,16 @@
         mid = pagectx.usrobj.mid;
         depCode = pagectx.usrobj.depCode;
         AJAX.call('jsp/getLockerUser.jsp',{mid:mid, depCode:depCode},(data)=>{
-            pagectx.lockerInfo = JSON.parse(data);
             data = data.trim();
-
+            pagectx.lockerInfo = JSON.parse(data);
             if(data == 'NO'){
-                console.log(1);
                 $('.cancel-locker').removeClass('show');
             }else{
                 data = JSON.parse(data);
                 if(data.type == 'C'){
-                    console.log(2);
                     $('.cancel-locker').removeClass('show');
                     return;
                 }
-                console.log(3);
                 $('.cancel-locker').addClass('show');
             }
         });
