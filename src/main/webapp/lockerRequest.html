@@ -14,6 +14,8 @@
         #lockerDate input{background-color:#F4F5FC;border-radius:8px;padding:15px;max-width:45%;width:100%;border:none;font-size:14px}
         .start-pw.show{display:flex}
         .start-pw{display:none}
+        .input-address{display: none}
+        .input-address.show{display: block}
     </style>
 </head>
 <body>
@@ -51,50 +53,51 @@
                 <div class="fs-20" style="margin-top:55px">
                     <label for="lockerWay">배정 방식</label>
                     <div id="lockerWay" class="d-flex fs-14" style="margin-top:34px">
-                        <input name="lockerWay" type="radio" value="fifo" checked> 선착순 배정
-                        <input name="lockerWay" type="radio" value="random" style="margin-left:42px"> 랜덤 배정
-                        <input name="lockerWay" type="radio" value="distance" style="margin-left:42px"> 거리순 배정
+                        <input name="lockerWay" type="radio" value="fifo" onclick="showAddress(this)" checked> 선착순 배정
+                        <input name="lockerWay" type="radio" value="random" onclick="showAddress(this)" style="margin-left:42px"> 랜덤 배정
+                        <input name="lockerWay" type="radio" value="distance" onclick="showAddress(this)" style="margin-left:42px"> 거리순 배정
                     </div>
                 </div>
-                <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">거리순 배정은 먼 거리의 학생이 사물함 우선권을 갖게됩니다.</div>
-                <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">학교의 위치 정보를 적어주세요.</div>
-                <div class="fs-20" style="margin-top:15px">
-                </div>
-                <div class="form-group m-form__group row">
-                    <label class="col-md-2 offset-md-3 col-form-label">
-                        주&nbsp;&nbsp;소&nbsp;&nbsp;<span class="m--font-orange vertical-middle">*</span>
-                    </label>
-                    <div class="col-md-2">
-                        <input type="text" class="mtop-10 form-control m-input" name="postcode" id="postcode" placeholder="우편번호" readonly />
+                <div class="input-address">
+                    <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">거리순 배정은 먼 거리의 학생이 사물함 우선권을 갖게됩니다.</div>
+                    <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">학교의 위치 정보를 적어주세요.</div>
+                    <div class="fs-20" style="margin-top:15px">
                     </div>
-                    <div class="col-md-2 postcode-btn mtop-10">
-                        <button type="button" class="btn btn-info m-btn--air" onclick="execDaumPostcode()">우편번호 찾기</button>
+                    <div class="form-group m-form__group row gap-1">
+                        <label class="col-md-2 offset-md-3 col-form-label">
+                            주&nbsp;&nbsp;소&nbsp;&nbsp;<span class="m--font-orange vertical-middle">*</span>
+                        </label>
+                        <div class="col-md-2">
+                            <input type="text" class="mtop-10 form-control m-input" name="postcode" id="postcode" placeholder="우편번호" readonly />
+                        </div>
+                        <div class="col-md-2 postcode-btn mtop-10">
+                            <button type="button" class="btn btn-info m-btn--air" onclick="execDaumPostcode()">우편번호 찾기</button>
+                        </div>
+                        <div class="col-md-4 offset-md-5 mtop-10">
+                            <input
+                                    type="text"
+                                    class="form-control m-input m--margin-top-10"
+                                    name="address"
+                                    id="address"
+                                    placeholder="도로명 주소"
+                                    readonly
+                            />
+                        </div>
+                        <div class="col-md-4 offset-md-5"></div>
                     </div>
-                    <div class="col-md-4 offset-md-5 mtop-10">
-                        <input
-                                type="text"
-                                class="form-control m-input m--margin-top-10"
-                                name="address"
-                                id="address"
-                                placeholder="도로명 주소"
-                                readonly
-                        />
-                    </div>
-                    <div class="col-md-4 offset-md-5"></div>
-
                 </div>
             </li>
             <li>
-                <div class="fs-20" style="margin-top:73px">
-                    <div class="d-flex" style="gap:10px">
-                        <label for="help">도움 필요 학생 체크 여부</label>
-                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>
-                    </div>
-                    <div id="help" class="d-flex fs-14" style="margin-top:34px">
-                        <input name="helpStatus" type="radio" value="yes" checked> 예
-                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px"> 아니오
-                    </div>
-                </div>
+<!--                <div class="fs-20" style="margin-top:73px">-->
+<!--                    <div class="d-flex" style="gap:10px">-->
+<!--                        <label for="help">도움 필요 학생 체크 여부</label>-->
+<!--                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>-->
+<!--                    </div>-->
+<!--                    <div id="help" class="d-flex fs-14" style="margin-top:34px">-->
+<!--                        <input name="helpStatus" type="radio" value="yes" checked> 예-->
+<!--                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px"> 아니오-->
+<!--                    </div>-->
+<!--                </div>-->
             </li>
             <li>
                 <div class="fs-20" style="margin-top:73px">
@@ -151,6 +154,8 @@
 <script src="js/velocity.min.js"></script>
 <script type="text/javascript">
     var pagectx = {};
+    let lat;
+    let lon;
     function init(params) {
         pagectx = params;
         AJAX.call('jsp/getLockerForm.jsp',{depCode:pagectx.usrobj.depCode},(data)=>{
@@ -160,6 +165,14 @@
             }
         })
         //getlatlon('주소 정보')-> x,y좌표를 jsonstr에 넣을 예정
+    }
+
+    function showAddress(select){
+        if($(select)[0].value == 'distance'){
+            $('.input-address').addClass('show');
+        }else{
+            $('.input-address').removeClass('show');
+        }
     }
 
     function reqLocker(){
@@ -183,12 +196,12 @@
         }else{
             lockerWay = $('input[name=lockerWay]')[2].value;
         }
-        let helpStatus;
-        if($('input[name=helpStatus]')[0].checked){
-            helpStatus = $('input[name=helpStatus]')[0].value;
-        }else {
-            helpStatus = $('input[name=helpStatus]')[1].value;
-        }
+        // let helpStatus;
+        // if($('input[name=helpStatus]')[0].checked){
+        //     helpStatus = $('input[name=helpStatus]')[0].value;
+        // }else {
+        //     helpStatus = $('input[name=helpStatus]')[1].value;
+        // }
         let oneLockerMaxNum = $('input[name=oneLockerMaxNum]').val().trim();
         let way;
         if($('input[name=way]')[0].checked){
@@ -201,13 +214,22 @@
             way = null;
         }
         let depCode = pagectx.usrobj.depCode;
-        let jsonstr = {startDate:startDate,endDate:endDate,startEndObj : startEndObj,lockerSumNum : lockerSumNum,lockerWay:lockerWay,oneLockerMaxNum:oneLockerMaxNum,way:way,helpStatus : helpStatus,startPw : startPw, depCode : depCode};
-        jsonstr = JSON.stringify(jsonstr);
+        let address = $('input[id=address]')[0].value;
+        console.log(address);
+        let jsonstr = {startDate:startDate,endDate:endDate,startEndObj : startEndObj,lockerSumNum : lockerSumNum,lockerWay:lockerWay,oneLockerMaxNum:oneLockerMaxNum,way:way,startPw : startPw, depCode : depCode};
+        // let jsonstr = {startDate:startDate,endDate:endDate,startEndObj : startEndObj,lockerSumNum : lockerSumNum,lockerWay:lockerWay,oneLockerMaxNum:oneLockerMaxNum,way:way,helpStatus : helpStatus,startPw : startPw, depCode : depCode};
 
-        AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},()=>{
-            // console.log(jsonstr)
-            Dialog.alert('신청완료',Page.back);
-        });
+        if(address == ''){
+            jsonstr = JSON.stringify(jsonstr);
+
+            AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},()=>{
+                // console.log(jsonstr)
+                Dialog.alert('신청완료',Page.back);
+            });
+        }else{
+            getlatlon(address,jsonstr);
+        }
+
     }
 
     function plus(){
@@ -264,13 +286,21 @@
         });
     }
 
-    function getlatlon(code){
+    function getlatlon(code,jsonstr){
         var geocoder = new kakao.maps.services.Geocoder();
 
         var callback = function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
-                console.log(result[0].x); //lat
-                console.log(result[0].y); //lon
+                // console.log(result[0].x); //lat
+                // console.log(result[0].y); //lon
+                jsonstr.lat = result[0].x;
+                jsonstr.lon = result[0].y;
+                jsonstr = JSON.stringify(jsonstr);
+
+                AJAX.call('jsp/lockerForm.jsp',{jsonstr:jsonstr},()=>{
+                    // console.log(jsonstr)
+                    Dialog.alert('신청완료',Page.back);
+                });
             }
         };
 

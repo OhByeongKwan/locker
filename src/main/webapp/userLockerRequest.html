@@ -14,6 +14,10 @@
         #lockerDate input{background-color:#F4F5FC;border-radius:8px;padding:15px;max-width:45%;width:100%;border:none;font-size:14px}
         .start-pw.show{display:flex}
         .start-pw{display:none}
+        .input-address{display: none}
+        .input-address.show{display: block}
+        .address-detail{display: none}
+        .address-detail.show{display: flex}
     </style>
 </head>
 <body>
@@ -52,54 +56,57 @@
                     </div>
                 </div>
 
-                <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">거리순 배정은 먼 거리의 학생이 사물함 우선권을 갖게됩니다. 허위 사실 기재 시 사물함 신청이 제한됩니다.</div>
-                <div class="m-top-10">통학 방식을 선택해주세요.</div>
-                <div class="fs-20" style="margin-top:15px">
-                    <label for="lockerWay">통학 방식</label>
-                    <div id="goingWay" class="d-flex fs-14" style="margin-top:15px">
-                        <input name="lockerWay" type="radio" value="fifo" readonly> 교내 기숙사 이용
-                        <input name="lockerWay" type="radio" value="random" style="margin-left:42px" readonly> 통학
+                <div class="input-address">
+                    <div class="m-top-10" style="margin-left: 0%; margin-top: 20px;">거리순 배정은 먼 거리의 학생이 사물함 우선권을 갖게됩니다. 허위 사실 기재 시 사물함 신청이 제한됩니다.</div>
+                    <div class="m-top-10">통학 방식을 선택해주세요.</div>
+                    <div class="fs-20" style="margin-top:15px">
+                        <label for="goingWay">통학 방식</label>
+                        <div id="goingWay" class="d-flex fs-14" style="margin-top:15px">
+                            <input name="goingWay" type="radio" value="dormitory" onclick="showAddress(this)" checked> 교내 기숙사 이용
+                            <input name="goingWay" type="radio" value="homeToUni" style="margin-left:42px" onclick="showAddress(this)"> 통학
+                        </div>
+                    </div>
+                    <div class="content-pane mtop-30">
+                        <div class="address-detail form-group m-form__group row gap-1">
+                            <label class="col-md-2 offset-md-3 col-form-label">
+                                주&nbsp;&nbsp;소&nbsp;&nbsp;<span class="m--font-orange vertical-middle">*</span>
+                            </label>
+                            <div class="col-md-2">
+                                <input type="text" class="mtop-10 form-control m-input" name="postcode" id="postcode" placeholder="우편번호" readonly />
+                            </div>
+                            <div class="col-md-2 postcode-btn mtop-10">
+                                <button type="button" class="btn btn-info m-btn--air" onclick="execDaumPostcode()">우편번호 찾기</button>
+                            </div>
+                            <div class="col-md-4 offset-md-5 mtop-10">
+                                <input
+                                        type="text"
+                                        class="form-control m-input m--margin-top-10"
+                                        name="address"
+                                        id="address"
+                                        placeholder="도로명 주소"
+                                        readonly
+                                />
+                            </div>
+                            <div class="col-md-4 offset-md-5"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="content-pane mtop-30">
-                    <div class="form-group m-form__group row">
-                        <label class="col-md-2 offset-md-3 col-form-label">
-                            주&nbsp;&nbsp;소&nbsp;&nbsp;<span class="m--font-orange vertical-middle">*</span>
-                        </label>
-                        <div class="col-md-2">
-                            <input type="text" class="mtop-10 form-control m-input" name="postcode" id="postcode" placeholder="우편번호" readonly />
-                        </div>
-                        <div class="col-md-2 postcode-btn mtop-10">
-                            <button type="button" class="btn btn-info m-btn--air" onclick="execDaumPostcode()">우편번호 찾기</button>
-                        </div>
-                        <div class="col-md-4 offset-md-5 mtop-10">
-                            <input
-                                    type="text"
-                                    class="form-control m-input m--margin-top-10"
-                                    name="address"
-                                    id="address"
-                                    placeholder="도로명 주소"
-                                    readonly
-                            />
-                        </div>
-                        <div class="col-md-4 offset-md-5"></div>
-                    </div>
-                </div>
+
             </li>
 
 
-            <li>
-                <div class="fs-20" style="margin-top:73px">
-                    <div class="d-flex" style="gap:10px">
-                        <label for="help">도움 필요 학생 체크 여부</label>
-                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>
-                    </div>
-                    <div id="help" class="d-flex fs-14" style="margin-top:34px">
-                        <input name="helpStatus" type="radio" value="yes" readonly> 예
-                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px" readonly> 아니오
-                    </div>
-                </div>
-            </li>
+<!--            <li>-->
+<!--                <div class="fs-20" style="margin-top:73px">-->
+<!--                    <div class="d-flex" style="gap:10px">-->
+<!--                        <label for="help">도움 필요 학생 체크 여부</label>-->
+<!--                        <div role="button" class="align-self-end" style="padding:3px 8px;border:1px solid #0E58D6;color:#0E58D6;border-radius:10px;font-size:7px;-webkit-transform:scale(0.5);height:max-content;float:bottom">더보기</div>-->
+<!--                    </div>-->
+<!--                    <div id="help" class="d-flex fs-14" style="margin-top:34px">-->
+<!--                        <input name="helpStatus" type="radio" value="yes" readonly> 예-->
+<!--                        <input name="helpStatus" type="radio" value="no" style="margin-left:42px" readonly> 아니오-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
             <li>
                 <div class="fs-20" style="margin-top:73px">
                     <div class="d-flex justify-content-between align-items-center">
@@ -182,6 +189,7 @@
     function checkLockerUser(form){
         AJAX.call('jsp/getLockerUser.jsp',{mid:pagectx.usrobj.mid, depCode:pagectx.usrobj.depCode},(data)=>{
             data = data.trim();
+            console.log(data);
             if(data == 'NO'){
                 renderForm(form);
             }else{
@@ -204,32 +212,38 @@
         }
 
         if(form.lockerWay == 'fifo'){
+            console.log('fifo');
             $('#lockerWay input[value=fifo]')[0].checked = true;
             $('#lockerWay input[value=random]')[0].checked = false;
             $('#lockerWay input[value=distance]')[0].checked = false;
+            $('.input-address').removeClass('show');
         }else if(form.lockerWay == 'random'){
+            console.log('random');
             $('#lockerWay input[value=fifo]')[0].checked = false;
             $('#lockerWay input[value=random]')[0].checked = true;
             $('#lockerWay input[value=distance]')[0].checked = false;
+            $('.input-address').removeClass('show');
         }else{
+            console.log('distance');
             $('#lockerWay input[value=fifo]')[0].checked = false;
             $('#lockerWay input[value=random]')[0].checked = false;
             $('#lockerWay input[value=distance]')[0].checked = true;
+            $('.input-address').addClass('show');
         }
 
         $('#lockerWay input[value=fifo]')[0].disabled = true;
         $('#lockerWay input[value=random]')[0].disabled = true;
         $('#lockerWay input[value=distance]')[0].disabled = true;
 
-        if(form.helpStatus == 'yes'){
-            $('#help input[value=yes]')[0].checked = true;
-            $('#help input[value=no]')[0].checked = false;
-        }else{
-            $('#help input[value=yes]')[0].checked = false;
-            $('#help input[value=no]')[0].checked = true;
-        }
-        $('#help input[value=yes]')[0].disabled = true;
-        $('#help input[value=no]')[0].disabled = true;
+        // if(form.helpStatus == 'yes'){
+        //     $('#help input[value=yes]')[0].checked = true;
+        //     $('#help input[value=no]')[0].checked = false;
+        // }else{
+        //     $('#help input[value=yes]')[0].checked = false;
+        //     $('#help input[value=no]')[0].checked = true;
+        // }
+        // $('#help input[value=yes]')[0].disabled = true;
+        // $('#help input[value=no]')[0].disabled = true;
 
         $('#oneLockerMaxNum')[0].value = form.oneLockerMaxNum;
         oneLockerMaxNum = form.oneLockerMaxNum;
@@ -256,17 +270,8 @@
         }
 
         let jsonstr = {mid : pagectx.usrobj.mid, depCode: pagectx.usrobj.depCode, SumNum:SumNum, oneLockerMaxNum:oneLockerMaxNum, pass:pass, startEndObj: pagectx.form};
-        jsonstr = JSON.stringify(jsonstr);
-
-        AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr,type:pagectx.lockerForm.lockerWay}, function(data) {
-            data = data.trim();
-            if(data == 'FULL'){
-                Dialog.alert('사물함 신청 인원이 마감 되었습니다.',Page.back);
-            }else{
-                Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
-            }
-        });
-
+        let address = $('#address')[0].value;
+        getlatlon(address,jsonstr);
     }
     /** 우편번호 찾기 */
     function execDaumPostcode() {
@@ -283,17 +288,59 @@
     }
 
 
-    function getlatlon(code){
-        var geocoder = new kakao.maps.services.Geocoder();
+    function getlatlon(code,jsonstr){
+        if($('input[value=dormitory]')[0].checked){
+            console.log(1)
+            let dist = 0;
 
-        var callback = function(result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                console.log(result[0].x);
-                console.log(result[0].y);
-            }
-        };
+            jsonstr.distance = dist;
+            jsonstr = JSON.stringify(jsonstr);
+            console.log(jsonstr);
 
-        geocoder.addressSearch(code, callback);
+            AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr,type:pagectx.lockerForm.lockerWay}, function(data) {
+                data = data.trim();
+                console.log(data);
+                if(data == 'FULL'){
+                    Dialog.alert('사물함 신청 인원이 마감 되었습니다.',Page.back);
+                }else{
+                    Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
+                }
+            });
+        }else{
+            console.log(2)
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            var callback = function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    console.log(result[0].x);
+                    console.log(result[0].y);
+
+                    let uniLat = pagectx.lockerForm.lat;
+                    let uniLon = pagectx.lockerForm.lon;
+                    let userLat = result[0].x;
+                    let userLon = result[0].y;
+
+                    let dist = distance(uniLat,uniLon,userLat,userLon,jsonstr);
+                    console.log(dist);
+
+                    jsonstr.distance = dist;
+                    jsonstr = JSON.stringify(jsonstr);
+                    console.log(jsonstr);
+
+                    AJAX.call("jsp/userLockerRequest.jsp", {jsonstr:jsonstr,type:pagectx.lockerForm.lockerWay}, function(data) {
+                        data = data.trim();
+                        console.log(data);
+                        if(data == 'FULL'){
+                            Dialog.alert('사물함 신청 인원이 마감 되었습니다.',Page.back);
+                        }else{
+                            Dialog.alert('사물함 신청이 완료되었습니다.',Page.back);
+                        }
+                    });
+                }
+            };
+
+            geocoder.addressSearch(code, callback);
+        }
     }
 
     function distance(lat1, lon1, lat2, lon2) {
@@ -319,5 +366,13 @@
     // const busanLon = 129.0756;
     // const dist = distance(seoulLat, seoulLon, busanLat, busanLon);
     // console.log(dist); // 출력: 325.4961911409085
+
+    function showAddress(select){
+        if($(select)[0].value == 'homeToUni'){
+            $('.address-detail').addClass('show');
+        }else{
+            $('.address-detail').removeClass('show');
+        }
+    }
 
 </script>
