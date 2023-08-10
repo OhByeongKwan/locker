@@ -67,15 +67,27 @@
     }
 
     function lockerFinish(){
-        if(pagectx.lockerForm.lockerWay == 'random'){
-            AJAX.call('jsp/typeBlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
-                Dialog.alert('랜덤 배정이 완료되었습니다.',Page.reload);
-            });
-        }else{
-            AJAX.call('jsp/typeAlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
-                Dialog.alert('선착순 배정이 완료되었습니다.',Page.reload);
-            });
-        }
+            let lockerformStatus = pagectx.lockerFormStatus;
+            console.log(lockerformStatus);
+
+            if(lockerformStatus == 'null'){
+                Dialog.alert('사물함 신청폼을 먼저 작성해주세요');
+                return;
+            }else if(pagectx.lockerForm.lockerWay == 'random' && lockerformStatus == 'N'){
+                AJAX.call('jsp/typeBlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                    Dialog.alert('랜덤 배정이 완료되었습니다.',Page.reload);
+                });
+            }else if(pagectx.lockerForm.lockerWay == 'fifo' && lockerformStatus == 'N'){
+                AJAX.call('jsp/typeAlockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                    Dialog.alert('선착순 배정이 완료되었습니다.',Page.reload);
+                });
+            }else if(pagectx.lockerForm.lockerWay == 'distance' && lockerformStatus == 'N'){
+                // AJAX.call('jsp/typeClockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                Dialog.alert('거리순 배정이 완료되었습니다.',Page.reload);
+                // });
+            }else{
+                Dialog.alert('이미 배정이 완료되었습니다.');
+            }
     }
 
     function lockerFormCheck(){

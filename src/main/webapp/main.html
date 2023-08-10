@@ -23,6 +23,10 @@
         .only-manager{display:none}
         .only-manager.show{display:flex}
         .locker-status>div:before{content:url("/img/locker_status.svg");margin-right:16px;vertical-align:middle}
+        .menus .possible{display:none}
+        .menus .possible.show{display:block}
+        .menus .impossible{display:none}
+        .menus .impossible.show{display:block}
     </style>
 </head>
 <body>
@@ -55,7 +59,8 @@
             <div class="d-flex bg-white" style="border-radius:8px;padding:14px 11px">
                 <div class="col-6" role="button" onclick="movePage()">
                     <div class="w-100 text-center" style="border-right:0.8px solid #DEE0EB;height:80%">
-                        <img src="/img/locker_req.svg">
+                        <img class="possible mx-auto" src="/img/locker_req_possible.svg">
+                        <img class="impossible mx-auto" src="/img/locker_req_impossible.svg">
                     </div>
                     <div class="text-center">사물함 신청하기</div>
                 </div>
@@ -155,6 +160,7 @@
             $('.uni-info .dep-name').text(user.depName);
             $('.permission1').addClass('show');
             $('.permission0').removeClass('show');
+
             if(user.type == 'A'){
                 $('.permission1 .only-manager').addClass('show');
             }else{
@@ -164,6 +170,15 @@
             $('.permission0 .user-info').append(`<p>${user.uniName}</p><p>${user.depName}</p>`);
             $('.permission1').removeClass('show');
             $('.permission0').addClass('show');
+        }
+
+        console.log(pagectx.lockerFormStatus);
+        if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
+            $('.menus .impossible').addClass('show');
+            $('.menus .possible').removeClass('show');
+        }else{
+            $('.menus .impossible').removeClass('show');
+            $('.menus .possible').addClass('show');
         }
     }
 
@@ -247,12 +262,13 @@
             }
     }
 
-    function modal2(){
+    function modal2(status){
+        let str = status == 'null' ? '현재 <span style="color:#FF7676">신청 가능한 <br>사물함이 없습니다.</span>' : '현재 사물함 <span style="color:#FF7676">신청 기간이<br>마감이 되었습니다.</span>';
             $("body .container").append(`<div class="locker-req-modal modal show" tabindex="-1" style="display:block;z-index:0;background-color:rgba(0,0,0,0.5)">
             <div class="modal-dialog modal-dialog-centered" style="margin:38px">
                 <div class="modal-content" style="padding:25px;border-radius:27px">
                     <div class="back-icon" style="left:0" role="button" onclick="hideModal('locker-req-modal')"></div>
-                    <div class="fs-22 fw-bold text-center" style="margin-top:56px">현재 사물함 <span style="color:#FF7676">신청 기간이<br>마감이 되었습니다.</span></div>
+                    <div class="fs-22 fw-bold text-center" style="margin-top:56px">${str}</div>
                     <div class="text-center fs-12" style="color:#686B7C;margin-top:38px">자세한 관련 문의는 각 학과 조교님에게<br>관련 문의 주시면 감사합니다.</div>
                     <button id="dialogOk" type="button" style="margin-top:10px;border-radius:8px;color:white;background-color:transparent;padding:12px;border:1px solid #0E58D6;color:#0E58D6" onclick="hideModal('locker-req-modal')" class="btn btn-sm btn-primary fs-18">확인</button>
                 </div>
@@ -265,8 +281,8 @@
     }
 
     function movePage(){
-        if(pagectx.lockerForm == null){
-            modal2();
+        if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
+            modal2(pagectx.lockerFormStatus);
         }else{
             Page.go('/userLockerRequest.html');
         }
