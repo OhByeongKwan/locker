@@ -564,6 +564,7 @@ let Page = {
                 });
                 AJAX.call('jsp/getLockerFormStatus.jsp',{depCode:param.usrobj.depCode},function(data){
                     data = data.trim();
+                    console.log(data)
                     pagectx.lockerFormStatus = data;
                 });
             }

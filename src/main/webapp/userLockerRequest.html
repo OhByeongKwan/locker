@@ -307,7 +307,6 @@
                 }
             });
         }else{
-            console.log(2)
             var geocoder = new kakao.maps.services.Geocoder();
 
             var callback = function(result, status) {
@@ -320,8 +319,10 @@
                     let userLat = result[0].x;
                     let userLon = result[0].y;
 
-                    let dist = distance(uniLat,uniLon,userLat,userLon,jsonstr);
-                    console.log(dist);
+                    let dist = distance(uniLat,uniLon,userLat,userLon,jsonstr)
+                    dist = Math.floor(dist)
+                    console.log(dist)
+
 
                     jsonstr.distance = dist;
                     jsonstr = JSON.stringify(jsonstr);

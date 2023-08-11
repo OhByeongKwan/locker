@@ -15,9 +15,11 @@
 	if(type.trim().equals("random")){
 		//random
 		out.print(dao.UserLockerRequest(jsonstr, "B"));
-	}else{
+	}else if(type.trim().equals("fifo")){
 		//선착순의 경우 typeAUserLockerRequest로 지정
 		out.print(dao.UserLockerRequest(jsonstr, "A"));
+	}else{
+		out.print(dao.UserLockerRequest(jsonstr, "C"));
 	}
 
 %>

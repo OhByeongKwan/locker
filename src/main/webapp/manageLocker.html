@@ -82,9 +82,9 @@
                     Dialog.alert('선착순 배정이 완료되었습니다.',Page.reload);
                 });
             }else if(pagectx.lockerForm.lockerWay == 'distance' && lockerformStatus == 'N'){
-                // AJAX.call('jsp/typeClockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
+                AJAX.call('jsp/typeClockerFinish.jsp', {depCode : pagectx.usrobj.depCode}, ()=>{
                 Dialog.alert('거리순 배정이 완료되었습니다.',Page.reload);
-                // });
+                });
             }else{
                 Dialog.alert('이미 배정이 완료되었습니다.');
             }

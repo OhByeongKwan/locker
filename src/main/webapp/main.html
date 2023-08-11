@@ -116,6 +116,7 @@
     function init(params) {
         pagectx = params;
         Dialog.init();
+        console.log(pagectx)
         renderPage(pagectx.usrobj);
         checkForm();
     }
@@ -171,8 +172,6 @@
             $('.permission1').removeClass('show');
             $('.permission0').addClass('show');
         }
-
-        console.log(pagectx.lockerFormStatus);
         if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
             $('.menus .impossible').addClass('show');
             $('.menus .possible').removeClass('show');

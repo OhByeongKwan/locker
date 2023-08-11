@@ -46,7 +46,7 @@ public class LockerDAO {
             System.out.println(sql);
             SqlUtil.update(sql);
 
-
+            String lockerWay = (String) jsonObj.get("lockerWay");
             //create table for this department
             // table name = lock<depCode>
             sql = "CREATE TABLE if not exists lock"+depCode+" (";
@@ -55,6 +55,9 @@ public class LockerDAO {
             sql += "status VARCHAR(128) DEFAULT 'N',";
             sql += "mid VARCHAR(128),";
             sql += "password VARCHAR(32),";
+            if(lockerWay.trim().equals("distance")){
+                sql += "distance INT(8) DEFAULT 0,";
+            }
             sql += "ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
             sql += ")";
             System.out.println(sql);
@@ -211,11 +214,16 @@ public class LockerDAO {
             Object obj = parser.parse( jsonstr );
             JSONObject jsonObj = (JSONObject) obj;
             System.out.println(jsonObj);
-            System.out.println("test!!!!!!!->"+type);
 
             String depCode = (String) jsonObj.get("depCode");
             String mid = (String) jsonObj.get("mid");
             String pass = (String) jsonObj.get("pass");
+            String distance = null;
+            if(type.equals("C")){
+                System.out.println("distance=");
+                distance = jsonObj.get("distance").toString();
+                System.out.println("distance="+distance);
+            }
             int lockerSumNum  = Integer.parseInt((String) jsonObj.get("SumNum"));
             int oneLockerMaxNum = Integer.parseInt((String) jsonObj.get("oneLockerMaxNum"));
             int totalCount = lockerSumNum*oneLockerMaxNum;
@@ -225,7 +233,13 @@ public class LockerDAO {
             String changeMid = SqlUtil.query(sql);
             if(changeMid != null) {
                 System.out.println(changeMid);
-                sql = "update lock"+depCode+" set mid = '"+mid+"', status ='N' where mid = '" + changeMid + "'";
+                sql = "update lock"+depCode+" set mid = '"+mid+"', status ='N'";
+                if(type.equals("C")){
+                    sql += ", distance = " + distance;
+                    System.out.println("distance="+distance);
+                }
+                sql += " where mid = '" + changeMid + "'";
+                System.out.println(sql);
                 SqlUtil.update(sql);
                 return "OK";
             }
@@ -246,6 +260,18 @@ public class LockerDAO {
                             "', '" + pass +
                             "')";
                     System.out.println(sql);
+                    SqlUtil.update(sql);
+                    return "OK";
+                }
+            }}else if(type.equals("C")){{
+                if(thisCount>=totalCount){
+                    sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password, distance) VALUES('" + 'A' +
+                            "', '" + '0' +
+                            "', '" + mid +
+                            "', '" + pass +
+                            "', " + distance +
+                            ")";
+                    System.out.println(sql+"=C");
                     SqlUtil.update(sql);
                     return "OK";
                 }
@@ -294,11 +320,20 @@ public class LockerDAO {
                 System.out.println("i="+ i+", num = "+num);
             }
 
-            sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password) VALUES('" + numCode +
-                    "', '" + num +
-                    "', '" + mid +
-                    "', '" + pass +
-                    "')";
+            if(type.equals("C")){
+                sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password, distance) VALUES('" + numCode +
+                        "', '" + num +
+                        "', '" + mid +
+                        "', '" + pass +
+                        "', " + distance +
+                        ")";
+            }else{
+                sql = "INSERT INTO lock"+depCode+"(numCode, num, mid, password) VALUES('" + numCode +
+                        "', '" + num +
+                        "', '" + mid +
+                        "', '" + pass +
+                        "')";
+            }
             System.out.println(sql);
             SqlUtil.update(sql);
 
@@ -390,7 +425,7 @@ public class LockerDAO {
                         SqlUtil.update(sql);
 //                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
 //                        SqlUtil.update(sql);
-                        sql = "update lock"+depCode+" set mid = '"+mid2+"' and ts ="+ts2+" where mid = '" + mid + "'";
+                        sql = "update lock"+depCode+" set mid = '"+mid2+"' , ts ='"+ts2+"' where mid = '" + mid + "'";
                         SqlUtil.update(sql);
                     }
                     ranCnt--;
@@ -408,5 +443,83 @@ public class LockerDAO {
         }
     }
 
+    public String typeClockFinish(String depCode) throws NamingException, SQLException, ParseException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        Statement st = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        //선착순 배정의 경우 단순 status만 옮기면 끝이난다.
+        try {
+            conn = ConnectionPool.get();
+
+            String sql = "select count(*) from lock"+depCode + " where status = 'N'";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            rs.next();
+            int cnt = rs.getInt("count(*)");
+            System.out.println(sql + ", cnt = " + cnt);
+            if(cnt == 0){
+                System.out.println("cnt = 0");
+                return typeAlockFinish(depCode);
+            }else{
+                //1 최대 카운트 수 구하기.
+                //2 신청 카운트 수 구하기
+                //3 랜덤 값 추출 후 탈락 시킬 유저 구하기
+                //4 탈락시킬 유저가 A , 0인경우 그냥 삭제
+                //5 탈락시킬 유저가 N인경우 A 0인 유저와 스위치 후 삭제.
+                sql = "select JSON_EXTRACT(jsonstr,'$.lockerSumNum') * JSON_EXTRACT(jsonstr,'$.oneLockerMaxNum') as cnt from lockerForm where depCode = "+depCode;
+                stmt = conn.prepareStatement(sql);
+                rs = stmt.executeQuery();
+                rs.next();
+                int maxCnt = rs.getInt("cnt");
+                System.out.println(maxCnt+"=maxCnt");
+
+                int ranCnt = cnt-maxCnt;
+                while(ranCnt>0){
+                    System.out.println(ranCnt+"ranCnt");
+                    //붙은거중에 제일 거리 가까운거랑 떨어진것들중 거리 제일 먼 것이랑 바꾸기.
+                    //붙은거중에 가까운거가 먼것보다 멀거나 같으면 return.
+                    sql = "SELECT * FROM lock" + depCode + " where num <> 0 ORDER BY distance ASC, ts ASC limit 1";
+                    System.out.println(sql);
+                    stmt = conn.prepareStatement(sql);
+                    rs = stmt.executeQuery();
+                    rs.next();
+                    int num = ((rs.getInt("num")));
+                    int distance = ((rs.getInt("distance")));
+                    String mid =rs.getString("mid");
+                    System.out.println(num + ",,," + mid);
+
+                    sql = "SELECT * FROM lock" + depCode + " where num = 0 ORDER BY distance limit 1";
+                    stmt = conn.prepareStatement(sql);
+                    rs2 = stmt.executeQuery();
+                    rs2.next();
+                    String mid2 = rs2.getString("mid");
+                    String ts2 = rs2.getString("ts");
+                    int distance2 = rs2.getInt("distance");
+                    if(distance >= distance2){
+                        break;
+                    }
+                    sql = "delete from lock" + depCode + " where mid = '"+ mid2+"'";
+                    System.out.println(sql+"=sqlUpdate");
+                    SqlUtil.update(sql);
+                    sql = "update lock"+depCode+" set mid = '"+mid2+"',ts ='"+ts2+"',distance = "+distance2+" where mid = '" + mid + "'";
+                    System.out.println(sql+"=sqlUpdate");
+                    SqlUtil.update(sql);
+
+                    ranCnt--;
+                }
+
+            }
+
+            sql =  "update lock"+depCode+" set status = 'A' where status = 'N'";
+            SqlUtil.update(sql);
+            sql = "update lockerForm set status = 'A' where depCode = '" + depCode + "'";
+            SqlUtil.update(sql);
+            return "OK";
+        } finally {
+            if (conn!= null) conn.close();
+        }
+    }
 
 }

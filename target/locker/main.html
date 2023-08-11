@@ -116,20 +116,9 @@
     function init(params) {
         pagectx = params;
         Dialog.init();
+        console.log(pagectx)
         renderPage(pagectx.usrobj);
         checkForm();
-        imageCheck(pagectx.lockerFormStatus);
-    }
-
-    function imageCheck(data){
-        console.log(data);
-        // if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
-        //     $('.menus .impossible').addClass('show');
-        //     $('.menus .possible').removeClass('show');
-        // }else{
-        //     $('.menus .impossible').removeClass('show');
-        //     $('.menus .possible').addClass('show');
-        // }
     }
 
     function checkForm(){
@@ -182,6 +171,13 @@
             $('.permission0 .user-info').append(`<p>${user.uniName}</p><p>${user.depName}</p>`);
             $('.permission1').removeClass('show');
             $('.permission0').addClass('show');
+        }
+        if(pagectx.lockerFormStatus == 'null' || pagectx.lockerFormStatus == 'A'){
+            $('.menus .impossible').addClass('show');
+            $('.menus .possible').removeClass('show');
+        }else{
+            $('.menus .impossible').removeClass('show');
+            $('.menus .possible').addClass('show');
         }
     }
 
