@@ -250,16 +250,16 @@
             *   4.onclick()으로 함수로 만들기 jquery로 해놓은 위에 코드 함수로 만들어서 관리해줘
             * */
 
-            AJAX.call("jsp/signup.jsp", obj, function(data) {
-                console.log(data.trim());
-                if(data.trim() == 'OK'){
-                    //OK -> 추가 완료
-                    Page.go('/sdSignupFinish.html')
-                }else{
-                    //ER -> 에러 (reload하면 적은 값들 사라지니까 이거는 빼자 - 메세지만 출력)
-                    Dialog.alert(data.message);
-                }
-            });
+            // AJAX.call("jsp/signup.jsp", obj, function(data) {
+            //     console.log(data.trim());
+            //     if(data.trim() == 'OK'){
+            //         //OK -> 추가 완료
+            //         Page.go('/sdSignupFinish.html')
+            //     }else{
+            //         //ER -> 에러 (reload하면 적은 값들 사라지니까 이거는 빼자 - 메세지만 출력)
+            //         Dialog.alert(data.message);
+            //     }
+            // });
     }
 
     function checkedAll(){

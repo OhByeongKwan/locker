@@ -163,8 +163,7 @@
             if(data != 'null'){
                 Dialog.alert('이미 작성하신 폼이 있습니다.',Page.back);
             }
-        })
-        //getlatlon('주소 정보')-> x,y좌표를 jsonstr에 넣을 예정
+        });
     }
 
     function showAddress(select){
@@ -176,6 +175,37 @@
     }
 
     function reqLocker(){
+
+        if($('input[name=startDate]')[0].value == ''){
+            Dialog.alert("신청 날짜를 입력해 주세요.");
+            $('input[name=startDate]')[0].focus();
+            return;
+        }else if($('input[name=endDate]')[0].value == ''){
+            Dialog.alert("신청 날짜를 입력해 주세요.");
+            $('input[name=endDate]')[0].focus();
+            return;
+        }else if($('input[value=distance]')[0].checked && $('input[name=address]')[0].value == ''){
+            Dialog.alert("주소를 입력해 주세요.");
+            $('input[name=address]')[0].focus();
+            return;
+        }else if($('input[name=oneLockerMaxNum]')[0].value == ''){
+            Dialog.alert("최대 인원수를 입력해 주세요.");
+            $('input[name=oneLockerMaxNum]')[0].focus();
+            return;
+        }else if($('input[value=password]')[0].checked && $('input[name=startPw]')[0].value == ''){
+            Dialog.alert("사물함 초기 비밀번호를 입력해 주세요.");
+            $('input[name=startPw]')[0].focus();
+            return;
+        }
+
+        let list = $('#lockerNum input');
+        for(const target of list){
+            if($(target)[0].value == ''){
+                Dialog.alert("사물함 번호를 정확히 입력해 주세요.");
+                $(target)[0].focus();
+                return;
+            }
+        }
         let startPw = null;
         let lockerObj = {};
         let startEndObj = [];
