@@ -43,8 +43,8 @@ public class Mail {
     public void send(String recipient, String code) {
 
         // 1. 발신자의 메일 계정과 비밀번호 설정
-        final String user = "locker@gmail.com";
-        final String password = "";
+        final String user = "tjdgk8880@gmail.com";
+        final String password = "jllspiycojbsthkp";
 
         // 2. Property에 SMTP 서버 정보 설정
         Properties prop = new Properties();
@@ -55,7 +55,7 @@ public class Mail {
         prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         // 3. SMTP 서버정보와 사용자 정보를 기반으로 Session 클래스의 인스턴스 생성
-        Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
+        Session session = Session.getDefaultInstance(prop, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(user, password);
             }
@@ -72,7 +72,7 @@ public class Mail {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 
             // Subject
-            message.setSubject("FoxChart - Password Code.");
+            message.setSubject("모두의 사물함 회원가입 이메일 발송");
 
             // Text
             //message.setText("Foxchart입니다. 비밀번호 재설정을 위한 코드는  ["+code+"] 입니다.");
@@ -92,7 +92,7 @@ public class Mail {
 
             body += "<div style='display: table; margin: 0 auto;'>";
             body += "<div style='float: left; width: 600px; background-color: #fff; padding: 30px 20px; box-sizing: border-box'>";
-            body += "<div style='margin: 15px 0; text-align: center; color:#666; font-size: 17px;'><b>비밀번호 변경을 위한 인증코드.</b></div>";
+            body += "<div style='margin: 15px 0; text-align: center; color:#666; font-size: 17px;'><b>회원가입을 위한 인증코드.</b></div>";
             body += "<div style='margin: 10px 0; text-align: center; color:#888; font-size: 14px;'></div>";
 
             body += "<table border='0' style='margin: 25px auto'>";
@@ -103,8 +103,8 @@ public class Mail {
 
             body += "<div style='float: left; width: 100%; margin: 10px 0 20px 0; border-top: 1px solid #ddd'></div>";
 
-            body += "<div style='float: left; width: 100%; color:#888; font-size: 13px; line-height: 1.5em;'>폭스차트 회원이 아닌 경우 이 메일을 무시해주세요.";
-            body += "<a href='#' style='color:#FF5B81; opacity:0.7; font-size: 13px; text-decoration:none' target='_blank'> <b> 코드 인증 시 비밀번호 변경이 가능합니다.</div>";
+            body += "<div style='float: left; width: 100%; color:#888; font-size: 13px; line-height: 1.5em;'>모두의 사물함 회원이 아닌 경우 이 메일을 무시해주세요.";
+            body += "<a href='#' style='color:#FF5B81; opacity:0.7; font-size: 13px; text-decoration:none' target='_blank'> <b> 코드 입력 시 회원가입이 진행됩니다.</div>";
             body += "</div>";
             body += "</div>";
 
