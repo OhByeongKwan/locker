@@ -395,13 +395,16 @@ public class LockerDAO {
                 //4 탈락시킬 유저가 A , 0인경우 그냥 삭제
                 //5 탈락시킬 유저가 N인경우 A 0인 유저와 스위치 후 삭제.
                 sql = "select JSON_EXTRACT(jsonstr,'$.lockerSumNum') * JSON_EXTRACT(jsonstr,'$.oneLockerMaxNum') as cnt from lockerForm where depCode = "+depCode;
+                System.out.println(sql);
                 stmt = conn.prepareStatement(sql);
                 rs = stmt.executeQuery();
                 rs.next();
                 int maxCnt = rs.getInt("cnt");
-
-                int ranCnt = cnt-maxCnt;
-                while(ranCnt>0){
+                System.out.println("cnt="+cnt);
+//                int ranCnt = cnt-maxCnt;
+//                System.out.println("rancnt="+ranCnt);
+                while(cnt>0){
+//                    System.out.println("rancnt="+ranCnt);
                     sql = "SELECT * FROM lock" + depCode + " ORDER BY RAND() limit 1";
                     System.out.println(sql);
                     stmt = conn.prepareStatement(sql);
@@ -423,12 +426,10 @@ public class LockerDAO {
                         String ts2 = rs2.getString("ts");
                         sql = "delete from lock" + depCode + " where mid = '"+ mid2+"'";
                         SqlUtil.update(sql);
-//                        sql = "update lock"+depCode+" set mid = '"+mid2+"' where mid = '" + mid + "'";
-//                        SqlUtil.update(sql);
                         sql = "update lock"+depCode+" set mid = '"+mid2+"' , ts ='"+ts2+"' where mid = '" + mid + "'";
                         SqlUtil.update(sql);
                     }
-                    ranCnt--;
+                    cnt--;
                 }
 
             }
@@ -475,9 +476,9 @@ public class LockerDAO {
                 int maxCnt = rs.getInt("cnt");
                 System.out.println(maxCnt+"=maxCnt");
 
-                int ranCnt = cnt-maxCnt;
-                while(ranCnt>0){
-                    System.out.println(ranCnt+"ranCnt");
+//                int ranCnt = cnt-maxCnt;
+                while(cnt>0){
+//                    System.out.println(ranCnt+"ranCnt");
                     //붙은거중에 제일 거리 가까운거랑 떨어진것들중 거리 제일 먼 것이랑 바꾸기.
                     //붙은거중에 가까운거가 먼것보다 멀거나 같으면 return.
                     sql = "SELECT * FROM lock" + depCode + " where num <> 0 ORDER BY distance ASC, ts ASC limit 1";
@@ -507,7 +508,7 @@ public class LockerDAO {
                     System.out.println(sql+"=sqlUpdate");
                     SqlUtil.update(sql);
 
-                    ranCnt--;
+                    cnt--;
                 }
 
             }

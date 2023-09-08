@@ -295,6 +295,10 @@
                 }
                 console.log(code);
 
+                AJAX.call("jsp/code.jsp", {mid: email, pwcode: code}, function(data) {
+                    console.log("aa")
+                });
+
                 let mm = 3;
                 let ss = 0;
                 $('#accessNum .mmss').css('color','black');
